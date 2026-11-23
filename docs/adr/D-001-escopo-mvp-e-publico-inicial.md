@@ -3,7 +3,8 @@
 - **Status**: Aprovada
 - **Data**: 2026-11-23
 - **Aprovação**: "Aprovo beta fechado primeiro" (sequência de lançamento) e "Aprovo como está" (escopo do MVP) (2026-11-23)
-- **Relacionadas**: D-002, D-003, D-011, D-013, D-014
+- **Relacionadas**: D-002, D-003, D-011, D-013, D-014, D-021
+- **Atualização (2026-11-23)**: o trecho "ao fim das férias" desta decisão foi substituído por D-021 (o beta não tem data fixa e abre quando o MVP estiver pronto e aprovado pelo usuário). O restante desta decisão continua valendo.
 
 ## Contexto
 

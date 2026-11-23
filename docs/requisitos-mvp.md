@@ -166,7 +166,7 @@ A matriz de permissões (que papel faz o quê, sobre quais dados) será definida
 | Com poucos usuários no beta, respostas "anonimizadas" podem ser reidentificáveis pelo contexto; avaliar se a anonimização é real. | Etapa 6 |
 | Formato específico do arquivo de exportação (por exemplo, JSON ou CSV). | Etapa 6 |
 | Política de supressão de grupos pequenos em números agregados (limiar e método), com análise de risco de reidentificação (CONTA-19). | Etapa 6 |
-| Matriz de permissões por papel, com menor privilégio e bloqueio por padrão (CONTA-20, CONTA-21). | Etapas 3 e 6 |
+| Matriz de permissões por papel, com menor privilégio e bloqueio por padrão (CONTA-20, CONTA-21). | Etapa 6. Na Etapa 3 ficou definido que as regras rodam no backend, em Django (D-004, D-020) |
 
 ## CAT: classificação e filtros
 
@@ -441,10 +441,10 @@ Os logs servem a diagnóstico e auditoria, sem expor credenciais e com o mínimo
 |---|---|
 | Breakpoints e layout por tamanho de tela (por exemplo, questão e correção lado a lado no tablet em paisagem). | Etapa 5 |
 | Registro do endereço IP em eventos de segurança e retenção específica para esses eventos. | Etapa 6 |
-| Meta definitiva de RNF-13, depois de medir um protótipo. | Etapa 3 |
+| Meta definitiva de RNF-13, medida com o método deste catálogo. | Primeira versão funcional do app, sem protótipo descartável (resposta "Na 1ª versão funcional", 2026-11-23; D-026) |
 | Prazos de retenção de cada categoria de registro (RNF-18), considerando necessidade operacional, segurança, privacidade e obrigações legais. | Etapa 6 |
 | Quais eventos de segurança são registrados (por exemplo, logins e acessos negados), conforme a seção 16.3 do OWASP ASVS 5.0. | Etapa 6 |
-| A ferramenta de logs permite registrar quem acessou os logs (RNF-20)? | Etapa 3 |
+| A ferramenta de logs permite registrar quem acessou os logs (RNF-20)? | Resolvido em D-025: o sistema registra cada login por SSH; registrar a leitura de cada arquivo de log, se necessário, fica para a Etapa 6 |
 | Conferir os aparelhos e as versões reais dos participantes do beta (por exemplo, iPads presos em versões antigas do iPadOS) e ajustar RNF-03 se preciso. | Antes do beta |
 
 ## Propostas separadas
@@ -474,3 +474,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-23: oito dúvidas e quatro propostas separadas respondidas pelo usuário. Novos critérios confirmados: REV-05, REV-06, DES-10, SIM-07, SIM-08, SIM-09 e CONTA-24. EDIT-05, EDIT-07, EDIT-08 e EDIT-09 passaram de propostos a confirmados. Propostas separadas aprovadas e movidas para as seções de origem: CONT-21, EDIT-10, EDIT-11 e FLUXO-16. O catálogo ainda não foi aprovado como um todo.
 - 2026-11-23: verificações finais pedidas pelo usuário. Novos propostos: CONT-22 (gabarito oficial exige referência desde o cadastro) e FLUXO-17 (retirada preserva tentativas e respostas). REV-04 ajustado para não exibir conteúdo retirado por licenciamento. Acrescentados o quadro "Duas comprovações que não se substituem" e o resumo da retirada de circulação. Nenhum critério confirmado foi alterado.
 - 2026-11-23: **Etapa 2 aprovada formalmente** ("Aprovar Etapa 2"). Os 64 critérios propostos passaram a confirmados, totalizando 131 critérios confirmados. Os 67 confirmados anteriores não mudaram. Índice atualizado com autorização do usuário: D-018 e D-019 aprovadas (D-019 com ADR) e D-002 atualizada, ainda pendente.
+- 2026-11-23: Etapa 3. Três pendências marcadas "Etapa 3" foram atualizadas, com autorização do usuário ("Sim, como descrito"). O registro de acesso aos logs foi resolvido em D-025. A camada da matriz de permissões foi definida (backend, D-004 e D-020), e o detalhe ficou para a Etapa 6. A meta do RNF-13 passou para a primeira versão funcional (D-026). Nenhum critério foi alterado. O texto "Etapa 3" que ainda aparece na Fonte do RNF-13 e na linha "Viabilidade" das condições de medição fica superado por esta atualização.
