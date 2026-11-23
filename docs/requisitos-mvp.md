@@ -82,6 +82,8 @@ O sistema só fica sabendo do gabarito definitivo quando o editor registra a nov
 | CONT-20 | WHEN o gabarito de uma questão muda THEN the system SHALL registrar quais respostas foram afetadas, identificando-as apenas pelos identificadores internos das respostas. | Confirmado | Revisão externa (2026-11-23): não duplicar dados pessoais; aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
 | CONT-21 | WHEN a situação do gabarito passa a "publicado oficialmente pela banca" THEN the system SHALL exigir a referência do documento oficial da banca (gabarito definitivo ou ato equivalente, com data). | Confirmado | Proposta separada do consultor (2026-11-23), aprovada na resposta "Aprovar" (2026-11-23) |
 | CONT-22 | IF uma questão com gabarito na situação "publicado oficialmente pela banca" não tiver a referência verificável do documento oficial da banca, inclusive quando é cadastrada já nessa situação, THEN the system SHALL impedir sua publicação. | Confirmado | Verificação final pedida pelo usuário (2026-11-23): deixa explícito que CONT-21 vale desde o cadastro. Essa evidência não comprova o direito de uso do conteúdo (ver "Duas comprovações que não se substituem", em EDIT); aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
+| CONT-23 | IF a alternativa escolhida numa tentativa, ou o gabarito da versão respondida, não existir na versão vigente THEN the system SHALL manter o resultado original da tentativa, sem recalculá-lo, e identificá-la como não recalculável. | Confirmado | Regras M-30 e M-37 do modelo conceitual (D-008); exceção explícita a CONT-09 e CONT-15; aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
+| CONT-24 | WHEN o estudante consulta no histórico uma tentativa não recalculável THEN the system SHALL mostrar o resultado original com o rótulo "resultado pelo gabarito da versão respondida; não reavaliado pelo gabarito atual". | Confirmado | Regra M-37 do modelo conceitual (D-008); aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
 
 **As três camadas do gabarito**, que não se confundem:
 
@@ -136,6 +138,7 @@ CONT-17 e CONT-19 convivem: depois da confirmação oficial, o resultado deixa d
 | CONTA-10 | WHEN o estudante pede a exportação dos seus dados THEN the system SHALL gerar um arquivo em formato estruturado e legível por máquina com os dados pessoais e o histórico de atividades pertencentes a ele (tentativas em treino e simulado, questões marcadas e reportes enviados). | Confirmado | Revisado conforme revisão do usuário (2026-11-23); "pertencentes a ele" acrescentado na revisão externa (2026-11-23); a lista entre parênteses é detalhamento do consultor. Sem relatórios elaborados no MVP; aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
 | CONTA-18 | The system SHALL excluir da exportação dados pessoais de outros usuários e informações a que o estudante não tem direito de acesso. | Confirmado | Revisão externa (2026-11-23); aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
 | CONTA-24 | The system SHALL incluir na exportação, para cada tentativa, o identificador da questão, a classificação (área, tema, banca, ano), a resposta dada, o resultado e a data, sem o texto da questão. | Confirmado | Resposta "Não, só identificadores" (2026-11-23) |
+| CONTA-25 | WHEN uma conta é excluída THEN the system SHALL reduzir ao mês as datas e horas das tentativas preservadas. | Confirmado | Regra M-36 do modelo conceitual (D-008); completa CONTA-12; aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
 | CONTA-11 | WHEN o estudante exclui a própria conta THEN the system SHALL apagar a conta, o e-mail e todo vínculo entre a pessoa e suas respostas. | Confirmado | Resposta "Anonimizar respostas" (2026-11-23) |
 | CONTA-12 | WHEN uma conta é excluída THEN the system SHALL manter as respostas dessa conta somente sem identificação, para estatísticas das questões. | Confirmado | Resposta "Anonimizar respostas" (2026-11-23) |
 
@@ -167,6 +170,7 @@ A matriz de permissões (que papel faz o quê, sobre quais dados) será definida
 | Formato específico do arquivo de exportação (por exemplo, JSON ou CSV). | Etapa 6 |
 | Política de supressão de grupos pequenos em números agregados (limiar e método), com análise de risco de reidentificação (CONTA-19). | Etapa 6 |
 | Matriz de permissões por papel, com menor privilégio e bloqueio por padrão (CONTA-20, CONTA-21). | Etapa 6. Na Etapa 3 ficou definido que as regras rodam no backend, em Django (D-004, D-020) |
+| O que fazer com o cadastro da pessoa editorial quando a conta dela é excluída: manter com base legal, pseudonimizar ou anonimizar (M-31). | Etapa 6 |
 
 ## CAT: classificação e filtros
 
@@ -181,7 +185,7 @@ A matriz de permissões (que papel faz o quê, sobre quais dados) será definida
 
 | Questão | Para onde vai |
 |---|---|
-| Identidade da questão × versão respondida: uma questão respondida numa versão anterior conta como resolvida em CAT-03? A resposta fica preservada na versão em que foi dada (CONT-13); falta definir como "não resolvidas" e "erradas" tratam versões novas, sem produzir resultados contraditórios. | Etapa 4 e spec de CAT |
+| Identidade da questão × versão respondida: uma questão respondida numa versão anterior conta como resolvida em CAT-03? A resposta fica preservada na versão em que foi dada (CONT-13); falta definir como "não resolvidas" e "erradas" tratam versões novas, sem produzir resultados contraditórios. | Resolvido em M-08 (D-008): "não resolvidas" e "erradas" olham para a questão em qualquer versão, e "erradas" usa a tentativa mais recente avaliada pelo gabarito atual |
 
 ## TREINO: resolução com correção imediata
 
@@ -219,6 +223,7 @@ SIM-06 só registra a tentativa. O uso dela segue as regras que já existem: his
 | REV-04 | WHILE uma questão marcada estiver retirada de circulação the system SHALL mantê-la na lista de marcadas do estudante, identificada como retirada e com o motivo, sem exibir o conteúdo quando a retirada for por licenciamento (FLUXO-16). | Confirmado | Revisão externa (2026-11-23). O uso em novos treinos e simulados já é impedido por CONT-06 e FLUXO-14. Exceção de licenciamento acrescentada na verificação final (2026-11-23); aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
 | REV-05 | WHEN o gabarito de uma questão muda (CONT-09, CONT-15) THEN the system SHALL reavaliar pelo gabarito novo a presença da questão na lista de erros e no filtro "erradas" de cada estudante que a respondeu. | Confirmado | Resposta "Sim, usam o novo" (2026-11-23) |
 | REV-06 | WHEN uma questão é retirada de circulação THEN the system SHALL removê-la da lista de erros de cada estudante. | Confirmado | Resposta "Sai da lista de erros" (2026-11-23); exceção explícita a REV-01 |
+| REV-07 | IF a tentativa mais recente de uma questão não for recalculável THEN the system SHALL deixar a questão fora da lista de erros e do filtro "erradas", mantendo-a no histórico. | Confirmado | Regra M-37 do modelo conceitual (D-008); exceção a REV-01 e CAT-04; aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
 
 REV-06 é uma exceção a REV-01: a questão retirada sai da lista de erros, mas continua no histórico (FLUXO-15) e, se estiver marcada, na lista de marcadas (REV-04). Se ela voltar a circular (FLUXO-12), REV-01 volta a valer. REV-05 muda só a avaliação da resposta; o registro dela continua inalterado (CONT-18).
 
@@ -238,6 +243,9 @@ As listas de marcadas e de erros são listas pessoais do estudante, não resulta
 | DES-08 | IF uma taxa de acerto se basear em menos de 10 respostas THEN the system SHALL sinalizá-la como baseada em poucas respostas. | Confirmado | Revisão do usuário em DES-04 (2026-11-23): não apresentar amostra pequena como conclusão robusta; limiar confirmado na resposta "10 respostas" (2026-11-23) |
 | DES-09 | WHEN o estudante consulta o desempenho só de simulados THEN the system SHALL calcular a taxa com todas as respostas dadas em simulados, inclusive de questões já respondidas no treino. | Confirmado | Resposta "Todas as do simulado" (2026-11-23) |
 | DES-10 | The system SHALL exibir os temas "mais fracos" (DES-03, DES-04) somente na visão geral do desempenho. | Confirmado | Resposta "Só na visão geral" (2026-11-23) |
+| DES-11 | The system SHALL excluir as tentativas não recalculáveis (CONT-23) das taxas de acerto de todas as visões. | Confirmado | Regra M-37 do modelo conceitual (D-008); aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
+| DES-12 | The system SHALL exibir, junto às taxas de acerto, quantas tentativas não recalculáveis ficaram fora do cálculo. | Confirmado | Regra M-37 do modelo conceitual (D-008); aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
+| DES-13 | IF a primeira tentativa de uma questão não for recalculável THEN the system SHALL deixar a questão fora da visão geral, sem tratar uma tentativa posterior como primeira. | Confirmado | Regra M-37 do modelo conceitual (D-008); exceção a DES-01; aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
 
 DES-09 é uma exceção a DES-01 válida só na visão de simulados. A visão geral continua usando apenas a primeira tentativa de cada questão.
 
@@ -255,7 +263,10 @@ Por isso o catálogo diz "respostas consideradas no cálculo" (DES-07), e não "
 
 | Questão | Para onde vai |
 |---|---|
-| A pausa do simulado tem limite (quantidade ou duração)? E se o estudante fechar o app sem pausar, o cronômetro continua? | Spec de SIM |
+| A pausa do simulado tem limite (quantidade ou duração)? Pausar exige conexão? Fechar o app sem pausar não para o cronômetro: resolvido em M-11 (D-008). | Spec de SIM |
+| Regra de aceitação de respostas sincronizadas depois do prazo do simulado; o horário informado pelo aparelho não serve de prova (M-32). | Spec de SIM |
+| O que acontece com um simulado em andamento quando uma questão dele é bloqueada por revogação de autorização (EDIT-12)? | Spec de SIM |
+| O estudante é avisado quando uma reclassificação muda o seu desempenho (M-05)? | Spec de DES |
 | Período do desempenho: todo o histórico ou com recorte de tempo (por exemplo, últimos 30 dias)? | Spec de DES |
 | Quantidade máxima de questões por simulado. | Spec de SIM |
 | Na visão só de treino (DES-06), vale a primeira tentativa entre as feitas no treino ou a primeira tentativa geral (que pode ter sido num simulado)? | Spec de DES |
@@ -277,6 +288,8 @@ Por isso o catálogo diz "respostas consideradas no cálculo" (DES-07), e não "
 | EDIT-09 | WHERE uma imagem for o próprio objeto de avaliação da questão (por exemplo, um ECG ou uma radiografia a interpretar) the system SHALL exigir texto alternativo com a identificação descritiva da imagem, sem a interpretação dos achados. | Confirmado | Contraproposta do consultor à revisão externa, com base na exceção para testes do critério 1.1.1 da WCAG 2.2; confirmada na resposta "Três categorias" (2026-11-23) |
 | EDIT-10 | WHEN a correção de uma questão cuja imagem é objeto de avaliação (EDIT-09) é exibida THEN the system SHALL mostrar a descrição dos achados da imagem, quando o editor a tiver registrado. | Confirmado | Proposta separada do consultor (2026-11-23), aprovada na resposta "Aprovar" (2026-11-23) |
 | EDIT-11 | IF uma questão com comentário não tiver ao menos uma referência THEN the system SHALL impedir sua publicação. | Confirmado | Proposta separada do consultor (2026-11-23), aprovada na resposta "Aprovar" (2026-11-23) |
+| EDIT-12 | WHEN a autorização de uso de uma fonte ou de um item deixa de valer THEN the system SHALL parar imediatamente de exibir o conteúdo dependente em treinos, simulados, listas e histórico, sem esperar a retirada formal. | Confirmado | Regra M-33 do modelo conceitual (D-008); aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
+| EDIT-13 | The system SHALL aplicar a autorização própria de um item no lugar da autorização da fonte, e só considerar válida uma autorização própria "autorizada" que tenha evidência independente da evidência da fonte. | Confirmado | Regras M-15 e M-33 do modelo conceitual (D-008); aprovado na Etapa 4 ("Aprovar Etapa 4" e autorização "Autorizo tudo", 2026-11-23) |
 
 Funcionar em tablet ou celular não é requisito do MVP para o painel do editor. RNF-04 trata só das funcionalidades do estudante.
 
@@ -475,3 +488,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-23: verificações finais pedidas pelo usuário. Novos propostos: CONT-22 (gabarito oficial exige referência desde o cadastro) e FLUXO-17 (retirada preserva tentativas e respostas). REV-04 ajustado para não exibir conteúdo retirado por licenciamento. Acrescentados o quadro "Duas comprovações que não se substituem" e o resumo da retirada de circulação. Nenhum critério confirmado foi alterado.
 - 2026-11-23: **Etapa 2 aprovada formalmente** ("Aprovar Etapa 2"). Os 64 critérios propostos passaram a confirmados, totalizando 131 critérios confirmados. Os 67 confirmados anteriores não mudaram. Índice atualizado com autorização do usuário: D-018 e D-019 aprovadas (D-019 com ADR) e D-002 atualizada, ainda pendente.
 - 2026-11-23: Etapa 3. Três pendências marcadas "Etapa 3" foram atualizadas, com autorização do usuário ("Sim, como descrito"). O registro de acesso aos logs foi resolvido em D-025. A camada da matriz de permissões foi definida (backend, D-004 e D-020), e o detalhe ficou para a Etapa 6. A meta do RNF-13 passou para a primeira versão funcional (D-026). Nenhum critério foi alterado. O texto "Etapa 3" que ainda aparece na Fonte do RNF-13 e na linha "Viabilidade" das condições de medição fica superado por esta atualização.
+- 2026-11-23: Etapa 4 aprovada. Nove critérios novos, todos confirmados a partir de regras aprovadas no modelo conceitual (D-008): CONT-23, CONT-24, CONTA-25, REV-07, DES-11 a DES-13, EDIT-12 e EDIT-13. Pendências atualizadas: CAT-03 resolvida (M-08); a do simulado respondida em parte (M-11); quatro pendências novas. Nenhum critério existente foi alterado. Autorização do usuário: "Autorizo tudo".

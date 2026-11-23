@@ -105,7 +105,7 @@ flowchart LR
     subgraph AWS["AWS Lightsail, região de São Paulo"]
         subgraph SRV["Servidor com Docker Compose"]
             S["Serviço web Django<br/>API com Django Ninja + app React"]
-            W["Processo de tarefas<br/>e-mails, exportação, recálculos"]
+            W["Processo de tarefas<br/>e-mails e exportação"]
             DB[("PostgreSQL 18<br/>dados e fila de tarefas")]
         end
         OS[("Armazenamento de objetos<br/>imagens e backups")]
@@ -177,8 +177,8 @@ Situação em 23/11/2026:
 | 1. Descoberta do produto | Concluída |
 | 2. Requisitos do MVP | Aprovada |
 | 3. Arquitetura e tecnologias | Aprovada |
-| 4. Modelagem conceitual dos dados | Próxima etapa, ainda não iniciada |
-| 5. Identidade visual, UX e fluxos de navegação | Futura |
+| 4. Modelagem conceitual dos dados | Aprovada |
+| 5. Identidade visual, UX e fluxos de navegação | Próxima etapa, ainda não iniciada |
 | 6. Segurança, qualidade e infraestrutura | Futura |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
@@ -188,7 +188,6 @@ Situação em 23/11/2026:
 |---|---|
 | D-002 | Origem das questões e licenciamento |
 | D-003 | Revisão do conteúdo clínico |
-| D-008 | Modelo de dados das questões |
 | D-009 | Tratamento de dados pessoais (LGPD) |
 | D-011 | Modelo de negócio e cobrança |
 | D-012 | Uso de IA no conteúdo |
@@ -218,6 +217,7 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 |---|---|
 | [docs/decisions.md](docs/decisions.md) | Registro de decisões: índice com a situação de cada decisão. Só as decisões aprovadas são vinculantes |
 | [docs/requisitos-mvp.md](docs/requisitos-mvp.md) | Catálogo de requisitos do MVP, com critérios no formato EARS e IDs rastreáveis (por exemplo, CONT-13) |
+| [docs/modelo-conceitual.md](docs/modelo-conceitual.md) | Modelo conceitual dos dados: entidades, relações, regras de integridade e rastreabilidade até os requisitos |
 | [docs/adr/](docs/adr/) | Registros de decisões de arquitetura (ADRs) com o raciocínio completo das decisões mais importantes. Cada ADR tem link no registro de decisões |
 
 As decisões passam por estes estados: **Pendente → Proposta → Aprovada → Substituída**, e as propostas recusadas ficam como **Descartada**. Cada requisito tem um ID; a especificação de cada funcionalidade e os seus testes citam esse ID, ligando o que foi pedido ao que foi verificado (D-026).
