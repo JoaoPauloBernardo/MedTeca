@@ -34,6 +34,7 @@ Situação do mapa: **Aprovado** na aprovação formal da Etapa 2 ("Aprovar Etap
 | CAT | Classificação grande área → tema e filtros | D-001, D-013 |
 | TREINO | Resolução com correção imediata | D-001 |
 | SIM | Simulado cronometrado com correção no fim | D-001 |
+| RISC | Riscar alternativas durante a resolução, no treino e no simulado | D-031 (acrescentado na Etapa 5) |
 | REV | Revisão dos erros e "marcar" | D-001 |
 | DES | Desempenho por área e tema | D-001 |
 | REP | Reportar erro na questão | D-001 |
@@ -93,6 +94,20 @@ O sistema só fica sabendo do gabarito definitivo quando o editor registra a nov
 
 CONT-17 e CONT-19 convivem: depois da confirmação oficial, o resultado deixa de ser provisório, mas o histórico continua mostrando que a resposta foi dada com gabarito preliminar. Se CONT-13 não registrasse a situação, essa informação se perderia, porque a confirmação de CONT-16 não cria nova versão.
 
+### Rótulos e nível de revisão
+
+Textos definidos na Etapa 5 (D-029). Detalhes de exibição em `docs/design-e-ux.md`.
+
+| ID | Critério | Situação | Fonte |
+|---|---|---|---|
+| CONT-25 | The system SHALL rotular as situações do gabarito como "Gabarito oficial da banca", "Gabarito definido pelo MedTeca" e "Gabarito preliminar da banca". | Confirmado | Resposta "Origem explícita" (2026-11-24); D-029; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| CONT-26 | WHERE o gabarito for definido pelo MedTeca the system SHALL exibir a linha de apoio "A banca não publicou gabarito oficial." nas questões de prova e "Questão própria: não existe gabarito de banca." nas questões de autoria própria. | Confirmado | Respostas "Origem explícita" e "Adaptar pela origem" (2026-11-24); D-019, D-029; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| CONT-27 | WHILE o gabarito de uma questão estiver na situação preliminar the system SHALL exibir "Ainda não confirmado. Seu resultado nesta questão será provisório." antes da resposta e "Ainda não confirmado. Seu resultado nesta questão é provisório." na correção. | Confirmado | Resposta "Origem explícita" (2026-11-24), com o tempo do verbo ajustado antes e depois da resposta; detalha CONT-04 e CONT-11; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| CONT-28 | The system SHALL exibir em cada questão o nível de revisão "Revisão editorial", com o mês e o ano da revisão aprovada da versão exibida. | Confirmado | Resposta "Revisão editorial + explicação" (2026-11-24); D-014, M-26; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| CONT-29 | WHEN o estudante aciona o nível de revisão de uma questão THEN the system SHALL exibir "Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica." | Confirmado | Resposta "Revisão editorial + explicação" (2026-11-24); M-26, D-003; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+
+Quando D-003 definir a revisão médica, ela entra como um segundo nível, ao lado da revisão editorial de CONT-28.
+
 ### Questões anuladas ou desatualizadas
 
 | ID | Critério | Situação | Fonte |
@@ -105,7 +120,7 @@ CONT-17 e CONT-19 convivem: depois da confirmação oficial, o resultado deixa d
 
 | Questão | Para onde vai |
 |---|---|
-| Texto exato dos rótulos das três situações e do aviso de gabarito preliminar. | Etapa 5 |
+| Texto exato dos rótulos das três situações e do aviso de gabarito preliminar. | Resolvido na Etapa 5: CONT-25 a CONT-27 (D-029) |
 
 ## CONTA: contas, acesso e dados pessoais
 
@@ -213,6 +228,22 @@ A matriz de permissões (que papel faz o quê, sobre quais dados) será definida
 
 SIM-06 só registra a tentativa. O uso dela segue as regras que já existem: histórico com a origem (DES-05), desempenho geral pela primeira tentativa (DES-01), visão de simulados com todas as respostas (DES-09) e lista de erros pela tentativa mais recente (REV-01).
 
+## RISC: riscar alternativas
+
+Funcionalidade acrescentada ao MVP na Etapa 5, a pedido do usuário, porque ajuda no raciocínio de quem estuda (D-031). Vale no treino e no simulado. A linha inteira da alternativa escolhe; uma tesoura no fim da linha risca.
+
+| ID | Critério | Situação | Fonte |
+|---|---|---|---|
+| RISC-01 | WHEN o estudante aciona "riscar" numa alternativa de uma questão ainda não respondida THEN the system SHALL exibir a alternativa riscada e esmaecida, sem selecioná-la. | Confirmado | Pedido do usuário (2026-11-24); resposta "Jeito 1, tesoura" (2026-11-24); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-02 | WHEN o estudante risca a alternativa que estava selecionada THEN the system SHALL desfazer a seleção. | Confirmado | Regra proposta com a demonstração dos dois jeitos e mantida na escolha "Jeito 1, tesoura" (2026-11-24); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-03 | WHEN o estudante seleciona uma alternativa riscada THEN the system SHALL remover o risco dela. | Confirmado | Regra proposta com a demonstração dos dois jeitos e mantida na escolha "Jeito 1, tesoura" (2026-11-24); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-04 | WHEN o estudante aciona "riscar" numa alternativa já riscada THEN the system SHALL remover o risco. | Confirmado | Regra proposta com a demonstração dos dois jeitos e mantida na escolha "Jeito 1, tesoura" (2026-11-24); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-05 | WHEN a correção de uma questão é exibida THEN the system SHALL manter visíveis os riscos e, se a alternativa correta estiver riscada, exibi-la como correta com o aviso "Resposta certa. Você tinha riscado esta." | Confirmado | Regra proposta com a demonstração dos dois jeitos e mantida na escolha "Jeito 1, tesoura" (2026-11-24); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-06 | The system SHALL guardar os riscos somente no aparelho do estudante, mantendo-os ao navegar entre questões e ao pausar e retomar, até exibir a correção da questão. | Confirmado | Resposta "Só no aparelho" (2026-11-24); D-020; aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+| RISC-07 | The system SHALL deixar os riscos fora da tentativa registrada, do desempenho, das listas, do histórico e da exportação de dados. | Confirmado | Resposta "Só no aparelho" (2026-11-24); minimização (LGPD); aprovado na Etapa 5 ("Aprovar Etapa 5", 2026-11-24) |
+
+Como os riscos não são guardados no servidor nem fazem parte da tentativa, o modelo conceitual (D-008) não muda. Trocar de aparelho no meio de um simulado não leva os riscos junto.
+
 ## REV: revisão dos erros e "marcar"
 
 | ID | Critério | Situação | Fonte |
@@ -270,7 +301,7 @@ Por isso o catálogo diz "respostas consideradas no cálculo" (DES-07), e não "
 | Período do desempenho: todo o histórico ou com recorte de tempo (por exemplo, últimos 30 dias)? | Spec de DES |
 | Quantidade máxima de questões por simulado. | Spec de SIM |
 | Na visão só de treino (DES-06), vale a primeira tentativa entre as feitas no treino ou a primeira tentativa geral (que pode ter sido num simulado)? | Spec de DES |
-| Quando um treino termina: ao responder todas as questões, quando o estudante encerra ou quando inicia outro treino? Ele pode ser retomado depois de fechar o app (TREINO-04)? | Spec de TREINO |
+| Quando um treino termina: ao responder todas as questões, quando o estudante encerra ou quando inicia outro treino? A retomada depois de fechar o app (TREINO-04) foi resolvida em M-10 (D-008): a sessão fica no servidor. | Spec de TREINO |
 | No sorteio do simulado (SIM-09): o que acontece se houver menos questões que a quantidade pedida, e o sorteio dá preferência a questões ainda não respondidas? | Spec de SIM |
 
 ## EDIT: painel do editor
@@ -452,7 +483,7 @@ Os logs servem a diagnóstico e auditoria, sem expor credenciais e com o mínimo
 
 | Questão | Para onde vai |
 |---|---|
-| Breakpoints e layout por tamanho de tela (por exemplo, questão e correção lado a lado no tablet em paisagem). | Etapa 5 |
+| Breakpoints e layout por tamanho de tela (por exemplo, questão e correção lado a lado no tablet em paisagem). | Resolvido na Etapa 5 (D-030): três faixas de largura e questão que divide ao responder a partir de 1024 px, em `docs/design-e-ux.md` |
 | Registro do endereço IP em eventos de segurança e retenção específica para esses eventos. | Etapa 6 |
 | Meta definitiva de RNF-13, medida com o método deste catálogo. | Primeira versão funcional do app, sem protótipo descartável (resposta "Na 1ª versão funcional", 2026-11-23; D-026) |
 | Prazos de retenção de cada categoria de registro (RNF-18), considerando necessidade operacional, segurança, privacidade e obrigações legais. | Etapa 6 |
@@ -489,3 +520,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-23: **Etapa 2 aprovada formalmente** ("Aprovar Etapa 2"). Os 64 critérios propostos passaram a confirmados, totalizando 131 critérios confirmados. Os 67 confirmados anteriores não mudaram. Índice atualizado com autorização do usuário: D-018 e D-019 aprovadas (D-019 com ADR) e D-002 atualizada, ainda pendente.
 - 2026-11-23: Etapa 3. Três pendências marcadas "Etapa 3" foram atualizadas, com autorização do usuário ("Sim, como descrito"). O registro de acesso aos logs foi resolvido em D-025. A camada da matriz de permissões foi definida (backend, D-004 e D-020), e o detalhe ficou para a Etapa 6. A meta do RNF-13 passou para a primeira versão funcional (D-026). Nenhum critério foi alterado. O texto "Etapa 3" que ainda aparece na Fonte do RNF-13 e na linha "Viabilidade" das condições de medição fica superado por esta atualização.
 - 2026-11-23: Etapa 4 aprovada. Nove critérios novos, todos confirmados a partir de regras aprovadas no modelo conceitual (D-008): CONT-23, CONT-24, CONTA-25, REV-07, DES-11 a DES-13, EDIT-12 e EDIT-13. Pendências atualizadas: CAT-03 resolvida (M-08); a do simulado respondida em parte (M-11); quatro pendências novas. Nenhum critério existente foi alterado. Autorização do usuário: "Autorizo tudo".
+- 2026-11-24: Etapa 5 aprovada ("Aprovar Etapa 5"). Doze critérios novos, confirmados: CONT-25 a CONT-29 (rótulos do gabarito e nível de revisão, D-029) e RISC-01 a RISC-07 (riscar alternativas, D-031), com a funcionalidade RISC no mapa. Pendências resolvidas: rótulos do gabarito e breakpoints; a do fim do treino passou a citar M-10, que já resolveu a retomada. Nenhum critério existente foi alterado.

@@ -2,7 +2,7 @@
 
 Plataforma web de questões para estudantes de medicina, com conteúdo rastreável, revisado por pessoas e transparente sobre a origem de cada gabarito.
 
-> **Situação: em planejamento.** Ainda não há código implementado nem versão em uso. Por enquanto, este repositório guarda a documentação de produto, os requisitos e as decisões técnicas. Esta página reflete a situação de 23/11/2026. A fonte da verdade sobre o que está decidido é o [registro de decisões](docs/decisions.md).
+> **Situação: em planejamento.** Ainda não há código implementado nem versão em uso. Por enquanto, este repositório guarda a documentação de produto, os requisitos e as decisões técnicas. Esta página reflete a situação de 24/11/2026. A fonte da verdade sobre o que está decidido é o [registro de decisões](docs/decisions.md).
 
 ## Visão geral
 
@@ -46,6 +46,7 @@ Este é o escopo aprovado em D-001, detalhado com critérios testáveis no [cat�
 - Questões organizadas por grande área e tema, com filtros por área, tema, banca, ano, questões não resolvidas e questões erradas.
 - Treino por tema, com correção imediata.
 - Simulado cronometrado, com pausa e correção no fim.
+- Riscar alternativas enquanto resolve, para eliminar opções, no treino e no simulado (D-031).
 - Lista de erros e questões marcadas para revisar.
 - Desempenho por área e tema. Os temas mais fracos aparecem em destaque, e cada taxa de acerto mostra quantas respostas entraram no cálculo.
 - Botão para reportar erro numa questão, com resposta ao estudante.
@@ -170,7 +171,7 @@ O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança 
 
 ## Situação atual
 
-Situação em 23/11/2026:
+Situação em 24/11/2026:
 
 | Etapa | Situação |
 |---|---|
@@ -178,8 +179,8 @@ Situação em 23/11/2026:
 | 2. Requisitos do MVP | Aprovada |
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
-| 5. Identidade visual, UX e fluxos de navegação | Próxima etapa, ainda não iniciada |
-| 6. Segurança, qualidade e infraestrutura | Futura |
+| 5. Identidade visual, UX e fluxos de navegação | Aprovada |
+| 6. Segurança, qualidade e infraestrutura | Próxima etapa, ainda não iniciada |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
 **Decisões ainda pendentes:**
@@ -218,6 +219,8 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 | [docs/decisions.md](docs/decisions.md) | Registro de decisões: índice com a situação de cada decisão. Só as decisões aprovadas são vinculantes |
 | [docs/requisitos-mvp.md](docs/requisitos-mvp.md) | Catálogo de requisitos do MVP, com critérios no formato EARS e IDs rastreáveis (por exemplo, CONT-13) |
 | [docs/modelo-conceitual.md](docs/modelo-conceitual.md) | Modelo conceitual dos dados: entidades, relações, regras de integridade e rastreabilidade até os requisitos |
+| [docs/design-e-ux.md](docs/design-e-ux.md) | Identidade visual, sistema de design, tom de voz, navegação, fluxos e tamanhos de tela, com os requisitos atendidos por tela |
+| [docs/design/](docs/design/) | Referência visual da Etapa 5: identidade, sistema de design e navegação, em páginas HTML para abrir no navegador. Não é código do app |
 | [docs/adr/](docs/adr/) | Registros de decisões de arquitetura (ADRs) com o raciocínio completo das decisões mais importantes. Cada ADR tem link no registro de decisões |
 
 As decisões passam por estes estados: **Pendente → Proposta → Aprovada → Substituída**, e as propostas recusadas ficam como **Descartada**. Cada requisito tem um ID; a especificação de cada funcionalidade e os seus testes citam esse ID, ligando o que foi pedido ao que foi verificado (D-026).

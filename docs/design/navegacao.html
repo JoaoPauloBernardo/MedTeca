@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Navegação e fluxos MedTeca</title>
+<meta name="description" content="Arquitetura de informação do MedTeca: mapa do app, navegação por tamanho de tela, fluxos do estudante e do editor e telas-chave.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..700&family=Literata:opsz,wght@7..72,400..700&display=swap">
+<script>
+(function () {
+  var r = document.documentElement, t = '';
+  try { t = localStorage.getItem('medteca-aparencia') || ''; } catch (e) {}
+  if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* Hallmark · shape: app screen · genre: editorial · theme: custom
+ * paper: oklch(98.6% 0.006 160) · accent: oklch(40% 0.11 163) · display: Literata · body: Figtree
+ * nav: barra fixa com a marca e a aparência, sumário em links · signature: a questão que divide ao responder, demonstrada ao vivo · states: aba ativa, modo foco, cronômetro, pausado, respondida, em branco, marcada, dividida
+ * axes: papel verde-claro/serifa/esmeralda com roxo · posture: referência de arquitetura · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V3 · weakest: V, segue o sistema aprovado de propósito; o que é novo é a estrutura, mostrada em mapa, fluxos e telas reais */
+
+/* ---------- Tokens: escala e paleta bruta (todas as cores e fontes nascem aqui) ---------- */
+:root {
+  color-scheme: light;
+  --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-read: 1.0625rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem;
+  --text-hero: clamp(2rem, 1.55rem + 1.9vw, 2.9rem); --text-figure: 3.25rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --dur-micro: 120ms; --dur-short: 220ms;
+  --container: 1200px; --gutter: 40px; --z-sticky: 200;
+
+  --font-display: "Literata", ui-serif, Georgia, serif;
+  --font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --tracking-display: -0.015em;
+  --radius-control: 8px; --radius-frame: 14px; --radius-chip: 6px; --radius-seg: 10px; --radius-bar: 999px;
+  --target: 44px;
+
+  /* Claro */
+  --e-paper: oklch(98.6% 0.006 160); --e-paper-2: oklch(96.5% 0.01 160); --e-rule: oklch(89% 0.014 160);
+  --e-ink: oklch(23% 0.02 165); --e-muted: oklch(49% 0.02 165);
+  --e-accent: oklch(40% 0.11 163); --e-accent-hover: oklch(35% 0.1 163); --e-accent-ink: oklch(99% 0.005 160);
+  --e-focus: oklch(55% 0.14 163); --e-success: oklch(46% 0.12 150); --e-error: oklch(48% 0.16 18); --e-warn: oklch(52% 0.12 70);
+  --e-on-status: oklch(99% 0.005 160); --e-mark: oklch(91% 0.05 163); --e-mark-ink: oklch(23% 0.02 165);
+  --e-book: oklch(44% 0.16 305); --e-cover: oklch(28% 0.12 305);
+  --e-cover-med: oklch(63% 0.15 160); --e-shell: oklch(94% 0.025 85);
+  /* Escuro */
+  --ed-paper: oklch(17% 0.015 165); --ed-paper-2: oklch(21% 0.018 165); --ed-rule: oklch(31% 0.02 165);
+  --ed-ink: oklch(94% 0.008 160); --ed-muted: oklch(72% 0.015 160);
+  --ed-accent: oklch(68% 0.14 160); --ed-accent-hover: oklch(74% 0.13 160); --ed-accent-ink: oklch(18% 0.02 165);
+  --ed-focus: oklch(82% 0.11 163); --ed-success: oklch(78% 0.12 150); --ed-error: oklch(74% 0.13 20); --ed-warn: oklch(80% 0.12 80);
+  --ed-on-status: oklch(17% 0.015 165); --ed-mark: oklch(34% 0.06 163); --ed-mark-ink: oklch(94% 0.008 160);
+  --ed-book: oklch(76% 0.11 305); --ed-cover: oklch(28% 0.12 305);
+}
+
+/* ---------- Pares claro e escuro ---------- */
+:root {
+  --l-paper: var(--e-paper); --l-paper-2: var(--e-paper-2); --l-rule: var(--e-rule); --l-ink: var(--e-ink); --l-muted: var(--e-muted);
+  --l-accent: var(--e-accent); --l-accent-hover: var(--e-accent-hover); --l-accent-ink: var(--e-accent-ink); --l-focus: var(--e-focus);
+  --l-success: var(--e-success); --l-error: var(--e-error); --l-warn: var(--e-warn); --l-on-status: var(--e-on-status);
+  --l-mark: var(--e-mark); --l-mark-ink: var(--e-mark-ink); --l-teca: var(--e-book); --l-ribbon: var(--e-book); --l-cover: var(--e-cover);
+  --d-paper: var(--ed-paper); --d-paper-2: var(--ed-paper-2); --d-rule: var(--ed-rule); --d-ink: var(--ed-ink); --d-muted: var(--ed-muted);
+  --d-accent: var(--ed-accent); --d-accent-hover: var(--ed-accent-hover); --d-accent-ink: var(--ed-accent-ink); --d-focus: var(--ed-focus);
+  --d-success: var(--ed-success); --d-error: var(--ed-error); --d-warn: var(--ed-warn); --d-on-status: var(--ed-on-status);
+  --d-mark: var(--ed-mark); --d-mark-ink: var(--ed-mark-ink); --d-teca: var(--e-shell); --d-ribbon: var(--ed-book); --d-cover: var(--ed-cover);
+  --color-cover-med: var(--e-cover-med); --color-cover-teca: var(--e-shell);
+}
+
+/* ---------- Aparência ---------- */
+:root {
+  --color-paper: var(--l-paper); --color-paper-2: var(--l-paper-2); --color-rule: var(--l-rule); --color-ink: var(--l-ink); --color-muted: var(--l-muted);
+  --color-accent: var(--l-accent); --color-accent-hover: var(--l-accent-hover); --color-accent-ink: var(--l-accent-ink); --color-focus: var(--l-focus);
+  --color-success: var(--l-success); --color-error: var(--l-error); --color-warn: var(--l-warn); --color-on-status: var(--l-on-status);
+  --color-mark: var(--l-mark); --color-mark-ink: var(--l-mark-ink); --color-teca: var(--l-teca); --color-ribbon: var(--l-ribbon); --color-cover: var(--l-cover);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-paper: var(--d-paper); --color-paper-2: var(--d-paper-2); --color-rule: var(--d-rule); --color-ink: var(--d-ink); --color-muted: var(--d-muted);
+    --color-accent: var(--d-accent); --color-accent-hover: var(--d-accent-hover); --color-accent-ink: var(--d-accent-ink); --color-focus: var(--d-focus);
+    --color-success: var(--d-success); --color-error: var(--d-error); --color-warn: var(--d-warn); --color-on-status: var(--d-on-status);
+    --color-mark: var(--d-mark); --color-mark-ink: var(--d-mark-ink); --color-teca: var(--d-teca); --color-ribbon: var(--d-ribbon); --color-cover: var(--d-cover);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: var(--d-paper); --color-paper-2: var(--d-paper-2); --color-rule: var(--d-rule); --color-ink: var(--d-ink); --color-muted: var(--d-muted);
+  --color-accent: var(--d-accent); --color-accent-hover: var(--d-accent-hover); --color-accent-ink: var(--d-accent-ink); --color-focus: var(--d-focus);
+  --color-success: var(--d-success); --color-error: var(--d-error); --color-warn: var(--d-warn); --color-on-status: var(--d-on-status);
+  --color-mark: var(--d-mark); --color-mark-ink: var(--d-mark-ink); --color-teca: var(--d-teca); --color-ribbon: var(--d-ribbon); --color-cover: var(--d-cover);
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; scrollbar-color: var(--color-muted) var(--color-paper); }
+body {
+  margin: 0; background: var(--color-paper); color: var(--color-ink);
+  font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; caret-color: var(--color-accent);
+}
+::selection { background: var(--color-mark); color: var(--color-mark-ink); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+h1, h2, h3, h4 {
+  margin: 0; font-family: var(--font-display); font-weight: 600; line-height: 1.15;
+  letter-spacing: var(--tracking-display); color: var(--color-ink);
+  text-wrap: balance; overflow-wrap: break-word; min-width: 0; font-synthesis: none;
+}
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; }
+figure { margin: 0; }
+[hidden] { display: none !important; }
+button, input { font: inherit; color: inherit; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ico { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.wrap {
+  width: 100%; max-width: var(--container); margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+}
+@media (max-width: 60rem) { :root { --gutter: 24px; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; } }
+.wm { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; font-size: var(--text-xl); }
+.wm-med { color: var(--color-accent); }
+.wm-teca { color: var(--color-teca); }
+.on-cover .wm-med { color: var(--color-cover-med); }
+.on-cover .wm-teca { color: var(--color-cover-teca); }
+
+/* ---------- Barra de cima e controles ---------- */
+.topbar { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-paper); border-bottom: 1px solid var(--color-rule); }
+.topbar-in { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-block: var(--space-xs); }
+.seg {
+  display: inline-flex; gap: 2px; margin: 0; padding: var(--space-2xs); min-inline-size: 0;
+  border: 1px solid var(--color-rule); border-radius: var(--radius-seg); background: var(--color-paper-2);
+}
+.seg label {
+  position: relative; flex: 1 0 auto; display: grid; place-items: center; white-space: nowrap;
+  min-height: var(--target); padding: var(--space-2xs) var(--space-md); border-radius: max(0px, calc(var(--radius-seg) - var(--space-2xs)));
+  font-size: var(--text-sm); font-weight: 600; line-height: 1.2; color: var(--color-ink);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.seg input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.seg label:hover:not(:has(input:checked)) { background: var(--color-rule); }
+.seg label:has(input:checked) { background: var(--color-accent); color: var(--color-accent-ink); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.seg label:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
+.seg-full { display: flex; width: 100%; }
+.seg-full label { flex: 1 1 0; }
+@media (max-width: 40rem) { .topbar .seg label { padding-inline: var(--space-sm); } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 48px; padding: 0 var(--space-lg); border: 1px solid transparent; border-radius: var(--radius-control);
+  font-weight: 600; white-space: nowrap; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.btn-primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn-primary:hover { background: var(--color-accent-hover); }
+.btn-quiet { background: transparent; color: var(--color-ink); border-color: var(--color-rule); padding-inline: var(--space-md); }
+.btn-quiet:hover { background: var(--color-paper-2); }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn-sm { min-height: var(--target); padding-inline: var(--space-sm); gap: var(--space-2xs); }
+.btn-quiet[aria-pressed="true"] { border-color: var(--color-ribbon); }
+.btn-quiet[aria-pressed="true"] .ico { fill: var(--color-ribbon); stroke: var(--color-ribbon); }
+.icon-btn {
+  inline-size: 44px; block-size: 44px; display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-control); background: transparent; color: var(--color-ink);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.icon-btn:hover { background: var(--color-paper-2); }
+.icon-btn:active { transform: scale(0.94); }
+.icon-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.icon-btn .ico { width: 24px; height: 24px; }
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: 40px; padding: 0 var(--space-sm);
+  border: 1px solid var(--color-muted); border-radius: var(--radius-chip); background: var(--color-paper); color: var(--color-ink);
+  font-size: var(--text-sm); font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.chip:hover { background: var(--color-paper-2); }
+.chip[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.chip .ico { display: none; width: 16px; height: 16px; }
+.chip[aria-pressed="true"] .ico { display: block; }
+.chip:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- Abertura ---------- */
+.intro { padding-block: var(--space-2xl) var(--space-xl); display: grid; gap: var(--space-md); }
+.intro h1 { font-size: var(--text-hero); }
+.lead { font-size: var(--text-lg); line-height: 1.5; max-width: 58ch; }
+.decided { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.decided li { display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: 32px; padding: var(--space-2xs) var(--space-sm); border-radius: var(--radius-chip); background: var(--color-paper-2); font-size: var(--text-sm); font-weight: 500; }
+.decided .ico { width: 16px; height: 16px; color: var(--color-success); }
+.toc { display: flex; flex-wrap: wrap; gap: var(--space-xs); list-style: none; padding: 0; }
+.toc a {
+  display: inline-flex; align-items: center; min-height: 36px; padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid var(--color-rule); border-radius: var(--radius-chip);
+  font-size: var(--text-sm); font-weight: 500; color: var(--color-ink); text-decoration: none;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.toc a:hover { background: var(--color-paper-2); }
+.band { padding-block: var(--space-xl); border-top: 1px solid var(--color-rule); }
+.band > h2 { font-size: var(--text-2xl); }
+.band-intro { margin-top: var(--space-xs); color: var(--color-muted); max-width: 64ch; }
+.sub { margin-top: var(--space-xl); font-size: var(--text-lg); }
+.note { margin-top: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); max-width: 64ch; }
+
+/* ---------- Mapa ---------- */
+.map { margin-top: var(--space-lg); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: var(--space-lg); }
+.map-col { border: 1px solid var(--color-rule); border-radius: var(--radius-frame); padding: var(--space-md); display: grid; gap: var(--space-xs); align-content: start; }
+.map-col h3 { display: flex; align-items: center; gap: var(--space-xs); font-size: var(--text-lg); }
+.map-col h3 .ico { width: 22px; height: 22px; }
+.map-where { font-size: var(--text-sm); color: var(--color-muted); }
+.map-col ul { list-style: none; padding: 0; display: grid; }
+.map-col li { padding-block: var(--space-xs); border-top: 1px solid var(--color-rule); }
+.map-col li b { display: block; font-weight: 600; }
+.ids { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+
+/* ---------- Tamanhos de tela ---------- */
+.sizes { margin-top: var(--space-lg); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-xl) var(--space-lg); align-items: end; }
+.size { display: grid; gap: var(--space-sm); justify-items: start; }
+.size h3 { font-size: var(--text-lg); }
+.size p { font-size: var(--text-sm); color: var(--color-muted); }
+.wf { display: grid; overflow: hidden; border: 1.5px solid var(--color-ink); border-radius: 12px; background: var(--color-paper); }
+.wf-phone { inline-size: 116px; aspect-ratio: 9 / 19; grid-template-rows: minmax(0, 1fr) 24px; }
+.wf-tablet { inline-size: 190px; aspect-ratio: 3 / 4; grid-template-columns: 30px minmax(0, 1fr); }
+.wf-wide { inline-size: 290px; aspect-ratio: 4 / 3; grid-template-columns: 72px minmax(0, 1fr); }
+.wf-focus { inline-size: 290px; aspect-ratio: 4 / 3; grid-template-rows: 22px minmax(0, 1fr); }
+.wf-nav { display: flex; align-items: center; justify-content: space-around; gap: var(--space-2xs); padding: var(--space-2xs); background: var(--color-paper-2); }
+.wf-phone .wf-nav { border-top: 1px solid var(--color-rule); }
+.wf-tablet .wf-nav, .wf-wide .wf-nav { flex-direction: column; justify-content: flex-start; padding-top: var(--space-sm); border-right: 1px solid var(--color-rule); }
+.wf-wide .wf-nav { align-items: stretch; }
+.wf-focus .wf-nav { justify-content: space-between; padding-inline: var(--space-xs); border-bottom: 1px solid var(--color-rule); }
+.wf-i { display: block; inline-size: 12px; block-size: 5px; border-radius: 3px; background: var(--color-muted); }
+.wf-i.is-on { background: var(--color-accent); }
+.wf-wide .wf-i { inline-size: auto; block-size: 6px; margin-inline: var(--space-xs); }
+.wf-body { display: grid; gap: var(--space-2xs); align-content: start; padding: var(--space-xs); min-inline-size: 0; }
+.wf-l { display: block; block-size: 5px; border-radius: 3px; background: color-mix(in oklab, var(--color-muted) 35%, var(--color-paper)); }
+.wf-l.w-60 { inline-size: 60%; } .wf-l.w-80 { inline-size: 80%; } .wf-l.w-40 { inline-size: 40%; }
+.wf-b { display: block; block-size: 12px; border-radius: 3px; border: 1px solid color-mix(in oklab, var(--color-muted) 45%, var(--color-paper)); }
+.wf-btn { display: block; block-size: 12px; inline-size: 60%; border-radius: 3px; border: 1.5px solid var(--color-accent); }
+.wf-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-xs); padding: var(--space-xs); }
+.wf-split > div { display: grid; gap: var(--space-2xs); align-content: start; }
+.wf-split > div + div { border-left: 1px solid var(--color-rule); padding-left: var(--space-xs); }
+.wf-tone { display: block; block-size: 14px; border-radius: 3px; background: color-mix(in oklab, var(--color-error) 18%, var(--color-paper)); }
+
+/* ---------- Fluxos ---------- */
+.flows { margin-top: var(--space-lg); display: grid; gap: var(--space-xl); }
+.flow h3 { font-size: var(--text-lg); }
+.flow-who { margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
+.steps { list-style: none; padding: 0; margin-top: var(--space-sm); display: flex; flex-wrap: wrap; gap: var(--space-xs); counter-reset: passo; }
+.steps li {
+  display: inline-flex; align-items: baseline; gap: var(--space-xs); padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper);
+  font-size: var(--text-sm); counter-increment: passo; max-inline-size: 100%;
+}
+.steps li::before { content: counter(passo); font-family: var(--font-display); font-weight: 600; color: var(--color-accent); }
+.steps li.is-alt { border-style: dashed; counter-increment: none; }
+.steps li.is-alt::before { content: "ou"; color: var(--color-muted); font-family: var(--font-body); font-weight: 500; }
+.steps li.is-open { background: color-mix(in oklab, var(--color-warn) 10%, var(--color-paper)); border-color: color-mix(in oklab, var(--color-warn) 45%, var(--color-paper)); }
+.flow .note { margin-top: var(--space-xs); }
+
+/* ---------- Telas-chave ---------- */
+.screens { margin-top: var(--space-lg); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: var(--space-xl) var(--space-lg); align-items: start; }
+.screen-title { font-size: var(--text-lg); margin-bottom: var(--space-sm); }
+.screen-sub { margin: calc(-1 * var(--space-xs)) 0 var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+.frame {
+  --pad: var(--space-md);
+  max-width: 440px; padding: 0 var(--pad) var(--space-lg);
+  border: 1px solid var(--color-rule); border-radius: var(--radius-frame); background: var(--color-paper); overflow: clip;
+}
+.frame.has-tabs { padding-bottom: 0; }
+@media (max-width: 40rem) { .frame { --pad: 0px; border-inline: 0; border-radius: 0; max-width: none; } }
+.appbar {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr) 88px; align-items: center; gap: var(--space-xs);
+  min-height: 56px; margin-inline: calc(-1 * var(--pad)); padding-inline: max(var(--space-2xs), calc(var(--pad) - var(--space-xs))) max(var(--space-2xs), calc(var(--pad) - var(--space-xs)));
+  border-bottom: 1px solid var(--color-rule);
+}
+.appbar-title { text-align: center; font-weight: 600; }
+.appbar-end { justify-self: end; }
+.timer { display: inline-flex; align-items: center; gap: var(--space-2xs); font-weight: 600; }
+.timer .ico { width: 18px; height: 18px; color: var(--color-muted); }
+.progress { height: 3px; margin-inline: calc(-1 * var(--pad)); background: var(--color-rule); }
+.progress span { display: block; height: 100%; inline-size: var(--p, 15%); background: var(--color-accent); }
+
+.cover {
+  position: relative; margin-inline: calc(-1 * var(--pad)); padding: var(--space-lg) var(--space-lg) var(--space-lg);
+  background: var(--color-cover); color: var(--color-cover-teca); display: grid; gap: var(--space-2xs);
+}
+.cover .wm { font-size: 2rem; }
+.cover-line { font-size: var(--text-sm); }
+.cover-account {
+  position: absolute; top: var(--space-sm); right: var(--space-sm);
+  inline-size: 44px; block-size: 44px; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid color-mix(in oklab, var(--color-cover-teca) 45%, var(--color-cover)); background: transparent; color: var(--color-cover-teca); cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.cover-account:hover { background: color-mix(in oklab, var(--color-cover-teca) 12%, var(--color-cover)); }
+.cover-account:focus-visible { outline-color: var(--color-cover-teca); }
+.block { margin-top: var(--space-lg); }
+.block h4 { font-size: var(--text-lg); }
+.block-sub { margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
+.bar { margin-top: var(--space-sm); height: 8px; border-radius: 999px; overflow: hidden; background: color-mix(in oklab, var(--color-muted) 18%, var(--color-paper)); }
+.bar span { display: block; height: 100%; inline-size: var(--v); border-radius: inherit; background: var(--color-accent); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+.actions .btn-primary { flex: 1 1 auto; }
+.notice {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: var(--space-sm); align-items: start;
+  margin-top: var(--space-lg); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-control);
+  background: color-mix(in oklab, var(--tone) 10%, var(--color-paper)); border: 1px solid color-mix(in oklab, var(--tone) 35%, var(--color-paper));
+  font-size: var(--text-sm);
+}
+.notice .ico { width: 22px; height: 22px; color: var(--tone); }
+.notice.is-ok { --tone: var(--color-success); }
+.notice a { color: var(--color-ink); font-weight: 600; }
+.shelf { list-style: none; padding: 0; margin-top: var(--space-xs); }
+.shelf a {
+  display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: var(--space-sm); align-items: center;
+  min-height: 56px; padding-block: var(--space-xs); border-bottom: 1px solid var(--color-rule);
+  color: var(--color-ink); text-decoration: none; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.shelf li:last-child a { border-bottom: 0; }
+.shelf a:hover { background: var(--color-paper-2); }
+.shelf .ico { width: 22px; height: 22px; color: var(--color-muted); }
+.shelf .is-ribbon .ico { fill: var(--color-ribbon); stroke: var(--color-ribbon); }
+.shelf-name { font-weight: 500; }
+.shelf-name small { display: block; font-size: var(--text-sm); font-weight: 400; color: var(--color-muted); }
+.shelf-count { font-size: var(--text-sm); color: var(--color-muted); }
+.demo-note { margin-top: var(--space-md); font-size: var(--text-xs); color: var(--color-muted); }
+
+.tabbar {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: var(--space-lg) calc(-1 * var(--pad)) 0;
+  border-top: 1px solid var(--color-rule); background: var(--color-paper);
+}
+.tabbar a {
+  display: grid; justify-items: center; gap: 2px; min-height: 60px; padding: var(--space-xs) 0;
+  font-size: var(--text-xs); font-weight: 500; color: var(--color-muted); text-decoration: none; -webkit-tap-highlight-color: transparent;
+}
+.tabbar a span { display: grid; place-items: center; inline-size: 56px; block-size: 28px; border-radius: var(--radius-bar); transition: background-color var(--dur-micro) var(--ease-out); }
+.tabbar a:hover span { background: var(--color-paper-2); }
+.tabbar a[aria-current="page"] { color: var(--color-ink); font-weight: 700; }
+.tabbar a[aria-current="page"] span { background: color-mix(in oklab, var(--color-accent) 16%, var(--color-paper)); color: var(--color-accent); }
+.tabbar .ico { width: 22px; height: 22px; }
+
+/* Praticar */
+.field-list { list-style: none; padding: 0; margin-top: var(--space-xs); }
+.field-list button {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-sm); align-items: center; inline-size: 100%;
+  min-height: 52px; padding: var(--space-xs) 0; border: 0; border-bottom: 1px solid var(--color-rule); background: transparent;
+  text-align: start; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-micro) var(--ease-out);
+}
+.field-list button:hover { background: var(--color-paper-2); }
+.field-list b { font-weight: 500; }
+.field-list span { font-size: var(--text-sm); color: var(--color-muted); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+.count { margin-top: var(--space-sm); font-size: var(--text-sm); }
+.count b { font-weight: 700; }
+.mode { margin-top: var(--space-sm); display: grid; gap: var(--space-sm); }
+.mode-desc { font-size: var(--text-sm); color: var(--color-muted); }
+.steppers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-sm); }
+.stepper { display: grid; gap: var(--space-2xs); }
+.stepper > span { font-size: var(--text-sm); font-weight: 600; }
+.stepper div { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; border: 1px solid var(--color-muted); border-radius: var(--radius-control); }
+.stepper output { text-align: center; font-weight: 600; }
+.stepper button { inline-size: 44px; block-size: 44px; border: 0; background: transparent; font-size: var(--text-lg); font-weight: 600; cursor: pointer; border-radius: var(--radius-control); transition: background-color var(--dur-micro) var(--ease-out); }
+.stepper button:hover { background: var(--color-paper-2); }
+.stepper button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Questão e alternativas */
+.q-meta { display: flex; flex-wrap: wrap; gap: var(--space-xs); list-style: none; padding: 0; margin-top: var(--space-md); }
+.tag { display: inline-flex; align-items: center; min-height: 28px; padding: var(--space-2xs) var(--space-sm); border-radius: var(--radius-chip); background: var(--color-paper-2); color: var(--color-muted); font-size: var(--text-xs); font-weight: 500; }
+.q-stem, .read { font-family: var(--font-display); font-size: var(--text-read); line-height: 1.6; }
+.q-stem { margin-top: var(--space-md); }
+.opts { display: grid; gap: var(--space-xs); margin: var(--space-lg) 0 0; padding: 0; border: 0; min-inline-size: 0; }
+.alt-letter {
+  inline-size: 32px; block-size: 32px; display: grid; place-items: center;
+  border: 1.5px solid var(--color-muted); border-radius: 50%;
+  font-family: var(--font-display); font-size: var(--text-md); font-weight: 600; color: var(--color-ink);
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.opt {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper);
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.opt:not(.is-done):has(input:checked) { border-color: var(--color-ink); background: color-mix(in oklab, var(--color-ink) 5%, var(--color-paper)); }
+.opt:not(.is-done):has(input:checked) .alt-letter { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.opt:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.opt-pick {
+  position: relative; display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: var(--space-sm); align-items: center;
+  min-height: 56px; padding: var(--space-sm) var(--space-xs) var(--space-sm) var(--space-md);
+  border-radius: var(--radius-control); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.opt-pick input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.opt-pick:hover { background: var(--color-paper-2); }
+.opt-text { line-height: 1.45; }
+.alt-tag { grid-column: 2; font-size: var(--text-sm); font-weight: 600; }
+.alt-tag:empty { display: none; }
+.strike {
+  inline-size: 44px; block-size: 44px; margin-inline-end: var(--space-xs); display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-control); background: transparent; color: var(--color-muted);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.strike:hover { background: var(--color-paper-2); color: var(--color-ink); }
+.strike[aria-pressed="true"] { color: var(--color-error); }
+.strike:disabled { visibility: hidden; }
+.opt.is-struck .alt-letter { border-color: var(--color-rule); color: var(--color-muted); }
+.opt.is-struck:not(.is-right) .opt-text { color: var(--color-muted); text-decoration: line-through; text-decoration-color: var(--color-error); text-decoration-thickness: 2px; }
+.opt.is-done .opt-pick { cursor: default; }
+.opt.is-done .opt-pick:hover { background: transparent; }
+.opt.is-done:not(.is-right):not(.is-wrong) .opt-text { color: var(--color-muted); }
+.opt.is-done:not(.is-right):not(.is-wrong) .alt-letter { border-color: var(--color-rule); color: var(--color-muted); }
+.opt.is-done.is-right { border-color: var(--color-success); }
+.opt.is-done.is-right .alt-letter { background: var(--color-success); border-color: var(--color-success); color: var(--color-on-status); }
+.opt.is-done.is-wrong { border-color: var(--color-error); }
+.opt.is-done.is-wrong .alt-letter { background: var(--color-error); border-color: var(--color-error); color: var(--color-on-status); }
+.opt.is-right .alt-tag { color: var(--color-success); }
+.opt.is-wrong .alt-tag { color: var(--color-error); }
+.foot-nav { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-sm); margin-top: var(--space-lg); }
+
+/* Mapa do simulado */
+.qgrid { list-style: none; padding: 0; margin-top: var(--space-md); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-xs); }
+.qgrid button {
+  position: relative; inline-size: 100%; min-height: 48px; border: 1.5px solid var(--color-muted); border-radius: var(--radius-control);
+  background: var(--color-paper); color: var(--color-ink); font-weight: 600; cursor: pointer; overflow: hidden;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.qgrid button:hover { background: var(--color-paper-2); }
+.qgrid .is-answered { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.qgrid .is-answered:hover { background: var(--color-ink); }
+.qgrid .is-current { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.qgrid .is-flagged::after { content: ""; position: absolute; top: 0; right: 6px; inline-size: 8px; block-size: 12px; background: var(--color-ribbon); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%); }
+.legend { list-style: none; padding: 0; margin-top: var(--space-md); display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); font-size: var(--text-sm); color: var(--color-muted); }
+.legend li { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.legend i { display: inline-block; inline-size: 18px; block-size: 18px; border-radius: 4px; border: 1.5px solid var(--color-muted); }
+.legend i.is-answered { background: var(--color-ink); border-color: var(--color-ink); }
+.legend i.is-flagged { border-color: var(--color-ribbon); background: var(--color-ribbon); }
+.summary { margin-top: var(--space-md); font-size: var(--text-sm); }
+
+/* ---------- Divide ao responder (demonstração ao vivo) ---------- */
+.study { container-type: inline-size; margin-top: var(--space-lg); border: 1px solid var(--color-rule); border-radius: var(--radius-frame); padding: var(--space-lg) var(--space-md); }
+.study-grid { display: grid; grid-template-columns: minmax(0, 640px); justify-content: center; gap: var(--space-xl); }
+.study-correction { display: grid; gap: var(--space-sm); align-content: start; }
+@container (min-width: 760px) {
+  .study.is-answered .study-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); justify-content: stretch; }
+  .study.is-answered .study-correction { border-left: 1px solid var(--color-rule); padding-left: var(--space-xl); }
+}
+.study-correction { animation: entrar var(--dur-short) var(--ease-out); }
+@keyframes entrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.result {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-sm); align-items: start;
+  padding: var(--space-md); border-radius: var(--radius-control);
+  background: color-mix(in oklab, var(--tone) 11%, var(--color-paper));
+}
+.result.is-wrong { --tone: var(--color-error); }
+.result.is-right { --tone: var(--color-success); }
+.result .ico { width: 28px; height: 28px; color: var(--tone); }
+.result-title { font-family: var(--font-display); font-weight: 600; font-size: var(--text-xl); line-height: 1.2; }
+.result-sub { margin-top: 2px; font-size: var(--text-sm); }
+.gab-line { display: flex; align-items: flex-start; gap: var(--space-xs); font-size: var(--text-sm); font-weight: 600; }
+.gab-line .ico { color: var(--color-accent); margin-top: 1px; }
+.gab-line small { display: block; font-weight: 400; color: var(--color-muted); }
+
+/* Procedência: origem, situação do gabarito e revisão, em cada questão */
+.prov { margin-top: var(--space-sm); display: grid; gap: var(--space-2xs); }
+.prov-origin { font-size: var(--text-sm); color: var(--color-muted); }
+.prov-badges { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-md); }
+.prov-badges li { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--text-sm); font-weight: 600; }
+.prov-badges .ico { width: 18px; height: 18px; color: var(--color-accent); }
+.prov-rev {
+  display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: var(--target); margin-block: calc(-1 * var(--space-sm));
+  padding: 0 var(--space-2xs); border: 0; border-radius: var(--radius-control); background: transparent; color: var(--color-ink);
+  font-size: var(--text-sm); font-weight: 600; white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.prov-rev:hover { background: var(--color-paper-2); }
+.prov-rev .ico { color: var(--color-muted); }
+.prov-rev .ico-i { width: 16px; height: 16px; }
+.prov-rev[aria-expanded="true"] { background: var(--color-paper-2); }
+.prov-explain { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-control); background: var(--color-paper-2); font-size: var(--text-sm); }
+
+/* Simulado pausado */
+.paused { display: grid; gap: var(--space-sm); justify-items: start; padding-block: var(--space-xl); }
+.paused .ico-big { width: 40px; height: 40px; color: var(--color-muted); }
+.paused h4 { font-size: var(--text-xl); }
+.paused .actions { width: 100%; }
+
+/* Filtros só do treino */
+.chips-note { margin-top: var(--space-xs); font-size: var(--text-sm); color: var(--color-muted); }
+.chip:disabled[aria-pressed="true"] { background: var(--color-paper); border-color: var(--color-muted); color: var(--color-ink); }
+.chip:disabled[aria-pressed="true"] .ico { display: none; }
+.steppers { margin-top: var(--space-sm); }
+h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
+
+/* Desempenho */
+.score { margin-top: var(--space-lg); }
+.score-fig { font-family: var(--font-display); font-weight: 600; font-size: var(--text-figure); line-height: 1; letter-spacing: var(--tracking-display); font-variant-numeric: tabular-nums; }
+.score-sub { margin-top: var(--space-xs); }
+.score-out { margin-top: var(--space-xs); font-size: var(--text-sm); color: var(--color-muted); }
+.d-title { margin-top: var(--space-lg); font-size: var(--text-lg); }
+.d-list { list-style: none; padding: 0; margin-top: var(--space-sm); display: grid; gap: var(--space-md); }
+.d-item-top { display: flex; justify-content: space-between; gap: var(--space-sm); font-weight: 500; }
+.d-item-sub { display: flex; align-items: center; gap: var(--space-xs); margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
+.d-item.is-few .d-item-sub { color: var(--color-ink); }
+.d-item.is-few .d-pct { color: var(--color-muted); }
+.d-item.is-few .bar span { background: var(--color-muted); }
+.d-item-sub .ico { width: 18px; height: 18px; }
+.d-area { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-rule); }
+.d-area > .d-item-top { font-weight: 700; }
+.d-area .d-list { margin-top: var(--space-sm); padding-left: var(--space-md); border-left: 2px solid var(--color-rule); }
+.refs-label { font-size: var(--text-sm); font-weight: 600; }
+.refs { padding-left: 1.4em; padding-top: var(--space-sm); display: grid; gap: var(--space-2xs); font-family: var(--font-display); font-size: var(--text-sm); color: var(--color-muted); background: linear-gradient(var(--color-muted), var(--color-muted)) top left / 33% 1px no-repeat; }
+.study-status { min-height: 1.5em; margin-top: var(--space-sm); font-size: var(--text-sm); font-weight: 600; }
+
+/* Acessibilidade */
+.a11y { margin-top: var(--space-lg); padding-left: 1.4em; display: grid; gap: var(--space-xs); max-width: 72ch; }
+.a11y li::marker { color: var(--color-accent); font-weight: 600; }
+.a11y b { font-weight: 600; }
+.open { list-style: none; padding: 0; margin-top: var(--space-lg); display: grid; gap: var(--space-xs); max-width: 72ch; }
+.open li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: var(--space-sm); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-control); background: color-mix(in oklab, var(--color-warn) 10%, var(--color-paper)); border: 1px solid color-mix(in oklab, var(--color-warn) 40%, var(--color-paper)); }
+.open .ico { width: 22px; height: 22px; color: var(--color-warn); }
+.open small { display: block; font-size: var(--text-sm); color: var(--color-muted); }
+
+.foot { margin-top: var(--space-2xl); padding-block: var(--space-xl); border-top: 1px solid var(--color-rule); }
+.foot p { font-size: var(--text-sm); color: var(--color-muted); max-width: 70ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></symbol>
+  <symbol id="i-practice" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/></symbol>
+  <symbol id="i-shelf" viewBox="0 0 24 24"><path d="M4 4h4v16H4zM10 4h4v16h-4z"/><path d="M15.5 5.6l3.6-1 3.4 14.2-3.6 1z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 3.8-5.5 7-5.5s5.8 1.9 7 5.5"/></symbol>
+  <symbol id="i-focus" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></symbol>
+  <symbol id="i-desk" viewBox="0 0 24 24"><path d="M3 5h18v11H3zM8 20h8M12 16v4"/></symbol>
+  <symbol id="i-door" viewBox="0 0 24 24"><path d="M14 4h5v16h-5"/><path d="M10 8l-4 4 4 4M6 12h9"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></symbol>
+  <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></symbol>
+  <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><path d="M8.6 8.6L20 19M8.6 15.4L20 5"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+  <symbol id="i-rev" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c1-3.4 3.4-5.3 6.5-5.3 1.3 0 2.5.3 3.5.9"/><path d="M15 18l2 2 4-4"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <p class="wm"><span class="wm-med">Med</span><span class="wm-teca">Teca</span></p>
+    <fieldset class="seg">
+      <legend class="visually-hidden">Aparência</legend>
+      <label><input type="radio" name="aparencia" value="system" checked><span>Auto</span></label>
+      <label><input type="radio" name="aparencia" value="light"><span>Claro</span></label>
+      <label><input type="radio" name="aparencia" value="dark"><span>Escuro</span></label>
+    </fieldset>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section class="intro" aria-labelledby="h-intro">
+      <h1 id="h-intro">Navegação e fluxos</h1>
+      <p class="lead">Como o MedTeca se organiza: o que fica em cada aba, como a tela muda do celular ao computador e o caminho de cada tarefa.</p>
+      <ul class="decided" aria-label="Decidido com vocês">
+        <li><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Quatro abas, com Praticar</li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Estante</li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Modo foco nas sessões</li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Divide ao responder na tela larga</li>
+      </ul>
+      <nav aria-label="Seções">
+        <ul class="toc">
+          <li><a href="#mapa">Mapa do app</a></li>
+          <li><a href="#tamanhos">Tamanhos de tela</a></li>
+          <li><a href="#fluxos">Fluxos</a></li>
+          <li><a href="#telas">Telas-chave</a></li>
+          <li><a href="#dividir">Divide ao responder</a></li>
+          <li><a href="#acessibilidade">Acessibilidade</a></li>
+          <li><a href="#aberto">Em aberto</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section class="band" id="mapa" aria-labelledby="h-mapa">
+      <h2 id="h-mapa">Mapa do app</h2>
+      <p class="band-intro">Cada tela com os requisitos que ela atende, para nada ficar sem lugar e nada aparecer sem requisito.</p>
+      <div class="map">
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Início</h3>
+          <p class="map-where">Aba 1. Abre aqui depois do login.</p>
+          <ul>
+            <li><b>Continuar de onde parou</b><span class="ids">Treino ou simulado em andamento. TREINO-⁠04, TREINO-⁠05, SIM-⁠03</span></li>
+            <li><b>Avisos</b><span class="ids">Resultado dos reportes enviados. REP-⁠03</span></li>
+            <li><b>Resumo da estante</b><span class="ids">Marcadas, erros, simulados feitos</span></li>
+            <li><b>Botão Conta, no canto</b><span class="ids">Abre a tela Conta</span></li>
+          </ul>
+        </div>
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-practice"/></svg>Praticar</h3>
+          <p class="map-where">Aba 2. Uma tela só, em dois passos.</p>
+          <ul>
+            <li><b>1. O que estudar</b><span class="ids">Área, tema, banca, ano, não resolvidas, erradas, com a contagem de questões. CAT-⁠01 a CAT-⁠04</span></li>
+            <li><b>2. Como praticar: Treino</b><span class="ids">Correção na hora, ordem aleatória. TREINO-⁠01, TREINO-⁠02</span></li>
+            <li><b>2. Como praticar: Simulado</b><span class="ids">Quantidade e duração; sorteio por área, tema, banca e ano. “Não resolvidas” e “erradas” valem só no treino. SIM-⁠01, SIM-⁠09</span></li>
+          </ul>
+        </div>
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-shelf"/></svg>Estante</h3>
+          <p class="map-where">Aba 3. As prateleiras pessoais.</p>
+          <ul>
+            <li><b>Questões marcadas</b><span class="ids">Inclusive retiradas, com o motivo. REV-⁠03, REV-⁠04</span></li>
+            <li><b>Erros para revisar</b><span class="ids">Com “Treinar estes erros”. REV-⁠01, REV-⁠02, REV-⁠05 a REV-⁠07</span></li>
+            <li><b>Simulados feitos</b><span class="ids">Nota, acertos, erros, em branco e correção. SIM-⁠05, SIM-⁠08</span></li>
+            <li><b>Histórico de respostas</b><span class="ids">Com a modalidade, treino ou simulado; avisa quando o gabarito mudou depois da resposta e quando o resultado não foi reavaliado; mostra o motivo das retiradas. DES-⁠05, CONT-⁠07, CONT-⁠10, CONT-⁠19, CONT-⁠24, FLUXO-⁠15, FLUXO-⁠16</span></li>
+          </ul>
+        </div>
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>Desempenho</h3>
+          <p class="map-where">Aba 4.</p>
+          <ul>
+            <li><b>Geral, Treino, Simulados</b><span class="ids">Cada visão com a sua regra de contagem. DES-⁠01, DES-⁠06, DES-⁠09</span></li>
+            <li><b>Por área e por tema</b><span class="ids">Com a quantidade e o aviso de poucas respostas. DES-⁠02, DES-⁠07, DES-⁠08</span></li>
+            <li><b>Temas mais fracos</b><span class="ids">Só na visão geral e só com 5 respostas ou mais, do menor para o maior acerto. DES-⁠03, DES-⁠04, DES-⁠10</span></li>
+            <li><b>Fora do cálculo</b><span class="ids">Tentativas que não dá para recalcular ficam de fora, com a contagem à vista. DES-⁠11 a DES-⁠13</span></li>
+          </ul>
+        </div>
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg>Conta</h3>
+          <p class="map-where">Pelo botão no canto do Início.</p>
+          <ul>
+            <li><b>Apelido e aparência</b><span class="ids">O apelido é opcional; a aparência fica guardada no aparelho. CONTA-⁠05</span></li>
+            <li><b>Reportes enviados</b><span class="ids">Com o resultado. REP-⁠03</span></li>
+            <li><b>Termos e privacidade</b><span class="ids">Com a versão aceita e a data. CONTA-⁠09</span></li>
+            <li><b>Exportar meus dados</b><span class="ids">Um arquivo legível por máquina, só com o que é seu e sem o texto das questões. Ele é preparado em segundo plano e fica disponível para baixar. CONTA-⁠10, CONTA-⁠18, CONTA-⁠24, D-⁠024</span></li>
+            <li><b>Excluir conta e Sair</b><span class="ids">Excluir apaga a conta e o vínculo com as respostas; sair encerra a sessão neste aparelho. CONTA-⁠07, CONTA-⁠11, CONTA-⁠12, CONTA-⁠25</span></li>
+          </ul>
+        </div>
+        <div class="map-col is-focus">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-focus"/></svg>Sessões em modo foco</h3>
+          <p class="map-where">Sem abas. Sai pelo botão no topo.</p>
+          <ul>
+            <li><b>Procedência em cada questão</b><span class="ids">Origem, situação do gabarito e revisão editorial, antes e depois de responder; aviso de gabarito preliminar. CONT-⁠02, CONT-⁠04, CONT-⁠11, D-⁠014</span></li>
+            <li><b>Treino</b><span class="ids">Questão, responder, correção, próxima. Marcar, riscar, reportar erro. TREINO-⁠02, REV-⁠03, REP-⁠01</span></li>
+            <li><b>Simulado</b><span class="ids">Cronômetro controlado pelo servidor, pausa sempre explícita, mapa das questões, entregar. SIM-⁠02 a SIM-⁠08, M-⁠11, M-⁠32</span></li>
+            <li><b>Sem conexão</b><span class="ids">Aviso; as respostas ficam no aparelho e são enviadas quando a conexão voltar. RNF-⁠06, RNF-⁠07, M-⁠32</span></li>
+          </ul>
+        </div>
+        <div class="map-col">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-door"/></svg>Fora da conta</h3>
+          <p class="map-where">Antes do login.</p>
+          <ul>
+            <li><b>Criar conta pelo convite</b><span class="ids">Senha, apelido opcional e aceite dos termos. CONTA-⁠01 a CONTA-⁠05, CONTA-⁠09, CONTA-⁠14</span></li>
+            <li><b>Entrar</b><span class="ids">A sessão dura até 30 dias sem uso. CONTA-⁠06</span></li>
+            <li><b>Recuperar senha</b><span class="ids">Por um link de uso único enviado ao e-mail. CONTA-⁠08</span></li>
+          </ul>
+        </div>
+        <div class="map-col is-editor">
+          <h3><svg class="ico" aria-hidden="true"><use href="#i-desk"/></svg>Painel do editor</h3>
+          <p class="map-where">Só no computador. Barra lateral própria.</p>
+          <ul>
+            <li><b>Questões</b><span class="ids">Por status: rascunho, em revisão, publicada, retirada. Edição, imagens, referências, versões. EDIT-⁠01, EDIT-⁠02, EDIT-⁠07 a EDIT-⁠11, FLUXO-⁠01, FLUXO-⁠04, FLUXO-⁠08</span></li>
+            <li><b>Revisão</b><span class="ids">Aprovar ou devolver com motivo, nunca a própria. FLUXO-⁠02, FLUXO-⁠03</span></li>
+            <li><b>Reportes</b><span class="ids">Fila, procedente ou não. REP-⁠01, REP-⁠02</span></li>
+            <li><b>Administração</b><span class="ids">Fontes e autorizações, convites e papéis. EDIT-⁠04 a EDIT-⁠06, EDIT-⁠12, EDIT-⁠13, CONTA-⁠02, CONTA-⁠16, CONTA-⁠17</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="tamanhos" aria-labelledby="h-tamanhos">
+      <h2 id="h-tamanhos">Tamanhos de tela</h2>
+      <p class="band-intro">Três faixas de largura. A navegação muda de lugar; o conteúdo continua o mesmo e o texto de leitura nunca passa de cerca de 68 caracteres por linha.</p>
+      <div class="sizes">
+        <figure class="size">
+          <span class="wf wf-phone" aria-hidden="true">
+            <span class="wf-body"><span class="wf-l w-60"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-btn"></span></span>
+            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span></span>
+          </span>
+          <figcaption><h3>Celular</h3><p>Até 599 px. Abas embaixo, ao alcance do polegar. Uma coluna.</p></figcaption>
+        </figure>
+        <figure class="size">
+          <span class="wf wf-tablet" aria-hidden="true">
+            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span></span>
+            <span class="wf-body"><span class="wf-l w-60"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-l"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-btn"></span></span>
+          </span>
+          <figcaption><h3>Tablet em pé e celular deitado</h3><p>De 600 a 1023 px. Trilho lateral com ícones e nomes, que deixa o celular deitado com a altura livre. Uma coluna.</p></figcaption>
+        </figure>
+        <figure class="size">
+          <span class="wf wf-wide" aria-hidden="true">
+            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span></span>
+            <span class="wf-body"><span class="wf-l w-40"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-btn"></span></span>
+          </span>
+          <figcaption><h3>Tablet deitado e computador</h3><p>1024 px ou mais. Barra lateral com nomes. Listas e desempenho ganham duas colunas.</p></figcaption>
+        </figure>
+        <figure class="size">
+          <span class="wf wf-focus" aria-hidden="true">
+            <span class="wf-nav"><span class="wf-i"></span><span class="wf-i is-on"></span><span class="wf-i"></span></span>
+            <span class="wf-split">
+              <span><span class="wf-l w-80"></span><span class="wf-l"></span><span class="wf-l w-60"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-b"></span></span>
+              <span><span class="wf-tone"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-l"></span><span class="wf-l w-60"></span></span>
+            </span>
+          </span>
+          <figcaption><h3>Modo foco, tela larga</h3><p>Em qualquer tamanho, a sessão esconde a navegação. Na tela larga, a questão divide ao responder.</p></figcaption>
+        </figure>
+      </div>
+      <p class="note">Girar o aparelho muda só a faixa de largura: resposta marcada, riscos, posição na sequência e cronômetro continuam iguais (RNF-14).</p>
+    </section>
+
+    <section class="band" id="fluxos" aria-labelledby="h-fluxos">
+      <h2 id="h-fluxos">Fluxos</h2>
+      <p class="band-intro">O caminho de cada tarefa. Passos tracejados são alternativas; passos em amarelo ainda dependem de uma decisão na especificação.</p>
+      <div class="flows">
+        <div class="flow">
+          <h3>Primeiro acesso</h3>
+          <p class="flow-who">Estudante convidado, no beta fechado.</p>
+          <ol class="steps">
+            <li>Recebe o convite por e-mail</li>
+            <li>Cria a senha, escolhe um apelido se quiser e aceita os termos</li>
+            <li>Chega ao Início vazio, com “Começar a praticar”</li>
+          </ol>
+          <p class="note">Convite vencido ou já usado mostra o motivo e como pedir outro (CONTA-03, CONTA-14).</p>
+        </div>
+        <div class="flow">
+          <h3>Treinar</h3>
+          <p class="flow-who">A tarefa mais frequente.</p>
+          <ol class="steps">
+            <li>Praticar</li>
+            <li>Escolhe os filtros e vê quantas questões atendem</li>
+            <li>Escolhe Treino e começa</li>
+            <li>Responde; a correção aparece na hora</li>
+            <li>Próxima questão</li>
+            <li class="is-open">Sai pelo topo; o fim do treino é definido na especificação</li>
+          </ol>
+        </div>
+        <div class="flow">
+          <h3>Fazer um simulado</h3>
+          <p class="flow-who">Com cara de prova, sem correção até o fim.</p>
+          <ol class="steps">
+            <li>Praticar</li>
+            <li>Escolhe os filtros</li>
+            <li>Escolhe Simulado, a quantidade e a duração</li>
+            <li>Responde com o cronômetro, que roda no servidor</li>
+            <li>Para sair, pausa antes; a pausa é sempre explícita</li>
+            <li>Confere no mapa o que ficou em branco</li>
+            <li>Entrega</li>
+            <li class="is-alt">o tempo acaba e o simulado é entregue sozinho</li>
+            <li>Vê nota, acertos, erros e em branco</li>
+            <li>Abre a correção de cada questão</li>
+          </ol>
+          <p class="note">Fechar o app sem pausar não para o tempo, e a tela de início do simulado avisa isso (M-11, M-32). Sem conexão, as respostas ficam no aparelho e são enviadas depois.</p>
+        </div>
+        <div class="flow">
+          <h3>Revisar erros</h3>
+          <p class="flow-who">O ciclo de estudo.</p>
+          <ol class="steps">
+            <li>Estante</li>
+            <li>Erros para revisar</li>
+            <li>Treinar estes erros, um treino só com eles</li>
+            <li>Acertou, a questão sai da lista</li>
+          </ol>
+        </div>
+        <div class="flow">
+          <h3>Reportar um erro</h3>
+          <p class="flow-who">Da correção até a resposta.</p>
+          <ol class="steps">
+            <li>Na correção, Reportar erro</li>
+            <li>Descreve o problema; a tela pede para não escrever dados pessoais</li>
+            <li>Envia</li>
+            <li>O editor analisa</li>
+            <li>O resultado aparece nos avisos do Início e em Conta</li>
+          </ol>
+        </div>
+        <div class="flow">
+          <h3>Publicar uma questão</h3>
+          <p class="flow-who">Editor e revisor, no computador.</p>
+          <ol class="steps">
+            <li>Nova questão, em rascunho</li>
+            <li>Preenche origem, gabarito e a situação dele, comentário, referências e imagens com texto alternativo</li>
+            <li>Envia para revisão</li>
+            <li>Outra pessoa, que não é autora nem cadastrou, aprova</li>
+            <li class="is-alt">devolve para rascunho com o motivo</li>
+            <li>Publicada, se a autorização de uso tiver evidência, o comentário tiver referência e o gabarito oficial tiver o documento da banca</li>
+            <li>Mudar o conteúdo cria uma nova versão; a anterior segue no ar até a aprovação</li>
+            <li>Retirar exige motivo e vale na hora</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="telas" aria-labelledby="h-telas">
+      <h2 id="h-telas">Telas-chave</h2>
+      <p class="band-intro">As telas novas deste bloco, no celular. As outras seguem o sistema de design aprovado.</p>
+      <div class="screens">
+
+        <article aria-labelledby="m-inicio">
+          <h3 class="screen-title" id="m-inicio">Início</h3>
+          <div class="frame has-tabs">
+            <div class="cover on-cover">
+              <p class="wm"><span class="wm-med">Med</span><span class="wm-teca">Teca</span></p>
+              <p class="cover-line">Olá, Ana. [FICTÍCIO]</p>
+              <button class="cover-account" type="button" aria-label="Conta"><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg></button>
+            </div>
+            <div class="block">
+              <h4>Continuar de onde parou</h4>
+              <p class="block-sub num">Treino, Tema de exemplo 3: 7 de 20 respondidas</p>
+              <div class="bar" aria-hidden="true"><span style="--v: 35%"></span></div>
+              <div class="actions"><a class="btn btn-primary" href="#m-simulado">Continuar treino</a></div>
+            </div>
+            <div class="notice is-ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><p>Seu reporte da questão 41 foi analisado: procedente. <a href="#m-estante">Ver</a></p></div>
+            <div class="block">
+              <h4>Sua estante</h4>
+              <ul class="shelf">
+                <li><a href="#m-estante" class="is-ribbon"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg><span class="shelf-name">Questões marcadas</span><span class="shelf-count num">12</span></a></li>
+                <li><a href="#m-estante"><svg class="ico" aria-hidden="true"><use href="#i-redo"/></svg><span class="shelf-name">Erros para revisar</span><span class="shelf-count num">23</span></a></li>
+              </ul>
+            </div>
+            <p class="demo-note">Nomes e números de exemplo [FICTÍCIO].</p>
+            <nav class="tabbar" aria-label="Principal">
+              <a href="#m-inicio" aria-current="page"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>Início</a>
+              <a href="#m-praticar"><span><svg class="ico" aria-hidden="true"><use href="#i-practice"/></svg></span>Praticar</a>
+              <a href="#m-estante"><span><svg class="ico" aria-hidden="true"><use href="#i-shelf"/></svg></span>Estante</a>
+              <a href="#m-desempenho"><span><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg></span>Desempenho</a>
+            </nav>
+          </div>
+        </article>
+
+        <article aria-labelledby="m-praticar">
+          <h3 class="screen-title" id="m-praticar">Praticar</h3>
+          <div class="frame has-tabs">
+            <div class="appbar"><span aria-hidden="true"></span><p class="appbar-title">Praticar</p><span aria-hidden="true"></span></div>
+            <div class="block">
+              <h4>1. O que estudar</h4>
+              <ul class="field-list">
+                <li><button type="button"><b>Área</b><span>Todas</span></button></li>
+                <li><button type="button"><b>Tema</b><span>Tema de exemplo 3</span></button></li>
+                <li><button type="button"><b>Banca</b><span>Todas</span></button></li>
+                <li><button type="button"><b>Ano</b><span>2020 a 2024</span></button></li>
+              </ul>
+              <div class="chips">
+                <button class="chip js-toggle js-so-treino" type="button" aria-pressed="true"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Não resolvidas</button>
+                <button class="chip js-toggle js-so-treino" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Erradas</button>
+              </div>
+              <p class="chips-note" id="nota-filtros" hidden>No simulado, o sorteio usa só área, tema, banca e ano.</p>
+              <p class="count" role="status"><b class="num" id="contagem">48</b> questões atendem aos filtros [FICTÍCIO]</p>
+            </div>
+            <div class="block">
+              <h4>2. Como praticar</h4>
+              <div class="mode">
+                <fieldset class="seg seg-full">
+                  <legend class="visually-hidden">Modo</legend>
+                  <label><input type="radio" name="modo" value="treino" checked><span>Treino</span></label>
+                  <label><input type="radio" name="modo" value="simulado"><span>Simulado</span></label>
+                </fieldset>
+                <div data-modo="treino">
+                  <p class="mode-desc">Correção logo depois de cada resposta, com comentário e referências.</p>
+                  <div class="actions"><a class="btn btn-primary" href="#dividir">Começar treino</a></div>
+                </div>
+                <div data-modo="simulado" hidden>
+                  <p class="mode-desc">Com cronômetro e correção só no fim, como numa prova. O tempo é contado pelo servidor: fechar o app não para o relógio; para parar, use Pausar.</p>
+                  <div class="steppers">
+                    <div class="stepper"><span id="lb-qtd">Questões</span><div role="group" aria-labelledby="lb-qtd"><button type="button" data-step="-10" data-target="qtd" aria-label="Menos 10 questões">−</button><output id="qtd" class="num" data-min="10" data-max="100">20</output><button type="button" data-step="10" data-target="qtd" aria-label="Mais 10 questões">+</button></div></div>
+                    <div class="stepper"><span id="lb-dur">Minutos</span><div role="group" aria-labelledby="lb-dur"><button type="button" data-step="-15" data-target="dur" aria-label="Menos 15 minutos">−</button><output id="dur" class="num" data-min="15" data-max="300">60</output><button type="button" data-step="15" data-target="dur" aria-label="Mais 15 minutos">+</button></div></div>
+                  </div>
+                  <div class="actions"><a class="btn btn-primary" href="#m-simulado">Começar simulado</a></div>
+                </div>
+              </div>
+            </div>
+            <nav class="tabbar" aria-label="Principal">
+              <a href="#m-inicio"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>Início</a>
+              <a href="#m-praticar" aria-current="page"><span><svg class="ico" aria-hidden="true"><use href="#i-practice"/></svg></span>Praticar</a>
+              <a href="#m-estante"><span><svg class="ico" aria-hidden="true"><use href="#i-shelf"/></svg></span>Estante</a>
+              <a href="#m-desempenho"><span><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg></span>Desempenho</a>
+            </nav>
+          </div>
+        </article>
+
+        <article aria-labelledby="m-simulado">
+          <h3 class="screen-title" id="m-simulado">Simulado em andamento</h3>
+          <p class="screen-sub">Modo foco: sem abas, cronômetro no topo.</p>
+          <div class="frame">
+            <div class="appbar">
+              <button class="icon-btn" type="button" id="pausar" aria-pressed="false" aria-label="Pausar simulado"><svg class="ico" aria-hidden="true"><use href="#i-pause"/></svg></button>
+              <p class="appbar-title"><span class="timer"><svg class="ico" aria-hidden="true"><use href="#i-timer"/></svg><span class="num" id="relogio">42:17</span></span><span class="visually-hidden"> restantes</span></p>
+              <a class="btn btn-quiet btn-sm appbar-end" href="#m-mapa"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg><span class="num">7/20</span><span class="visually-hidden"> Abrir o mapa do simulado</span></a>
+            </div>
+            <div class="progress" aria-hidden="true" style="--p: 35%"><span></span></div>
+            <div class="paused" id="sim-pausado" hidden>
+              <svg class="ico ico-big" aria-hidden="true"><use href="#i-pause"/></svg>
+              <h4 id="sim-pausado-titulo" tabindex="-1">Simulado pausado</h4>
+              <p>O cronômetro está parado em <span class="num">42:17</span>. A questão fica escondida até você retomar.</p>
+              <div class="actions"><button class="btn btn-primary" type="button" id="retomar">Retomar</button><a class="btn btn-quiet" href="#m-inicio">Sair; o simulado fica pausado</a></div>
+            </div>
+            <div id="sim-conteudo">
+            <ul class="q-meta" aria-label="Classificação"><li class="tag">Área de exemplo 1</li><li class="tag">Tema de exemplo 2</li></ul>
+            <div class="prov">
+              <p class="prov-origin">Origem: prova fictícia de residência, 2024, questão 12</p>
+              <ul class="prov-badges">
+                <li><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>Gabarito oficial da banca</li>
+                <li><button class="prov-rev" type="button" aria-expanded="false" aria-controls="rev-sim"><svg class="ico" aria-hidden="true"><use href="#i-rev"/></svg>Revisão editorial, nov. 2026<svg class="ico ico-i" aria-hidden="true"><use href="#i-info"/></svg></button></li>
+              </ul>
+              <p class="prov-explain" id="rev-sim" hidden>Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica.</p>
+            </div>
+            <p class="q-stem">[FICTÍCIO] Enunciado de exemplo. No simulado, nada de correção até a entrega.</p>
+            <fieldset class="opts">
+              <legend class="visually-hidden">Escolha uma opção</legend>
+              <div class="opt"><label class="opt-pick"><input type="radio" name="sim7" value="A"><span class="alt-letter" aria-hidden="true">A</span><span class="opt-text">Opção A</span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção A"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt"><label class="opt-pick"><input type="radio" name="sim7" value="B"><span class="alt-letter" aria-hidden="true">B</span><span class="opt-text">Opção B</span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção B"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt"><label class="opt-pick"><input type="radio" name="sim7" value="C"><span class="alt-letter" aria-hidden="true">C</span><span class="opt-text">Opção C</span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção C"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt"><label class="opt-pick"><input type="radio" name="sim7" value="D"><span class="alt-letter" aria-hidden="true">D</span><span class="opt-text">Opção D</span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção D"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            </fieldset>
+            <div class="foot-nav">
+              <a class="btn btn-quiet" href="#m-simulado">Anterior</a>
+              <a class="btn btn-primary" href="#m-simulado">Próxima</a>
+            </div>
+            </div>
+          </div>
+        </article>
+
+        <article aria-labelledby="m-mapa">
+          <h3 class="screen-title" id="m-mapa">Mapa do simulado</h3>
+          <p class="screen-sub">Abre por cima da questão. Toque num número para ir até ela.</p>
+          <div class="frame">
+            <div class="appbar"><a class="icon-btn" href="#m-simulado" aria-label="Voltar para a questão"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg></a><p class="appbar-title">Mapa</p><span class="appbar-end timer"><svg class="ico" aria-hidden="true"><use href="#i-timer"/></svg><span class="num">42:17</span></span></div>
+            <ol class="qgrid" aria-label="Questões do simulado">
+              <li><button type="button" class="is-answered">1<span class="visually-hidden">, respondida</span></button></li>
+              <li><button type="button" class="is-answered">2<span class="visually-hidden">, respondida</span></button></li>
+              <li><button type="button" class="is-answered is-flagged">3<span class="visually-hidden">, respondida, marcada</span></button></li>
+              <li><button type="button">4<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button" class="is-answered">5<span class="visually-hidden">, respondida</span></button></li>
+              <li><button type="button" class="is-answered">6<span class="visually-hidden">, respondida</span></button></li>
+              <li><button type="button" class="is-current" aria-current="true">7<span class="visually-hidden">, atual, em branco</span></button></li>
+              <li><button type="button">8<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button" class="is-flagged">9<span class="visually-hidden">, em branco, marcada</span></button></li>
+              <li><button type="button">10<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button">11<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button">12<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button">13<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button">14<span class="visually-hidden">, em branco</span></button></li>
+              <li><button type="button">15<span class="visually-hidden">, em branco</span></button></li>
+            </ol>
+            <ul class="legend">
+              <li><i class="is-answered"></i>Respondida</li>
+              <li><i></i>Em branco</li>
+              <li><i class="is-flagged"></i>Marcada</li>
+            </ul>
+            <p class="summary num">5 respondidas, 15 em branco. Em branco não conta como resposta, e a nota é acertos sobre o total.</p>
+            <div class="actions"><button class="btn btn-primary" type="button">Entregar simulado</button></div>
+            <p class="demo-note">Mostra 15 de 20 para caber. Números de exemplo [FICTÍCIO].</p>
+          </div>
+        </article>
+
+        <article aria-labelledby="m-estante">
+          <h3 class="screen-title" id="m-estante">Estante</h3>
+          <div class="frame has-tabs">
+            <div class="appbar"><span aria-hidden="true"></span><p class="appbar-title">Estante</p><span aria-hidden="true"></span></div>
+            <ul class="shelf">
+              <li><a href="#m-estante" class="is-ribbon"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg><span class="shelf-name">Questões marcadas<small>Para voltar depois</small></span><span class="shelf-count num">12</span></a></li>
+              <li><a href="#m-estante"><svg class="ico" aria-hidden="true"><use href="#i-redo"/></svg><span class="shelf-name">Erros para revisar<small>Saem da lista quando você acerta</small></span><span class="shelf-count num">23</span></a></li>
+              <li><a href="#m-estante"><svg class="ico" aria-hidden="true"><use href="#i-timer"/></svg><span class="shelf-name">Simulados feitos<small>Nota e correção de cada um</small></span><span class="shelf-count num">2</span></a></li>
+              <li><a href="#m-estante"><svg class="ico" aria-hidden="true"><use href="#i-history"/></svg><span class="shelf-name">Histórico de respostas<small>Tudo o que você respondeu</small></span><span class="shelf-count num">186</span></a></li>
+            </ul>
+            <div class="actions"><a class="btn btn-primary" href="#dividir">Treinar meus erros</a></div>
+            <p class="demo-note">Números de exemplo [FICTÍCIO].</p>
+            <nav class="tabbar" aria-label="Principal">
+              <a href="#m-inicio"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>Início</a>
+              <a href="#m-praticar"><span><svg class="ico" aria-hidden="true"><use href="#i-practice"/></svg></span>Praticar</a>
+              <a href="#m-estante" aria-current="page"><span><svg class="ico" aria-hidden="true"><use href="#i-shelf"/></svg></span>Estante</a>
+              <a href="#m-desempenho"><span><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg></span>Desempenho</a>
+            </nav>
+          </div>
+        </article>
+
+        <article aria-labelledby="m-desempenho">
+          <h3 class="screen-title" id="m-desempenho">Desempenho</h3>
+          <p class="screen-sub">“Mais fracos” só na visão geral e só com 5 respostas ou mais.</p>
+          <div class="frame has-tabs">
+            <div class="appbar"><span aria-hidden="true"></span><p class="appbar-title">Desempenho</p><span aria-hidden="true"></span></div>
+            <fieldset class="seg seg-full block">
+              <legend class="visually-hidden">Mostrar o desempenho de</legend>
+              <label><input type="radio" name="visao" value="geral" checked><span>Geral</span></label>
+              <label><input type="radio" name="visao" value="treino"><span>Treino</span></label>
+              <label><input type="radio" name="visao" value="simulados"><span>Simulados</span></label>
+            </fieldset>
+            <div class="score">
+              <p class="score-fig num" id="d-taxa">62%</p>
+              <p class="score-sub">de acerto: <span class="num" id="d-certas">124</span> de <span class="num" id="d-total">200</span> <span id="d-unidade">questões respondidas</span></p>
+              <p class="score-out" id="d-fora">2 respostas ficaram fora do cálculo porque as questões mudaram depois.</p>
+            </div>
+            <div id="d-fracos-bloco">
+              <h4 class="d-title">Temas mais fracos</h4>
+              <ol class="d-list" id="d-fracos"></ol>
+            </div>
+            <h4 class="d-title">Por área e tema</h4>
+            <div id="d-areas"></div>
+            <p class="demo-note">Números de exemplo [FICTÍCIO].</p>
+            <nav class="tabbar" aria-label="Principal">
+              <a href="#m-inicio"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>Início</a>
+              <a href="#m-praticar"><span><svg class="ico" aria-hidden="true"><use href="#i-practice"/></svg></span>Praticar</a>
+              <a href="#m-estante"><span><svg class="ico" aria-hidden="true"><use href="#i-shelf"/></svg></span>Estante</a>
+              <a href="#m-desempenho" aria-current="page"><span><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg></span>Desempenho</a>
+            </nav>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="band" id="dividir" aria-labelledby="h-dividir">
+      <h2 id="h-dividir">Divide ao responder</h2>
+      <p class="band-intro">Funcionando de verdade. Na tela larga, responda e veja a correção abrir ao lado; no celular, ela aparece embaixo. No app, cada lado rola sozinho.</p>
+      <div class="study" id="estudo">
+        <div class="study-grid">
+          <div class="study-question">
+            <ul class="q-meta" aria-label="Classificação"><li class="tag">Área de exemplo 2</li><li class="tag">Tema de exemplo 3</li></ul>
+            <div class="prov">
+              <p class="prov-origin">Origem: autoria própria</p>
+              <ul class="prov-badges">
+                <li><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>Gabarito definido pelo MedTeca</li>
+                <li><button class="prov-rev" type="button" aria-expanded="false" aria-controls="rev-estudo"><svg class="ico" aria-hidden="true"><use href="#i-rev"/></svg>Revisão editorial, nov. 2026<svg class="ico ico-i" aria-hidden="true"><use href="#i-info"/></svg></button></li>
+              </ul>
+              <p class="prov-explain" id="rev-estudo" hidden>Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica.</p>
+            </div>
+            <p class="q-stem">[FICTÍCIO] Enunciado de exemplo, usado só para mostrar a divisão da tela. É uma questão de autoria própria, o caso mais comum no beta.</p>
+            <fieldset class="opts" id="estudo-opcoes">
+              <legend class="visually-hidden">Escolha uma opção</legend>
+              <div class="opt" data-letter="A"><label class="opt-pick"><input type="radio" name="estudo" value="A"><span class="alt-letter" aria-hidden="true">A</span><span class="opt-text">Opção A</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção A"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt" data-letter="B"><label class="opt-pick"><input type="radio" name="estudo" value="B"><span class="alt-letter" aria-hidden="true">B</span><span class="opt-text">Opção B</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção B"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt" data-letter="C"><label class="opt-pick"><input type="radio" name="estudo" value="C"><span class="alt-letter" aria-hidden="true">C</span><span class="opt-text">Opção C</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção C"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+              <div class="opt" data-letter="D"><label class="opt-pick"><input type="radio" name="estudo" value="D"><span class="alt-letter" aria-hidden="true">D</span><span class="opt-text">Opção D</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção D"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            </fieldset>
+            <p class="study-status" id="estudo-aviso" role="status"></p>
+            <div class="actions">
+              <button class="btn btn-primary" type="button" id="estudo-responder">Responder</button>
+              <button class="btn btn-quiet" type="button" id="estudo-marcar" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg>Marcar</button>
+            </div>
+          </div>
+          <div class="study-correction" id="estudo-correcao" hidden>
+            <h3 class="visually-hidden" id="estudo-titulo" tabindex="-1">Correção</h3>
+            <div class="result is-wrong" id="estudo-resultado">
+              <svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>
+              <div><p class="result-title" id="estudo-res-titulo">Você errou</p><p class="result-sub" id="estudo-res-sub">Você marcou B. A resposta certa é D.</p></div>
+            </div>
+            <div class="gab-line"><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg><p>Gabarito definido pelo MedTeca<small>Questão própria: não existe gabarito de banca.</small></p></div>
+            <p class="read">[FICTÍCIO] Comentário de exemplo. Na tela larga ele fica ao lado da questão, sem precisar rolar para ver as duas coisas.</p>
+            <p class="refs-label">Referências</p>
+            <ol class="refs"><li>Referência fictícia 1. Autor de exemplo. Título de exemplo.</li></ol>
+            <div class="actions">
+              <button class="btn btn-primary" type="button" id="estudo-proxima">Próxima questão</button>
+              <button class="btn btn-quiet" type="button"><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg>Reportar erro</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="acessibilidade" aria-labelledby="h-acessibilidade">
+      <h2 id="h-acessibilidade">Acessibilidade da navegação</h2>
+      <p class="band-intro">O que a estrutura garante, além do que o sistema de design já cobre (WCAG 2.2 AA, RNF-01).</p>
+      <ol class="a11y">
+        <li><b>Regiões nomeadas:</b> navegação principal, conteúdo e avisos, para o leitor de tela pular direto.</li>
+        <li><b>Foco ao trocar de tela:</b> vai para o título da nova tela, que é anunciado. Na correção, vai para o resultado.</li>
+        <li><b>Aba atual</b> marcada para o leitor de tela, não só pela cor.</li>
+        <li><b>Sair do modo foco</b> sempre pelo botão no topo. No simulado, esse botão é Pausar: a pausa é explícita, e a tela pausada oferece Retomar ou Sair.</li>
+        <li><b>Cronômetro:</b> não fala a cada segundo. Avisa com 5 minutos e com 1 minuto restantes.</li>
+        <li><b>Tudo por toque</b> (RNF-15) e por teclado. Nada depende de passar o mouse.</li>
+        <li><b>Texto ampliado:</b> com a letra do aparelho em 200%, nada é cortado e os nomes das abas quebram linha em vez de sumir.</li>
+        <li><b>Procedência:</b> a explicação da revisão abre por um botão com estado anunciado, e não por dica de mouse.</li>
+      </ol>
+    </section>
+
+    <section class="band" id="aberto" aria-labelledby="h-aberto">
+      <h2 id="h-aberto">Em aberto</h2>
+      <p class="band-intro">Pontos que a navegação já acomoda, mas que se resolvem nas especificações, como o catálogo prevê.</p>
+      <ul class="open">
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Quando um treino termina. Retomar já está resolvido: a sessão fica no servidor e sobrevive a fechar o app e a trocar de aparelho (M-10).<small>Especificação de TREINO</small></span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Limite de pausas, se pausar exige conexão, quantidade máxima de questões, respostas que chegam depois do prazo (M-32) e questão bloqueada no meio de um simulado (M-33).<small>Especificação de SIM</small></span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Recorte de tempo do desempenho, a regra da visão só de treino e se o estudante é avisado quando uma reclassificação muda o desempenho (M-05).<small>Especificação de DES</small></span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Mostrar o nome do autor nas questões de autoria própria. Depende do que os autores autorizarem por escrito.<small>D-019 e Etapa 6</small></span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Como mostrar a revisão médica, quando existir.<small>D-003</small></span></li>
+        <li><svg class="ico" aria-hidden="true"><use href="#i-open"/></svg><span>Guardar os riscos só até a correção.<small>Proposta, a confirmar no fechamento da Etapa 5</small></span></li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Referência visual da Etapa 5 (D-028 a D-031), descrita em docs/design-e-ux.md. Não é código do app. Textos marcados [FICTÍCIO] são exemplos sem conteúdo clínico.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  var themeInputs = document.querySelectorAll('input[name="aparencia"]');
+  function setTheme(t, fromUser) {
+    if (t === 'light' || t === 'dark') root.setAttribute('data-theme', t);
+    else { root.removeAttribute('data-theme'); t = 'system'; }
+    themeInputs.forEach(function (i) { i.checked = i.value === t; });
+    if (fromUser) save('medteca-aparencia', t);
+  }
+  themeInputs.forEach(function (i) { i.addEventListener('change', function () { setTheme(i.value, true); }); });
+  setTheme(root.getAttribute('data-theme') || 'system', false);
+
+  /* Filtros e modo em Praticar */
+  document.querySelectorAll('.js-toggle').forEach(function (b) {
+    b.addEventListener('click', function () { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); });
+  });
+  /* No simulado, o sorteio usa só área, tema, banca e ano (SIM-09): os filtros do treino ficam desligados */
+  document.querySelectorAll('input[name="modo"]').forEach(function (i) {
+    i.addEventListener('change', function () {
+      var sim = i.value === 'simulado';
+      document.querySelectorAll('[data-modo]').forEach(function (p) { p.hidden = p.getAttribute('data-modo') !== i.value; });
+      document.querySelectorAll('.js-so-treino').forEach(function (c) { c.disabled = sim; });
+      document.getElementById('nota-filtros').hidden = !sim;
+      document.getElementById('contagem').textContent = sim ? '120' : '48';
+    });
+  });
+  document.querySelectorAll('[data-step]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var out = document.getElementById(b.getAttribute('data-target'));
+      var v = parseInt(out.textContent, 10) + parseInt(b.getAttribute('data-step'), 10);
+      v = Math.max(parseInt(out.getAttribute('data-min'), 10), Math.min(parseInt(out.getAttribute('data-max'), 10), v));
+      out.textContent = v;
+    });
+  });
+
+  /* Riscar: mesmas regras do sistema de design */
+  function ligarRiscos(scope) {
+    scope.querySelectorAll('.opt').forEach(function (row) {
+      var input = row.querySelector('input'), sb = row.querySelector('[data-strike]');
+      if (!sb) return;
+      sb.addEventListener('click', function () {
+        if (row.classList.contains('is-done')) return;
+        var on = !row.classList.contains('is-struck');
+        row.classList.toggle('is-struck', on);
+        sb.setAttribute('aria-pressed', on ? 'true' : 'false');
+        if (on && input.checked) input.checked = false;
+      });
+      input.addEventListener('change', function () {
+        if (input.checked) { row.classList.remove('is-struck'); sb.setAttribute('aria-pressed', 'false'); }
+      });
+    });
+  }
+  ligarRiscos(document);
+
+  /* Pausa sempre explícita (M-11): pausado, a questão some e a tela oferece Retomar ou Sair */
+  var pausar = document.getElementById('pausar');
+  var pausado = document.getElementById('sim-pausado'), conteudo = document.getElementById('sim-conteudo');
+  function setPausa(p) {
+    pausar.setAttribute('aria-pressed', p ? 'true' : 'false');
+    pausar.setAttribute('aria-label', p ? 'Retomar simulado' : 'Pausar simulado');
+    pausado.hidden = !p; conteudo.hidden = p;
+    if (p) document.getElementById('sim-pausado-titulo').focus(); else pausar.focus();
+  }
+  pausar.addEventListener('click', function () { setPausa(pausar.getAttribute('aria-pressed') !== 'true'); });
+  document.getElementById('retomar').addEventListener('click', function () { setPausa(false); });
+
+  /* Procedência: a explicação da revisão abre por botão */
+  document.querySelectorAll('.prov-rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.getElementById(b.getAttribute('aria-controls')).hidden = !open;
+    });
+  });
+
+  /* Desempenho: geral = treino + simulados; "mais fracos" só na geral, com 5 respostas ou mais (DES-03, DES-04, DES-10) */
+  var VISOES = {
+    geral: { unidade: 'questões respondidas', fora: 2, areas: [
+      ['Área de exemplo 1', [['Tema de exemplo 1', 37, 49], ['Tema de exemplo 2', 44, 70]]],
+      ['Área de exemplo 2', [['Tema de exemplo 3', 40, 75], ['Tema de exemplo 4', 3, 6]]] ] },
+    treino: { unidade: 'respostas consideradas', fora: 2, areas: [
+      ['Área de exemplo 1', [['Tema de exemplo 1', 26, 35], ['Tema de exemplo 2', 33, 50]]],
+      ['Área de exemplo 2', [['Tema de exemplo 3', 29, 55], ['Tema de exemplo 4', 2, 4]]] ] },
+    simulados: { unidade: 'respostas em simulados', fora: 0, areas: [
+      ['Área de exemplo 1', [['Tema de exemplo 1', 11, 14], ['Tema de exemplo 2', 11, 20]]],
+      ['Área de exemplo 2', [['Tema de exemplo 3', 11, 20], ['Tema de exemplo 4', 1, 2]]] ] }
+  };
+  var POUCAS = 10, MIN_FRACOS = 5, QTD_FRACOS = 3;
+  function pct(c, n) { return Math.round(c / n * 100); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function icone(id) {
+    var ns = 'http://www.w3.org/2000/svg', s = document.createElementNS(ns, 'svg'), u = document.createElementNS(ns, 'use');
+    s.setAttribute('class', 'ico'); s.setAttribute('aria-hidden', 'true'); u.setAttribute('href', '#' + id); s.appendChild(u); return s;
+  }
+  function item(nome, c, n, tag) {
+    var li = el(tag || 'li', 'd-item' + (n < POUCAS ? ' is-few' : ''));
+    var top = el('div', 'd-item-top'); top.appendChild(el('span', null, nome)); top.appendChild(el('span', 'd-pct num', pct(c, n) + '%'));
+    var bar = el('div', 'bar'); bar.setAttribute('aria-hidden', 'true'); var f = el('span'); f.style.setProperty('--v', pct(c, n) + '%'); bar.appendChild(f);
+    var sub = el('p', 'd-item-sub num');
+    if (n < POUCAS) { sub.appendChild(icone('i-info')); sub.appendChild(document.createTextNode('Poucas respostas: ' + c + ' de ' + n + '. Ainda não dá para concluir.')); }
+    else sub.textContent = c + ' de ' + n;
+    li.appendChild(top); li.appendChild(bar); li.appendChild(sub);
+    return li;
+  }
+  function desempenho(k) {
+    var v = VISOES[k], certas = 0, total = 0, temas = [];
+    var areas = document.getElementById('d-areas'); areas.textContent = '';
+    v.areas.forEach(function (a) {
+      var ac = 0, an = 0, lista = el('ol', 'd-list');
+      a[1].forEach(function (t) { ac += t[1]; an += t[2]; temas.push(t); lista.appendChild(item(t[0], t[1], t[2])); });
+      certas += ac; total += an;
+      var bloco = item(a[0], ac, an, 'div'); bloco.className += ' d-area'; bloco.appendChild(lista); areas.appendChild(bloco);
+    });
+    document.getElementById('d-taxa').textContent = pct(certas, total) + '%';
+    document.getElementById('d-certas').textContent = certas;
+    document.getElementById('d-total').textContent = total;
+    document.getElementById('d-unidade').textContent = v.unidade;
+    var fora = document.getElementById('d-fora'); fora.hidden = !v.fora;
+    if (v.fora) fora.textContent = v.fora + ' respostas ficaram fora do cálculo porque as questões mudaram depois.';
+    var bloco = document.getElementById('d-fracos-bloco'); bloco.hidden = k !== 'geral';
+    var fracos = document.getElementById('d-fracos'); fracos.textContent = '';
+    temas.filter(function (t) { return t[2] >= MIN_FRACOS; })
+      .sort(function (a, b) { return pct(a[1], a[2]) - pct(b[1], b[2]); })
+      .slice(0, QTD_FRACOS)
+      .forEach(function (t) { fracos.appendChild(item(t[0], t[1], t[2])); });
+  }
+  document.querySelectorAll('input[name="visao"]').forEach(function (i) { i.addEventListener('change', function () { desempenho(i.value); }); });
+  desempenho('geral');
+
+  /* Divide ao responder */
+  var CERTA = 'D';
+  var estudo = document.getElementById('estudo');
+  var aviso = document.getElementById('estudo-aviso');
+  var correcao = document.getElementById('estudo-correcao');
+  var marcar = document.getElementById('estudo-marcar');
+  marcar.addEventListener('click', function () { marcar.setAttribute('aria-pressed', marcar.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); });
+  document.getElementById('estudo-responder').addEventListener('click', function () {
+    var sel = estudo.querySelector('input[name="estudo"]:checked');
+    if (!sel) { aviso.textContent = 'Escolha uma opção antes de responder.'; return; }
+    aviso.textContent = '';
+    var v = sel.value, ok = v === CERTA;
+    estudo.querySelectorAll('.opt').forEach(function (row) {
+      var l = row.getAttribute('data-letter'), tag = row.querySelector('.alt-tag');
+      row.classList.add('is-done');
+      row.querySelector('input').disabled = true;
+      row.querySelector('[data-strike]').disabled = true;
+      if (l === CERTA) { row.classList.add('is-right'); tag.textContent = ok ? 'Sua resposta, certa' : (row.classList.contains('is-struck') ? 'Resposta certa. Você tinha riscado esta.' : 'Resposta certa'); }
+      else if (l === v) { row.classList.add('is-wrong'); tag.textContent = 'Sua resposta'; }
+    });
+    var res = document.getElementById('estudo-resultado');
+    res.className = 'result ' + (ok ? 'is-right' : 'is-wrong');
+    res.querySelector('use').setAttribute('href', ok ? '#i-check' : '#i-x');
+    document.getElementById('estudo-res-titulo').textContent = ok ? 'Você acertou' : 'Você errou';
+    document.getElementById('estudo-res-sub').textContent = ok ? 'Você marcou D, a resposta certa.' : 'Você marcou ' + v + '. A resposta certa é D.';
+    document.getElementById('estudo-responder').disabled = true;
+    correcao.hidden = false;
+    estudo.classList.add('is-answered');
+    document.getElementById('estudo-titulo').focus();
+  });
+  document.getElementById('estudo-proxima').addEventListener('click', function () {
+    estudo.classList.remove('is-answered');
+    correcao.hidden = true;
+    document.getElementById('estudo-responder').disabled = false;
+    estudo.querySelectorAll('.opt').forEach(function (row) {
+      var input = row.querySelector('input');
+      row.classList.remove('is-done', 'is-right', 'is-wrong', 'is-struck');
+      row.querySelector('[data-strike]').setAttribute('aria-pressed', 'false');
+      row.querySelector('[data-strike]').disabled = false;
+      input.disabled = false; input.checked = false;
+      row.querySelector('.alt-tag').textContent = '';
+    });
+    estudo.querySelector('input[name="estudo"]').focus();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Sistema de design MedTeca</title>
+<meta name="description" content="Sistema de design da identidade Esmeralda do MedTeca: cores, tipografia, espaço, componentes com todos os estados, movimento e tom de voz.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..700&family=Literata:opsz,wght@7..72,400..700&display=swap">
+<script>
+(function () {
+  var r = document.documentElement, t = '';
+  try { t = localStorage.getItem('medteca-aparencia') || ''; } catch (e) {}
+  if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* Hallmark · shape: app screen · genre: editorial · theme: custom
+ * paper: oklch(98.6% 0.006 160) · accent: oklch(40% 0.11 163) · display: Literata · body: Figtree
+ * nav: barra fixa com a marca e a aparência, sumário em links · signature: a alternativa em bolinha em todos os estados, ao lado das três situações do gabarito · states: padrão, hover, foco, pressionado, desabilitado, carregando, escolhida, certa, errada, provisório, vazio, erro
+ * axes: papel verde-claro/serifa/esmeralda com roxo · posture: referência de sistema · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V, herda a Esmeralda aprovada de propósito; a página mostra estados em vez de repetir telas */
+
+/* ---------- Tokens: escala e paleta bruta (todas as cores e fontes nascem aqui) ---------- */
+:root {
+  color-scheme: light;
+  --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-read: 1.0625rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem;
+  --text-hero: clamp(2rem, 1.55rem + 1.9vw, 2.9rem); --text-figure: 3.25rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --dur-micro: 120ms; --dur-short: 220ms;
+  --container: 1120px; --gutter: 40px; --z-sticky: 200;
+
+  --font-display: "Literata", ui-serif, Georgia, serif;
+  --font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --tracking-display: -0.015em;
+  --radius-control: 8px; --radius-frame: 14px; --radius-chip: 6px; --radius-seg: 10px; --radius-bar: 999px;
+  --target: 44px;
+
+  /* Claro */
+  --e-paper: oklch(98.6% 0.006 160); --e-paper-2: oklch(96.5% 0.01 160); --e-rule: oklch(89% 0.014 160);
+  --e-ink: oklch(23% 0.02 165); --e-muted: oklch(49% 0.02 165);
+  --e-accent: oklch(40% 0.11 163); --e-accent-hover: oklch(35% 0.1 163); --e-accent-ink: oklch(99% 0.005 160);
+  --e-focus: oklch(55% 0.14 163); --e-success: oklch(46% 0.12 150); --e-error: oklch(48% 0.16 18); --e-warn: oklch(52% 0.12 70);
+  --e-on-status: oklch(99% 0.005 160); --e-mark: oklch(91% 0.05 163); --e-mark-ink: oklch(23% 0.02 165);
+  --e-book: oklch(44% 0.16 305); --e-cover: oklch(28% 0.12 305);
+  --e-cover-med: oklch(63% 0.15 160); --e-shell: oklch(94% 0.025 85);
+  /* Escuro */
+  --ed-paper: oklch(17% 0.015 165); --ed-paper-2: oklch(21% 0.018 165); --ed-rule: oklch(31% 0.02 165);
+  --ed-ink: oklch(94% 0.008 160); --ed-muted: oklch(72% 0.015 160);
+  --ed-accent: oklch(68% 0.14 160); --ed-accent-hover: oklch(74% 0.13 160); --ed-accent-ink: oklch(18% 0.02 165);
+  --ed-focus: oklch(82% 0.11 163); --ed-success: oklch(78% 0.12 150); --ed-error: oklch(74% 0.13 20); --ed-warn: oklch(80% 0.12 80);
+  --ed-on-status: oklch(17% 0.015 165); --ed-mark: oklch(34% 0.06 163); --ed-mark-ink: oklch(94% 0.008 160);
+  --ed-book: oklch(76% 0.11 305); --ed-cover: oklch(28% 0.12 305);
+}
+
+/* ---------- Pares claro e escuro ---------- */
+:root {
+  --l-paper: var(--e-paper); --l-paper-2: var(--e-paper-2); --l-rule: var(--e-rule); --l-ink: var(--e-ink); --l-muted: var(--e-muted);
+  --l-accent: var(--e-accent); --l-accent-hover: var(--e-accent-hover); --l-accent-ink: var(--e-accent-ink); --l-focus: var(--e-focus);
+  --l-success: var(--e-success); --l-error: var(--e-error); --l-warn: var(--e-warn); --l-on-status: var(--e-on-status);
+  --l-mark: var(--e-mark); --l-mark-ink: var(--e-mark-ink); --l-teca: var(--e-book); --l-ribbon: var(--e-book); --l-cover: var(--e-cover);
+  --d-paper: var(--ed-paper); --d-paper-2: var(--ed-paper-2); --d-rule: var(--ed-rule); --d-ink: var(--ed-ink); --d-muted: var(--ed-muted);
+  --d-accent: var(--ed-accent); --d-accent-hover: var(--ed-accent-hover); --d-accent-ink: var(--ed-accent-ink); --d-focus: var(--ed-focus);
+  --d-success: var(--ed-success); --d-error: var(--ed-error); --d-warn: var(--ed-warn); --d-on-status: var(--ed-on-status);
+  --d-mark: var(--ed-mark); --d-mark-ink: var(--ed-mark-ink); --d-teca: var(--e-shell); --d-ribbon: var(--ed-book); --d-cover: var(--ed-cover);
+  --color-cover-med: var(--e-cover-med); --color-cover-teca: var(--e-shell);
+}
+
+/* ---------- Aparência ---------- */
+:root {
+  --color-paper: var(--l-paper); --color-paper-2: var(--l-paper-2); --color-rule: var(--l-rule); --color-ink: var(--l-ink); --color-muted: var(--l-muted);
+  --color-accent: var(--l-accent); --color-accent-hover: var(--l-accent-hover); --color-accent-ink: var(--l-accent-ink); --color-focus: var(--l-focus);
+  --color-success: var(--l-success); --color-error: var(--l-error); --color-warn: var(--l-warn); --color-on-status: var(--l-on-status);
+  --color-mark: var(--l-mark); --color-mark-ink: var(--l-mark-ink); --color-teca: var(--l-teca); --color-ribbon: var(--l-ribbon); --color-cover: var(--l-cover);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-paper: var(--d-paper); --color-paper-2: var(--d-paper-2); --color-rule: var(--d-rule); --color-ink: var(--d-ink); --color-muted: var(--d-muted);
+    --color-accent: var(--d-accent); --color-accent-hover: var(--d-accent-hover); --color-accent-ink: var(--d-accent-ink); --color-focus: var(--d-focus);
+    --color-success: var(--d-success); --color-error: var(--d-error); --color-warn: var(--d-warn); --color-on-status: var(--d-on-status);
+    --color-mark: var(--d-mark); --color-mark-ink: var(--d-mark-ink); --color-teca: var(--d-teca); --color-ribbon: var(--d-ribbon); --color-cover: var(--d-cover);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: var(--d-paper); --color-paper-2: var(--d-paper-2); --color-rule: var(--d-rule); --color-ink: var(--d-ink); --color-muted: var(--d-muted);
+  --color-accent: var(--d-accent); --color-accent-hover: var(--d-accent-hover); --color-accent-ink: var(--d-accent-ink); --color-focus: var(--d-focus);
+  --color-success: var(--d-success); --color-error: var(--d-error); --color-warn: var(--d-warn); --color-on-status: var(--d-on-status);
+  --color-mark: var(--d-mark); --color-mark-ink: var(--d-mark-ink); --color-teca: var(--d-teca); --color-ribbon: var(--d-ribbon); --color-cover: var(--d-cover);
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; scrollbar-color: var(--color-muted) var(--color-paper); }
+body {
+  margin: 0; background: var(--color-paper); color: var(--color-ink);
+  font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55;
+  -webkit-font-smoothing: antialiased; caret-color: var(--color-accent);
+}
+::selection { background: var(--color-mark); color: var(--color-mark-ink); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+h1, h2, h3, h4 {
+  margin: 0; font-family: var(--font-display); font-weight: 600; line-height: 1.15;
+  letter-spacing: var(--tracking-display); color: var(--color-ink);
+  text-wrap: balance; overflow-wrap: break-word; min-width: 0; font-synthesis: none;
+}
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; }
+figure { margin: 0; }
+[hidden] { display: none !important; }
+button, input { font: inherit; color: inherit; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.num { font-variant-numeric: tabular-nums; }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ico { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.wrap {
+  width: 100%; max-width: var(--container); margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+}
+@media (max-width: 60rem) { :root { --gutter: 24px; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; } }
+
+.wm { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; font-size: var(--text-xl); }
+.wm-med { color: var(--color-accent); }
+.wm-teca { color: var(--color-teca); }
+
+/* ---------- Barra de cima ---------- */
+.topbar { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--color-paper); border-bottom: 1px solid var(--color-rule); }
+.topbar-in { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-block: var(--space-xs); }
+
+/* Controle segmentado */
+.seg {
+  display: inline-flex; gap: 2px; margin: 0; padding: var(--space-2xs); min-inline-size: 0;
+  border: 1px solid var(--color-rule); border-radius: var(--radius-seg); background: var(--color-paper-2);
+}
+.seg label {
+  position: relative; flex: 1 0 auto; display: grid; place-items: center; white-space: nowrap;
+  min-height: var(--target); padding: var(--space-2xs) var(--space-md); border-radius: max(0px, calc(var(--radius-seg) - var(--space-2xs)));
+  font-size: var(--text-sm); font-weight: 600; line-height: 1.2; color: var(--color-ink);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.seg input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.seg label:hover:not(:has(input:checked)) { background: var(--color-rule); }
+.seg label:has(input:checked) { background: var(--color-accent); color: var(--color-accent-ink); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.seg label:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
+@media (max-width: 40rem) { .topbar .seg label { padding-inline: var(--space-sm); } }
+
+/* ---------- Abertura e sumário ---------- */
+.intro { padding-block: var(--space-2xl) var(--space-xl); display: grid; gap: var(--space-md); }
+.intro h1 { font-size: var(--text-hero); }
+.lead { font-size: var(--text-lg); line-height: 1.5; max-width: 56ch; }
+.toc { display: flex; flex-wrap: wrap; gap: var(--space-xs); list-style: none; padding: 0; margin-top: var(--space-xs); }
+.toc a {
+  display: inline-flex; align-items: center; min-height: 36px; padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid var(--color-rule); border-radius: var(--radius-chip);
+  font-size: var(--text-sm); font-weight: 500; color: var(--color-ink); text-decoration: none;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.toc a:hover { background: var(--color-paper-2); }
+
+.band { padding-block: var(--space-xl); border-top: 1px solid var(--color-rule); }
+.band > h2 { font-size: var(--text-2xl); }
+.band-intro { margin-top: var(--space-xs); color: var(--color-muted); max-width: 62ch; }
+.sub { margin-top: var(--space-xl); font-size: var(--text-lg); }
+.note { margin-top: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); max-width: 62ch; }
+
+/* Princípios */
+.principles { list-style: none; padding: 0; margin-top: var(--space-lg); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: var(--space-lg); }
+.principles strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: var(--text-lg); }
+.principles span { display: block; margin-top: var(--space-2xs); color: var(--color-muted); }
+
+/* Cores */
+.swatches { list-style: none; padding: 0; margin-top: var(--space-lg); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: var(--space-md) var(--space-lg); }
+.sw { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--space-sm); align-items: center; }
+.sw-chip {
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border-radius: var(--radius-control); border: 1px solid var(--color-rule);
+  background: var(--c); color: var(--t, transparent);
+  font-family: var(--font-display); font-weight: 600; font-size: var(--text-lg);
+}
+.sw-name { display: block; font-weight: 600; font-size: var(--text-sm); }
+.sw-role { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+.sw-val { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+
+/* Tipografia */
+.type { list-style: none; padding: 0; margin-top: var(--space-lg); display: grid; }
+.type li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); gap: var(--space-lg); align-items: baseline; padding-block: var(--space-md); border-bottom: 1px solid var(--color-rule); }
+.type li:last-child { border-bottom: 0; }
+@media (max-width: 40rem) { .type li { grid-template-columns: minmax(0, 1fr); gap: var(--space-2xs); } }
+.type-spec { font-size: var(--text-xs); color: var(--color-muted); }
+.t-figure { font-family: var(--font-display); font-weight: 600; font-size: var(--text-figure); line-height: 1; letter-spacing: var(--tracking-display); font-variant-numeric: tabular-nums; }
+.t-h1 { font-family: var(--font-display); font-weight: 600; font-size: var(--text-2xl); line-height: 1.15; letter-spacing: var(--tracking-display); }
+.t-h2 { font-family: var(--font-display); font-weight: 600; font-size: var(--text-lg); line-height: 1.25; }
+.t-read { font-family: var(--font-display); font-size: var(--text-read); line-height: 1.6; max-width: 60ch; }
+.t-ui { font-size: var(--text-md); line-height: 1.45; }
+.t-ui strong { font-weight: 600; }
+.t-small { font-size: var(--text-sm); line-height: 1.5; color: var(--color-muted); }
+.t-xs { font-size: var(--text-xs); color: var(--color-muted); }
+
+/* Espaço e forma */
+.scale { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-lg); margin-top: var(--space-lg); }
+.scale figure { display: grid; gap: var(--space-xs); justify-items: center; }
+.scale span { display: block; background: var(--color-accent); border-radius: 2px; inline-size: var(--s); block-size: var(--s); }
+.scale figcaption, .state figcaption { font-size: var(--text-xs); color: var(--color-muted); text-align: center; }
+.shapes { display: flex; flex-wrap: wrap; gap: var(--space-lg); margin-top: var(--space-lg); }
+.shapes figure { display: grid; gap: var(--space-xs); justify-items: center; }
+.shape { inline-size: 96px; block-size: 64px; border: 1.5px solid var(--color-ink); background: var(--color-paper-2); }
+.shape.r-control { border-radius: var(--radius-control); }
+.shape.r-frame { border-radius: var(--radius-frame); }
+.shape.r-chip { border-radius: var(--radius-chip); block-size: 32px; }
+.shape.r-bar { border-radius: var(--radius-bar); block-size: 12px; }
+.shape.target { inline-size: var(--target); block-size: var(--target); border-style: dashed; border-radius: var(--radius-control); }
+
+/* Vitrine de estados */
+.states { display: flex; flex-wrap: wrap; gap: var(--space-lg) var(--space-md); margin-top: var(--space-md); align-items: flex-start; }
+.state { display: grid; gap: var(--space-xs); justify-items: center; }
+.stack { display: grid; gap: var(--space-md); margin-top: var(--space-md); max-width: 440px; }
+.stack .state { justify-items: stretch; }
+.stack .state figcaption { text-align: start; }
+
+/* Botões */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+  min-height: 48px; padding: 0 var(--space-lg); border: 1px solid transparent; border-radius: var(--radius-control);
+  font-weight: 600; white-space: nowrap; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+.btn-primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn-primary:hover, .btn-primary.is-hover { background: var(--color-accent-hover); }
+.btn-quiet { background: transparent; color: var(--color-ink); border-color: var(--color-rule); padding-inline: var(--space-md); }
+.btn-quiet:hover, .btn-quiet.is-hover { background: var(--color-paper-2); }
+.btn:active, .btn.is-active { transform: scale(0.98); }
+.btn.is-focus { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; transform: none; }
+.btn[aria-busy="true"] { cursor: progress; }
+.btn-quiet[aria-pressed="true"] { border-color: var(--color-ribbon); }
+.btn-quiet[aria-pressed="true"] .ico { fill: var(--color-ribbon); stroke: var(--color-ribbon); }
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: girar 0.8s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* Alternativas */
+.alt {
+  position: relative; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: var(--space-sm); align-items: center;
+  min-height: 56px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-control);
+  background: var(--color-paper); color: var(--color-ink); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.alt:hover, .alt.is-hover { background: var(--color-paper-2); }
+.alt input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.alt:has(input:focus-visible), .alt.is-focus { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.alt-letter {
+  inline-size: 32px; block-size: 32px; display: grid; place-items: center;
+  border: 1.5px solid var(--color-muted); border-radius: 50%;
+  font-family: var(--font-display); font-size: var(--text-md); font-weight: 600; color: var(--color-ink);
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.alt:has(input:checked), .alt.is-chosen { border-color: var(--color-ink); background: color-mix(in oklab, var(--color-ink) 5%, var(--color-paper)); }
+.alt:has(input:checked) .alt-letter, .alt.is-chosen .alt-letter { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.alt.is-done { cursor: default; color: var(--color-muted); }
+.alt.is-done:hover { background: var(--color-paper); }
+.alt.is-done .alt-letter { border-color: var(--color-rule); color: var(--color-muted); }
+.alt.is-right { border-color: var(--color-success); color: var(--color-ink); }
+.alt.is-right .alt-letter { background: var(--color-success); border-color: var(--color-success); color: var(--color-on-status); }
+.alt.is-wrong { border-color: var(--color-error); color: var(--color-ink); }
+.alt.is-wrong .alt-letter { background: var(--color-error); border-color: var(--color-error); color: var(--color-on-status); }
+.alt-tag { grid-column: 2; font-size: var(--text-sm); font-weight: 600; }
+.alt.is-right .alt-tag { color: var(--color-success); }
+.alt.is-wrong .alt-tag { color: var(--color-error); }
+
+/* Riscar alternativas */
+.alt.is-struck .alt-letter, .opt.is-struck .alt-letter { border-color: var(--color-rule); color: var(--color-muted); }
+.alt.is-struck .alt-text, .opt.is-struck:not(.is-right) .opt-text {
+  color: var(--color-muted); text-decoration: line-through; text-decoration-color: var(--color-error); text-decoration-thickness: 2px;
+}
+.demos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: var(--space-xl) var(--space-lg); margin-top: var(--space-lg); align-items: start; }
+.demo { display: grid; gap: var(--space-sm); align-content: start; }
+.demo h3 { font-size: var(--text-lg); }
+.demo-why { font-size: var(--text-sm); color: var(--color-muted); }
+.opts { display: grid; gap: var(--space-xs); margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.opt {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper);
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.opt:not(.is-done):has(input:checked) { border-color: var(--color-ink); background: color-mix(in oklab, var(--color-ink) 5%, var(--color-paper)); }
+.opt:not(.is-done):has(input:checked) .alt-letter { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.opt:has(input:focus-visible) { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.opt-pick {
+  position: relative; display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: var(--space-sm); align-items: center;
+  min-height: 56px; padding: var(--space-sm) var(--space-xs) var(--space-sm) var(--space-md);
+  border-radius: var(--radius-control); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.opt-pick input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.opt-pick:hover { background: var(--color-paper-2); }
+.alt.has-strike { grid-template-columns: 32px minmax(0, 1fr) 44px; padding-inline-end: var(--space-xs); }
+.strike-static { display: grid; place-items: center; inline-size: 44px; block-size: 44px; color: var(--color-muted); }
+.alt.is-struck .strike-static { color: var(--color-error); }
+.opt-text { line-height: 1.45; }
+.strike {
+  inline-size: 44px; block-size: 44px; margin-inline-end: var(--space-xs); display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-control); background: transparent; color: var(--color-muted);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+.strike:hover { background: var(--color-paper-2); color: var(--color-ink); }
+.strike:active { transform: scale(0.94); }
+.strike[aria-pressed="true"] { color: var(--color-error); }
+.strike:disabled { visibility: hidden; }
+.opt.is-done .opt-pick { cursor: default; }
+.opt.is-done:not(.is-right):not(.is-wrong) .opt-text { color: var(--color-muted); }
+.opt.is-done:not(.is-right):not(.is-wrong) .alt-letter { border-color: var(--color-rule); color: var(--color-muted); }
+.opt.is-done .opt-pick:hover { background: transparent; }
+.opt.is-done.is-right { border-color: var(--color-success); }
+.opt.is-done.is-right .alt-letter { background: var(--color-success); border-color: var(--color-success); color: var(--color-on-status); }
+.opt.is-done.is-wrong { border-color: var(--color-error); }
+.opt.is-done.is-wrong .alt-letter { background: var(--color-error); border-color: var(--color-error); color: var(--color-on-status); }
+.opt.is-right .alt-tag { color: var(--color-success); }
+.opt.is-wrong .alt-tag { color: var(--color-error); }
+.demo-status { min-height: 1.5em; font-size: var(--text-sm); font-weight: 600; }
+.demo .actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.demo .actions .btn-primary { flex: 1 1 auto; }
+.rules-strike { margin-top: var(--space-xl); padding-left: 1.4em; display: grid; gap: var(--space-xs); max-width: 70ch; }
+.rules-strike li::marker { color: var(--color-accent); font-weight: 600; }
+
+/* Gabarito e resultado */
+.gab {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: var(--space-sm); align-items: start;
+  padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-control);
+}
+.gab .ico { width: 22px; height: 22px; margin-top: 1px; }
+.gab strong { display: block; font-weight: 600; }
+.gab small { display: block; font-size: var(--text-sm); color: var(--color-muted); }
+.gab-oficial .ico { color: var(--color-accent); }
+.gab-medteca .ico { color: var(--color-muted); }
+.gab-preliminar { border-color: color-mix(in oklab, var(--color-warn) 45%, var(--color-paper)); background: color-mix(in oklab, var(--color-warn) 10%, var(--color-paper)); }
+.gab-preliminar .ico { color: var(--color-warn); }
+.gab-preliminar small { color: var(--color-ink); }
+.result {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-sm); align-items: start;
+  padding: var(--space-md); border-radius: var(--radius-control);
+  background: color-mix(in oklab, var(--tone) 11%, var(--color-paper));
+}
+.result.is-wrong { --tone: var(--color-error); }
+.result.is-right { --tone: var(--color-success); }
+.result .ico { width: 28px; height: 28px; color: var(--tone); }
+.result-title { font-family: var(--font-display); font-weight: 600; font-size: var(--text-xl); line-height: 1.2; }
+.result-sub { margin-top: 2px; font-size: var(--text-sm); }
+.provisorio { display: inline-flex; align-items: center; gap: var(--space-2xs); margin-top: var(--space-xs); padding: 2px var(--space-xs); border-radius: var(--radius-chip); font-size: var(--text-xs); font-weight: 600; color: var(--color-ink); background: color-mix(in oklab, var(--color-warn) 18%, var(--color-paper)); }
+.provisorio .ico { width: 14px; height: 14px; color: var(--color-warn); }
+
+/* Campos */
+.field { display: grid; gap: var(--space-2xs); inline-size: min(100%, 300px); }
+.field label { font-size: var(--text-sm); font-weight: 600; }
+.input {
+  min-height: 48px; padding: 0 var(--space-sm); border: 1px solid var(--color-muted); border-radius: var(--radius-control);
+  background: var(--color-paper); color: var(--color-ink); font-size: var(--text-md);
+  transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+}
+.input::placeholder { color: var(--color-muted); }
+.input:hover, .input.is-hover { border-color: var(--color-ink); }
+.input:focus-visible, .input.is-focus { outline: 2px solid var(--color-focus); outline-offset: 1px; border-color: var(--color-ink); }
+.input[aria-invalid="true"] { border-color: var(--color-error); box-shadow: inset 0 0 0 1px var(--color-error); }
+.input:disabled { opacity: 0.45; cursor: not-allowed; }
+.field-help { font-size: var(--text-sm); color: var(--color-muted); }
+.field-error { display: flex; gap: var(--space-2xs); align-items: flex-start; font-size: var(--text-sm); font-weight: 600; color: var(--color-error); }
+.field-error .ico { width: 18px; height: 18px; margin-top: 1px; }
+
+/* Filtros */
+.chip {
+  display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: 40px; padding: 0 var(--space-sm);
+  border: 1px solid var(--color-muted); border-radius: var(--radius-chip); background: var(--color-paper); color: var(--color-ink);
+  font-size: var(--text-sm); font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.chip:hover, .chip.is-hover { background: var(--color-paper-2); }
+.chip.is-focus { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.chip[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
+.chip[aria-pressed="true"] .ico { display: block; }
+.chip .ico { display: none; width: 16px; height: 16px; }
+.chip:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Avisos */
+.notice {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: var(--space-sm); align-items: start;
+  padding: var(--space-sm) var(--space-md); border-radius: var(--radius-control);
+  background: color-mix(in oklab, var(--tone) 10%, var(--color-paper)); border: 1px solid color-mix(in oklab, var(--tone) 35%, var(--color-paper));
+}
+.notice .ico { width: 22px; height: 22px; color: var(--tone); margin-top: 1px; }
+.notice.is-info { --tone: var(--color-muted); }
+.notice.is-ok { --tone: var(--color-success); }
+.notice.is-error { --tone: var(--color-error); }
+.notice .btn { margin-top: var(--space-xs); min-height: var(--target); }
+.notice.is-warn { --tone: var(--color-warn); }
+.notice strong { font-weight: 600; }
+.btn-sm { min-height: var(--target); padding-inline: var(--space-sm); }
+
+/* Procedência */
+.prov { display: grid; gap: var(--space-2xs); padding: var(--space-sm) 0; }
+.prov-origin { font-size: var(--text-sm); color: var(--color-muted); }
+.prov-badges { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-md); }
+.prov-badges li { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--text-sm); font-weight: 600; }
+.prov-badges .ico { width: 18px; height: 18px; color: var(--color-accent); }
+.prov-badges li.is-warn .ico { color: var(--color-warn); }
+.prov-rev {
+  display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: var(--target); margin-block: calc(-1 * var(--space-sm));
+  padding: 0 var(--space-2xs); border: 0; border-radius: var(--radius-control); background: transparent; color: var(--color-ink);
+  font-size: var(--text-sm); font-weight: 600; white-space: nowrap; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.prov-rev:hover, .prov-rev[aria-expanded="true"] { background: var(--color-paper-2); }
+.prov-rev .ico { color: var(--color-muted); }
+.prov-rev .ico-i { width: 16px; height: 16px; }
+.prov-explain { padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-control); background: var(--color-paper-2); font-size: var(--text-sm); }
+
+/* Histórico */
+.hist { list-style: none; padding: 0; margin-top: var(--space-lg); max-width: 560px; border-top: 1px solid var(--color-rule); }
+.hist-item { padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); display: grid; gap: var(--space-2xs); }
+.hist-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm); }
+.hist-title { font-weight: 600; }
+.hist-res { display: inline-flex; align-items: center; gap: var(--space-2xs); font-size: var(--text-sm); font-weight: 600; color: var(--color-muted); }
+.hist-res .ico { width: 18px; height: 18px; }
+.hist-res.is-right { color: var(--color-success); }
+.hist-res.is-wrong { color: var(--color-error); }
+.hist-sub { font-size: var(--text-sm); color: var(--color-muted); }
+.hist-note { font-size: var(--text-sm); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-control); background: var(--color-paper-2); }
+.hist-item.is-out .hist-title { color: var(--color-muted); }
+
+/* Imagens */
+.img-slot { display: grid; place-items: center; aspect-ratio: 4 / 3; inline-size: 100%; border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper-2); overflow: hidden; }
+.img-slot.is-loading { place-items: stretch; }
+.img-slot.is-loading .skel { block-size: 100%; border-radius: 0; }
+.img-slot .ico-big { width: 48px; height: 48px; color: var(--color-muted); }
+.img-box { display: grid; gap: var(--space-xs); justify-items: start; }
+.findings { display: grid; gap: var(--space-2xs); padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-rule); background: var(--color-paper-2); border-radius: var(--radius-control); }
+.findings-label { font-size: var(--text-sm); font-weight: 600; }
+
+/* Estados de tela */
+.screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--space-lg); margin-top: var(--space-md); }
+.panel { border: 1px solid var(--color-rule); border-radius: var(--radius-frame); padding: var(--space-lg) var(--space-md); display: grid; gap: var(--space-sm); align-content: start; min-height: 240px; }
+.panel-title { font-weight: 600; }
+.panel .ico-big { width: 40px; height: 40px; color: var(--color-muted); }
+.skel { display: block; height: 14px; border-radius: var(--radius-bar); background: var(--color-rule); animation: pulsar 1.4s var(--ease-out) infinite alternate; }
+.skel.w-90 { inline-size: 90%; } .skel.w-70 { inline-size: 70%; } .skel.w-80 { inline-size: 80%; } .skel.tall { height: 48px; border-radius: var(--radius-control); }
+@keyframes pulsar { from { opacity: 1; } to { opacity: 0.45; } }
+
+/* Movimento */
+.motion { list-style: none; padding: 0; margin-top: var(--space-lg); display: grid; gap: var(--space-sm); max-width: 70ch; }
+.motion li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--space-md); padding-block: var(--space-xs); border-bottom: 1px solid var(--color-rule); }
+.motion li:last-child { border-bottom: 0; }
+.motion b { font-weight: 600; }
+
+/* Tom de voz */
+.rules { margin-top: var(--space-lg); padding-left: 1.4em; display: grid; gap: var(--space-xs); max-width: 66ch; }
+.rules li::marker { color: var(--color-accent); font-weight: 600; }
+.voice { margin-top: var(--space-lg); width: 100%; max-width: 820px; border-collapse: collapse; }
+.voice th { text-align: start; font-size: var(--text-sm); font-weight: 600; padding: var(--space-xs) var(--space-sm) var(--space-xs) 0; border-bottom: 1px solid var(--color-ink); }
+.voice td { vertical-align: top; padding: var(--space-sm) var(--space-sm) var(--space-sm) 0; border-bottom: 1px solid var(--color-rule); }
+.voice td:first-child { font-weight: 500; }
+.voice td:last-child { color: var(--color-muted); text-decoration: line-through; text-decoration-color: var(--color-error); }
+@media (max-width: 40rem) {
+  .voice, .voice tbody, .voice tr, .voice td { display: block; width: 100%; }
+  .voice thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .voice tr { padding-block: var(--space-xs); border-bottom: 1px solid var(--color-rule); }
+  .voice td { border-bottom: 0; padding: var(--space-2xs) 0; }
+}
+
+.foot { margin-top: var(--space-2xl); padding-block: var(--space-xl); border-top: 1px solid var(--color-rule); }
+.foot p { font-size: var(--text-sm); color: var(--color-muted); max-width: 70ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></symbol>
+  <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><path d="M8.6 8.6L20 19M8.6 15.4L20 5"/></symbol>
+  <symbol id="i-rev" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c1-3.4 3.4-5.3 6.5-5.3 1.3 0 2.5.3 3.5.9"/><path d="M15 18l2 2 4-4"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-5 4 4 2.5-2.5L20 17"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18z"/><path d="M12 11v3M12 16.5h.01"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <p class="wm"><span class="wm-med">Med</span><span class="wm-teca">Teca</span></p>
+    <fieldset class="seg">
+      <legend class="visually-hidden">Aparência</legend>
+      <label><input type="radio" name="aparencia" value="system" checked><span>Auto</span></label>
+      <label><input type="radio" name="aparencia" value="light"><span>Claro</span></label>
+      <label><input type="radio" name="aparencia" value="dark"><span>Escuro</span></label>
+    </fieldset>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section class="intro" aria-labelledby="h-intro">
+      <h1 id="h-intro">Sistema de design</h1>
+      <p class="lead">As peças da Esmeralda aprovada, com todos os estados. É a referência para construir cada tela do MedTeca.</p>
+      <nav aria-label="Seções">
+        <ul class="toc">
+          <li><a href="#principios">Princípios</a></li>
+          <li><a href="#cores">Cores</a></li>
+          <li><a href="#tipografia">Tipografia</a></li>
+          <li><a href="#espaco">Espaço e forma</a></li>
+          <li><a href="#botoes">Botões</a></li>
+          <li><a href="#alternativas">Alternativas</a></li>
+          <li><a href="#riscar">Riscar alternativas</a></li>
+          <li><a href="#gabarito">Gabarito e resultado</a></li>
+          <li><a href="#campos">Campos e filtros</a></li>
+          <li><a href="#historico">Histórico e retiradas</a></li>
+          <li><a href="#imagens">Imagens</a></li>
+          <li><a href="#avisos">Avisos e estados de tela</a></li>
+          <li><a href="#movimento">Movimento</a></li>
+          <li><a href="#voz">Tom de voz</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section class="band" id="principios" aria-labelledby="h-principios">
+      <h2 id="h-principios">Princípios</h2>
+      <ul class="principles">
+        <li><strong>Ler vem primeiro</strong><span>Enunciado e comentário na Literata, em tamanho confortável para horas de estudo.</span></li>
+        <li><strong>Origem sempre à vista</strong><span>Banca, ano e situação do gabarito aparecem antes de qualquer conclusão.</span></li>
+        <li><strong>Cor nunca sozinha</strong><span>Todo estado tem também ícone ou texto. Quem não distingue verde de vermelho entende igual.</span></li>
+        <li><strong>Calma</strong><span>Sem sombras, sem pressa e sem comemoração exagerada. O movimento só confirma o toque.</span></li>
+      </ul>
+    </section>
+
+    <section class="band" id="cores" aria-labelledby="h-cores">
+      <h2 id="h-cores">Cores</h2>
+      <p class="band-intro">Cada cor tem um papel. O contraste é medido agora, no modo em que você está; o mínimo para texto é 4,5:1 e, para bordas e ícones, 3:1.</p>
+      <ul class="swatches">
+        <li class="sw"><span class="sw-chip" style="--c: var(--color-paper)"></span><span><span class="sw-name">Papel</span><span class="sw-role">Fundo de todas as telas</span></span></li>
+        <li class="sw"><span class="sw-chip" style="--c: var(--color-paper-2)"></span><span><span class="sw-name">Superfície</span><span class="sw-role">Etiquetas, hover e áreas de apoio</span></span></li>
+        <li class="sw"><span class="sw-chip" style="--c: var(--color-rule)"></span><span><span class="sw-name">Fio</span><span class="sw-role">Divisórias e bordas de cartão</span></span></li>
+        <li class="sw" data-fg="--color-ink" data-bg="--color-paper" data-min="4.5" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-paper); --t: var(--color-ink)" aria-hidden="true">Aa</span><span><span class="sw-name">Tinta</span><span class="sw-role">Texto principal e opção escolhida</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-muted" data-bg="--color-paper" data-min="4.5" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-paper); --t: var(--color-muted)" aria-hidden="true">Aa</span><span><span class="sw-name">Tinta secundária</span><span class="sw-role">Metadados, legendas, bordas de campo</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-accent-ink" data-bg="--color-accent" data-min="4.5" data-on="no botão principal"><span class="sw-chip" style="--c: var(--color-accent); --t: var(--color-accent-ink)" aria-hidden="true">Aa</span><span><span class="sw-name">Esmeralda</span><span class="sw-role">Marca, ação principal, progresso</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-ribbon" data-bg="--color-paper" data-min="3" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-ribbon)"></span><span><span class="sw-name">Roxo do livro</span><span class="sw-role">Teca, fita das marcadas, capa</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-success" data-bg="--color-paper" data-min="4.5" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-paper); --t: var(--color-success)" aria-hidden="true">Aa</span><span><span class="sw-name">Acerto</span><span class="sw-role">Só resposta certa</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-error" data-bg="--color-paper" data-min="4.5" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-paper); --t: var(--color-error)" aria-hidden="true">Aa</span><span><span class="sw-name">Erro</span><span class="sw-role">Resposta errada e falhas</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-warn" data-bg="--color-paper" data-min="4.5" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-paper); --t: var(--color-warn)" aria-hidden="true">Aa</span><span><span class="sw-name">Atenção</span><span class="sw-role">Gabarito preliminar e resultado provisório</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-mark-ink" data-bg="--color-mark" data-min="4.5" data-on="no trecho destacado"><span class="sw-chip" style="--c: var(--color-mark); --t: var(--color-mark-ink)" aria-hidden="true">Aa</span><span><span class="sw-name">Destaque</span><span class="sw-role">Trecho-chave do comentário</span><span class="sw-val"></span></span></li>
+        <li class="sw" data-fg="--color-focus" data-bg="--color-paper" data-min="3" data-on="sobre o papel"><span class="sw-chip" style="--c: var(--color-focus)"></span><span><span class="sw-name">Foco</span><span class="sw-role">Anel do teclado</span><span class="sw-val"></span></span></li>
+      </ul>
+      <p class="note">O verde de acerto fica perto da esmeralda. Por isso a opção escolhida usa tinta escura, e o acerto vem sempre com ícone e texto.</p>
+    </section>
+
+    <section class="band" id="tipografia" aria-labelledby="h-tipografia">
+      <h2 id="h-tipografia">Tipografia</h2>
+      <p class="band-intro">Literata para ler, Figtree para usar. Tudo em rem, para acompanhar o tamanho de letra escolhido no aparelho.</p>
+      <ul class="type">
+        <li><p class="t-figure num">62%</p><p class="type-spec">Número de destaque. Literata 600, 52 px, números tabulares.</p></li>
+        <li><p class="t-h1">Revisão dos erros</p><p class="type-spec">Título de tela. Literata 600, 28 px.</p></li>
+        <li><p class="t-h2">Temas mais fracos</p><p class="type-spec">Título de seção. Literata 600, 19 px.</p></li>
+        <li><p class="t-read">[FICTÍCIO] Texto de leitura, como o enunciado e o comentário. Linhas de até 65 caracteres e entrelinha folgada para não cansar.</p><p class="type-spec">Leitura. Literata 400, 17 px, entrelinha 1,6.</p></li>
+        <li><p class="t-ui"><strong>Responder</strong> e Opção B, com um texto de interface</p><p class="type-spec">Interface. Figtree 400 e 600, 16 px.</p></li>
+        <li><p class="t-small">Origem: prova fictícia de residência, 2024, questão 41</p><p class="type-spec">Apoio. Figtree 400, 14 px.</p></li>
+        <li><p class="t-xs">Números de exemplo [FICTÍCIO].</p><p class="type-spec">Nota. Figtree 500, 13 px. Nunca para conteúdo principal.</p></li>
+      </ul>
+    </section>
+
+    <section class="band" id="espaco" aria-labelledby="h-espaco">
+      <h2 id="h-espaco">Espaço e forma</h2>
+      <p class="band-intro">Espaços em múltiplos de 4. Sem sombras: a separação vem de fios e superfícies.</p>
+      <div class="scale">
+        <figure><span style="--s: 4px"></span><figcaption>4</figcaption></figure>
+        <figure><span style="--s: 8px"></span><figcaption>8</figcaption></figure>
+        <figure><span style="--s: 12px"></span><figcaption>12</figcaption></figure>
+        <figure><span style="--s: 16px"></span><figcaption>16</figcaption></figure>
+        <figure><span style="--s: 24px"></span><figcaption>24</figcaption></figure>
+        <figure><span style="--s: 40px"></span><figcaption>40</figcaption></figure>
+        <figure><span style="--s: 64px"></span><figcaption>64</figcaption></figure>
+      </div>
+      <div class="shapes">
+        <figure><span class="shape r-control"></span><figcaption>Controles, 8 px</figcaption></figure>
+        <figure><span class="shape r-frame"></span><figcaption>Painéis, 14 px</figcaption></figure>
+        <figure><span class="shape r-chip"></span><figcaption>Etiquetas, 6 px</figcaption></figure>
+        <figure><span class="shape r-bar"></span><figcaption>Barras, redondas</figcaption></figure>
+        <figure><span class="shape target"></span><figcaption>Toque mínimo, 44 px</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="band" id="botoes" aria-labelledby="h-botoes">
+      <h2 id="h-botoes">Botões</h2>
+      <p class="band-intro">Um só botão principal por tela. O secundário tem contorno; ações de marcar mostram o estado ligado.</p>
+      <h3 class="sub">Principal</h3>
+      <div class="states">
+        <figure class="state"><button class="btn btn-primary" type="button">Responder</button><figcaption>Padrão</figcaption></figure>
+        <figure class="state"><button class="btn btn-primary is-hover" type="button">Responder</button><figcaption>Mouse por cima</figcaption></figure>
+        <figure class="state"><button class="btn btn-primary is-focus" type="button">Responder</button><figcaption>Foco do teclado</figcaption></figure>
+        <figure class="state"><button class="btn btn-primary is-hover is-active" type="button">Responder</button><figcaption>Pressionado</figcaption></figure>
+        <figure class="state"><button class="btn btn-primary" type="button" disabled>Responder</button><figcaption>Desabilitado</figcaption></figure>
+        <figure class="state"><button class="btn btn-primary" type="button" aria-busy="true" aria-disabled="true"><span class="spinner" aria-hidden="true"></span>Salvando</button><figcaption>Carregando</figcaption></figure>
+      </div>
+      <h3 class="sub">Secundário e marcar</h3>
+      <div class="states">
+        <figure class="state"><button class="btn btn-quiet" type="button">Reportar erro</button><figcaption>Padrão</figcaption></figure>
+        <figure class="state"><button class="btn btn-quiet is-hover" type="button">Reportar erro</button><figcaption>Mouse por cima</figcaption></figure>
+        <figure class="state"><button class="btn btn-quiet is-focus" type="button">Reportar erro</button><figcaption>Foco do teclado</figcaption></figure>
+        <figure class="state"><button class="btn btn-quiet" type="button" disabled>Reportar erro</button><figcaption>Desabilitado</figcaption></figure>
+        <figure class="state"><button class="btn btn-quiet js-toggle" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg>Marcar</button><figcaption>Desmarcada</figcaption></figure>
+        <figure class="state"><button class="btn btn-quiet js-toggle" type="button" aria-pressed="true"><svg class="ico" aria-hidden="true"><use href="#i-bookmark"/></svg>Marcar</button><figcaption>Marcada, com a fita roxa</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="band" id="alternativas" aria-labelledby="h-alternativas">
+      <h2 id="h-alternativas">Alternativas</h2>
+      <p class="band-intro">A bolinha com a letra é a assinatura, e a tesoura no fim da linha risca. Antes de responder, a escolha fica em tinta escura; depois, só a certa e a sua ganham cor.</p>
+      <div class="stack">
+        <figure class="state"><figcaption>Padrão</figcaption><div class="alt has-strike"><span class="alt-letter" aria-hidden="true">A</span><span>Opção A</span><span class="strike-static" aria-hidden="true"><svg class="ico"><use href="#i-scissors"/></svg></span></div></figure>
+        <figure class="state"><figcaption>Mouse por cima</figcaption><div class="alt has-strike is-hover"><span class="alt-letter" aria-hidden="true">A</span><span>Opção A</span><span class="strike-static" aria-hidden="true"><svg class="ico"><use href="#i-scissors"/></svg></span></div></figure>
+        <figure class="state"><figcaption>Foco do teclado</figcaption><div class="alt has-strike is-focus"><span class="alt-letter" aria-hidden="true">A</span><span>Opção A</span><span class="strike-static" aria-hidden="true"><svg class="ico"><use href="#i-scissors"/></svg></span></div></figure>
+        <figure class="state"><figcaption>Escolhida, antes de responder</figcaption><div class="alt has-strike is-chosen"><span class="alt-letter" aria-hidden="true">B</span><span>Opção B</span><span class="strike-static" aria-hidden="true"><svg class="ico"><use href="#i-scissors"/></svg></span></div></figure>
+        <figure class="state"><figcaption>Riscada, antes de responder</figcaption><div class="alt has-strike is-struck"><span class="alt-letter" aria-hidden="true">C</span><span class="alt-text">Opção C</span><span class="strike-static" aria-hidden="true"><svg class="ico"><use href="#i-scissors"/></svg></span></div></figure>
+        <figure class="state"><figcaption>Depois de responder: a sua, errada</figcaption><div class="alt is-done is-wrong"><span class="alt-letter" aria-hidden="true">B</span><span>Opção B</span><span class="alt-tag">Sua resposta</span></div></figure>
+        <figure class="state"><figcaption>Depois de responder: a certa</figcaption><div class="alt is-done is-right"><span class="alt-letter" aria-hidden="true">D</span><span>Opção D</span><span class="alt-tag">Resposta certa</span></div></figure>
+        <figure class="state"><figcaption>Depois de responder: as outras</figcaption><div class="alt is-done"><span class="alt-letter" aria-hidden="true">E</span><span>Opção E</span></div></figure>
+      </div>
+    </section>
+
+    <section class="band" id="riscar" aria-labelledby="h-riscar">
+      <h2 id="h-riscar">Riscar alternativas</h2>
+      <p class="band-intro">Para eliminar opções enquanto pensa: a linha inteira escolhe, e a tesoura no fim da linha risca. Risco não é resposta e não conta no desempenho. Experimente abaixo; a certa é a D.</p>
+      <div class="demos">
+
+        <div class="demo" data-demo>
+          <h3>Experimente</h3>
+          <p class="demo-why">Risque, escolha e toque em Responder. Para ver o aviso da correção, risque a D antes de responder.</p>
+          <fieldset class="opts">
+            <legend class="visually-hidden">Escolha uma opção</legend>
+            <div class="opt" data-letter="A"><label class="opt-pick"><input type="radio" name="jeito1" value="A"><span class="alt-letter" aria-hidden="true">A</span><span class="opt-text">Opção A</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção A"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            <div class="opt" data-letter="B"><label class="opt-pick"><input type="radio" name="jeito1" value="B"><span class="alt-letter" aria-hidden="true">B</span><span class="opt-text">Opção B, com um texto mais longo para ver a quebra de linha</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção B"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            <div class="opt" data-letter="C"><label class="opt-pick"><input type="radio" name="jeito1" value="C"><span class="alt-letter" aria-hidden="true">C</span><span class="opt-text">Opção C</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção C"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            <div class="opt" data-letter="D"><label class="opt-pick"><input type="radio" name="jeito1" value="D"><span class="alt-letter" aria-hidden="true">D</span><span class="opt-text">Opção D</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção D"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+            <div class="opt" data-letter="E"><label class="opt-pick"><input type="radio" name="jeito1" value="E"><span class="alt-letter" aria-hidden="true">E</span><span class="opt-text">Opção E, também um pouco mais longa que as outras</span><span class="alt-tag"></span></label><button class="strike" type="button" data-strike aria-pressed="false" aria-label="Riscar opção E"><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg></button></div>
+          </fieldset>
+          <p class="demo-status" role="status"></p>
+          <div class="actions"><button class="btn btn-primary" type="button" data-responder>Responder</button><button class="btn btn-quiet" type="button" data-recomecar>Recomeçar</button></div>
+        </div>
+      </div>
+      <ol class="rules-strike">
+        <li>Riscar não escolhe. Dá para riscar quantas opções quiser.</li>
+        <li>Riscar a opção escolhida tira a escolha.</li>
+        <li>Escolher uma opção riscada tira o risco.</li>
+        <li>Tocar de novo desfaz o risco.</li>
+        <li>Na correção, os riscos continuam à vista. Se você riscou a certa, ela aparece em verde com o aviso “Você tinha riscado esta”.</li>
+        <li>Os riscos ficam guardados até a correção: continuam se você sair e voltar à questão, inclusive no simulado, e não entram no histórico nem no desempenho. Esta regra ainda é proposta, a confirmar no fechamento da etapa.</li>
+      </ol>
+    </section>
+
+    <section class="band" id="gabarito" aria-labelledby="h-gabarito">
+      <h2 id="h-gabarito">Gabarito e resultado</h2>
+      <p class="band-intro">Rótulos aprovados: dizem sempre quem definiu a resposta.</p>
+      <div class="stack">
+        <figure class="state"><figcaption>Oficial</figcaption><div class="gab gab-oficial"><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>Gabarito oficial da banca</strong></span></div></figure>
+        <figure class="state"><figcaption>Definido por uma pessoa, em prova sem gabarito oficial</figcaption><div class="gab gab-medteca"><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg><span><strong>Gabarito definido pelo MedTeca</strong><small>A banca não publicou gabarito oficial.</small></span></div></figure>
+        <figure class="state"><figcaption>Definido por uma pessoa, em questão de autoria própria</figcaption><div class="gab gab-medteca"><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg><span><strong>Gabarito definido pelo MedTeca</strong><small>Questão própria: não existe gabarito de banca.</small></span></div></figure>
+        <figure class="state"><figcaption>Preliminar, na correção</figcaption><div class="gab gab-preliminar"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg><span><strong>Gabarito preliminar da banca</strong><small>Ainda não confirmado. Seu resultado nesta questão é provisório.</small></span></div></figure>
+        <figure class="state"><figcaption>Preliminar, na questão, antes de responder</figcaption><div class="gab gab-preliminar"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg><span><strong>Gabarito preliminar da banca</strong><small>Ainda não confirmado. Seu resultado nesta questão será provisório.</small></span></div></figure>
+      </div>
+      <h3 class="sub">Resultado</h3>
+      <div class="stack">
+        <figure class="state"><figcaption>Acertou</figcaption><div class="result is-right"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><div><p class="result-title">Você acertou</p><p class="result-sub">Você marcou D, a resposta certa.</p></div></div></figure>
+        <figure class="state"><figcaption>Errou</figcaption><div class="result is-wrong"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg><div><p class="result-title">Você errou</p><p class="result-sub">Você marcou B. A resposta certa é D.</p></div></div></figure>
+        <figure class="state"><figcaption>Errou, com gabarito preliminar</figcaption><div class="result is-wrong"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg><div><p class="result-title">Você errou</p><p class="result-sub">Você marcou B. A resposta certa, pelo gabarito preliminar, é D.</p><p class="provisorio"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>Resultado provisório</p></div></div></figure>
+      </div>
+      <p class="note">Duas adaptações do texto aprovado: o aviso antes de responder usa “será provisório”, e a correção, “é provisório”; e a linha de apoio de “definido pelo MedTeca” muda conforme a origem da questão.</p>
+
+      <h3 class="sub">Procedência, em cada questão</h3>
+      <p class="note">Origem, situação do gabarito e nível de revisão aparecem antes e depois de responder (D-014, CONT-02, TREINO-02). A explicação da revisão abre ao tocar.</p>
+      <div class="stack">
+        <figure class="state"><figcaption>Prova com gabarito oficial</figcaption>
+          <div class="prov">
+            <p class="prov-origin">Origem: prova fictícia de residência, 2024, questão 41</p>
+            <ul class="prov-badges">
+              <li><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>Gabarito oficial da banca</li>
+              <li><button class="prov-rev" type="button" aria-expanded="false" aria-controls="rev-1"><svg class="ico" aria-hidden="true"><use href="#i-rev"/></svg>Revisão editorial, nov. 2026<svg class="ico ico-i" aria-hidden="true"><use href="#i-info"/></svg></button></li>
+            </ul>
+            <p class="prov-explain" id="rev-1" hidden>Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica.</p>
+          </div>
+        </figure>
+        <figure class="state"><figcaption>Autoria própria, o caso mais comum no beta</figcaption>
+          <div class="prov">
+            <p class="prov-origin">Origem: autoria própria</p>
+            <ul class="prov-badges">
+              <li><svg class="ico" aria-hidden="true"><use href="#i-pen"/></svg>Gabarito definido pelo MedTeca</li>
+              <li><button class="prov-rev" type="button" aria-expanded="true" aria-controls="rev-2"><svg class="ico" aria-hidden="true"><use href="#i-rev"/></svg>Revisão editorial, nov. 2026<svg class="ico ico-i" aria-hidden="true"><use href="#i-info"/></svg></button></li>
+            </ul>
+            <p class="prov-explain" id="rev-2">Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica.</p>
+          </div>
+        </figure>
+        <figure class="state"><figcaption>Prova com gabarito preliminar</figcaption>
+          <div class="prov">
+            <p class="prov-origin">Origem: prova fictícia de residência, 2025, questão 7</p>
+            <ul class="prov-badges">
+              <li class="is-warn"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>Gabarito preliminar da banca</li>
+              <li><button class="prov-rev" type="button" aria-expanded="false" aria-controls="rev-3"><svg class="ico" aria-hidden="true"><use href="#i-rev"/></svg>Revisão editorial, nov. 2026<svg class="ico ico-i" aria-hidden="true"><use href="#i-info"/></svg></button></li>
+            </ul>
+            <p class="prov-explain" id="rev-3" hidden>Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica.</p>
+          </div>
+        </figure>
+      </div>
+      <p class="note">Quando a revisão médica existir (D-003), ela entra como um segundo nível, ao lado da revisão editorial.</p>
+
+      <h3 class="sub">Quando o gabarito muda depois da resposta</h3>
+      <div class="stack">
+        <figure class="state"><figcaption>Gabarito mudou e o resultado foi recalculado</figcaption><div class="notice is-warn"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><div><p>O gabarito desta questão mudou depois da sua resposta. Seu resultado foi recalculado pelo gabarito novo.</p></div></div></figure>
+        <figure class="state"><figcaption>Gabarito confirmado depois da resposta</figcaption><div class="notice is-info"><svg class="ico" aria-hidden="true"><use href="#i-info"/></svg><div><p>Quando você respondeu, o gabarito era preliminar. Agora é oficial da banca, e o resultado deixou de ser provisório.</p></div></div></figure>
+        <figure class="state"><figcaption>Resposta que não dá para reavaliar</figcaption><div class="notice is-info"><svg class="ico" aria-hidden="true"><use href="#i-info"/></svg><div><p>Resultado pelo gabarito da versão respondida; não reavaliado pelo gabarito atual.</p></div></div></figure>
+      </div>
+      <p class="note">CONT-10, CONT-17, CONT-19 e CONT-24. O último texto é o rótulo aprovado no catálogo, só com a inicial maiúscula.</p>
+    </section>
+
+    <section class="band" id="historico" aria-labelledby="h-historico">
+      <h2 id="h-historico">Histórico e retiradas</h2>
+      <p class="band-intro">Como cada resposta aparece no histórico e nas marcadas, inclusive quando a questão sai de circulação.</p>
+      <ul class="hist">
+        <li class="hist-item"><div class="hist-top"><span class="hist-title">Questão 41, prova fictícia 2024</span><span class="hist-res is-right"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Acertou</span></div><p class="hist-sub">Treino, nov. 2026 [FICTÍCIO]</p></li>
+        <li class="hist-item"><div class="hist-top"><span class="hist-title">Questão 12, prova fictícia 2025</span><span class="hist-res is-wrong"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>Errou</span></div><p class="hist-sub">Simulado, out. 2026 [FICTÍCIO]</p><p class="hist-note">O gabarito mudou depois da sua resposta. Seu resultado foi recalculado pelo gabarito novo.</p></li>
+        <li class="hist-item"><div class="hist-top"><span class="hist-title">Questão própria, Tema de exemplo 3</span><span class="hist-res is-wrong"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>Errou</span></div><p class="hist-sub">Treino, set. 2026 [FICTÍCIO]</p><p class="hist-note">Resultado pelo gabarito da versão respondida; não reavaliado pelo gabarito atual. Fica fora da lista de erros e das taxas.</p></li>
+        <li class="hist-item is-out"><div class="hist-top"><span class="hist-title">Questão 3, prova fictícia 2023</span><span class="hist-res"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Acertou</span></div><p class="hist-sub">Treino, ago. 2026 [FICTÍCIO]</p><p class="hist-note">Retirada de circulação: anulada pela banca. A questão continua visível aqui.</p></li>
+        <li class="hist-item is-out"><div class="hist-top"><span class="hist-title">Questão indisponível</span></div><p class="hist-sub">Resposta registrada em jul. 2026 [FICTÍCIO]</p><p class="hist-note">Retirada por licenciamento: o conteúdo não pode mais ser exibido. Fica só o registro da sua resposta e o motivo.</p></li>
+      </ul>
+      <p class="note">CONT-07, CONT-10, CONT-24, FLUXO-15, FLUXO-16 e REV-04. Nas marcadas, a questão retirada aparece igual, com o motivo. Que dados ficam visíveis numa retirada por licenciamento depende da consulta jurídica (D-002); aqui está o mínimo.</p>
+    </section>
+
+    <section class="band" id="imagens" aria-labelledby="h-imagens">
+      <h2 id="h-imagens">Imagens na questão</h2>
+      <p class="band-intro">O texto nunca espera a imagem: o espaço dela fica reservado enquanto carrega (RNF-19).</p>
+      <div class="stack">
+        <figure class="state"><figcaption>Carregando, com o espaço reservado</figcaption><div class="img-slot is-loading" aria-hidden="true"><span class="skel tall"></span></div></figure>
+        <figure class="state"><figcaption>Carregada, com texto alternativo e opção de ampliar</figcaption><div class="img-box"><div class="img-slot" role="img" aria-label="[FICTÍCIO] Imagem de exemplo, identificada sem interpretar os achados"><svg class="ico ico-big" aria-hidden="true"><use href="#i-image"/></svg></div><button class="btn btn-quiet btn-sm" type="button">Ampliar imagem</button></div></figure>
+        <figure class="state"><figcaption>Na correção, quando a imagem é o que se avalia</figcaption><div class="findings"><p class="findings-label">Descrição dos achados</p><p class="t-read">[FICTÍCIO] Descrição dos achados de exemplo, registrada pelo editor.</p></div></figure>
+      </div>
+      <p class="note">Imagem informativa: o texto alternativo descreve o conteúdo. Objeto de avaliação: só identifica a imagem, e os achados aparecem na correção. Decorativa: o leitor de tela ignora (EDIT-07 a EDIT-10).</p>
+    </section>
+
+    <section class="band" id="campos" aria-labelledby="h-campos">
+      <h2 id="h-campos">Campos e filtros</h2>
+      <p class="band-intro">Rótulo sempre visível acima do campo. O erro diz o que houve e como resolver.</p>
+      <div class="states">
+        <div class="field"><label for="c1">Apelido (opcional)</label><input class="input" id="c1" type="text" autocomplete="off" placeholder="Como quer ser chamado"><span class="field-help">Padrão. O cadastro pede só e-mail, senha e este apelido (CONTA-05).</span></div>
+        <div class="field"><label for="c2">Apelido (opcional)</label><input class="input is-focus" id="c2" type="text" autocomplete="off" value="Ana"><span class="field-help">Foco</span></div>
+        <div class="field"><label for="c3">E-mail</label><input class="input" id="c3" type="email" autocomplete="off" value="estudante@" aria-invalid="true" aria-describedby="c3-erro"><span class="field-error" id="c3-erro"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>Confira o e-mail: falta o domínio, como em nome@exemplo.com.</span></div>
+        <div class="field"><label for="c4">E-mail</label><input class="input" id="c4" type="email" autocomplete="off" value="estudante@exemplo.com" disabled><span class="field-help">Desabilitado</span></div>
+      </div>
+      <h3 class="sub">Filtros</h3>
+      <div class="states">
+        <figure class="state"><button class="chip js-toggle" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Não resolvidas</button><figcaption>Desligado</figcaption></figure>
+        <figure class="state"><button class="chip is-hover" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Não resolvidas</button><figcaption>Mouse por cima</figcaption></figure>
+        <figure class="state"><button class="chip is-focus" type="button" aria-pressed="false"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Não resolvidas</button><figcaption>Foco do teclado</figcaption></figure>
+        <figure class="state"><button class="chip js-toggle" type="button" aria-pressed="true"><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Erradas</button><figcaption>Ligado, com marca</figcaption></figure>
+        <figure class="state"><button class="chip" type="button" disabled><svg class="ico" aria-hidden="true"><use href="#i-tick"/></svg>Erradas</button><figcaption>Desabilitado</figcaption></figure>
+      </div>
+      <h3 class="sub">Seleção de uma entre poucas</h3>
+      <div class="states">
+        <fieldset class="seg">
+          <legend class="visually-hidden">Mostrar o desempenho de</legend>
+          <label><input type="radio" name="escopo" value="geral" checked><span>Geral</span></label>
+          <label><input type="radio" name="escopo" value="treino"><span>Treino</span></label>
+          <label><input type="radio" name="escopo" value="simulados"><span>Simulados</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="band" id="avisos" aria-labelledby="h-avisos">
+      <h2 id="h-avisos">Avisos e estados de tela</h2>
+      <p class="band-intro">Toda tela que carrega dados tem quatro estados: carregando, vazia, com erro e cheia. Os três primeiros ficam aqui.</p>
+      <div class="stack">
+        <div class="notice is-info"><svg class="ico" aria-hidden="true"><use href="#i-info"/></svg><div><p>Poucas respostas: 3 de 6. Ainda não dá para concluir.</p></div></div>
+        <div class="notice is-ok"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg><div><p>Erro reportado. Obrigado por avisar.</p></div></div>
+        <div class="notice is-error" role="alert"><svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg><div><p>Não foi possível salvar sua resposta. Tente de novo.</p><button class="btn btn-quiet" type="button">Tentar de novo</button></div></div>
+        <div class="notice is-info"><svg class="ico" aria-hidden="true"><use href="#i-cloud"/></svg><div><p><strong>Sem conexão.</strong> O MedTeca precisa de internet. Assim que a conexão voltar, você continua daqui.</p></div></div>
+        <div class="notice is-info"><svg class="ico" aria-hidden="true"><use href="#i-cloud"/></svg><div><p><strong>Sem conexão, no simulado.</strong> Suas respostas ficam guardadas neste aparelho e são enviadas quando a conexão voltar. O cronômetro continua.</p></div></div>
+      </div>
+      <p class="note">RNF-05 a RNF-07 e M-32. No simulado, quem conta o tempo é o servidor.</p>
+      <div class="screens">
+        <div class="panel" aria-label="Exemplo de tela carregando" role="group">
+          <p class="panel-title">Carregando</p>
+          <span class="skel w-70" aria-hidden="true"></span>
+          <span class="skel w-90" aria-hidden="true"></span>
+          <span class="skel w-80" aria-hidden="true"></span>
+          <span class="skel tall" aria-hidden="true"></span>
+          <span class="skel tall" aria-hidden="true"></span>
+          <p class="visually-hidden">Carregando questões</p>
+        </div>
+        <div class="panel" aria-label="Exemplo de tela vazia" role="group">
+          <p class="panel-title">Vazia</p>
+          <svg class="ico ico-big" aria-hidden="true"><use href="#i-book"/></svg>
+          <p>Você ainda não respondeu nenhuma questão deste tema.</p>
+          <button class="btn btn-primary" type="button">Começar</button>
+        </div>
+        <div class="panel" aria-label="Exemplo de tela com erro" role="group">
+          <p class="panel-title">Com erro</p>
+          <svg class="ico ico-big" aria-hidden="true"><use href="#i-cloud"/></svg>
+          <p>Não foi possível carregar suas questões. Confira a conexão e tente de novo.</p>
+          <button class="btn btn-quiet" type="button">Tentar de novo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="movimento" aria-labelledby="h-movimento">
+      <h2 id="h-movimento">Movimento</h2>
+      <p class="band-intro">Pouco e rápido. Nada se move sozinho, e com “reduzir movimento” ligado no aparelho as transições somem.</p>
+      <ul class="motion">
+        <li><b class="num">120 ms</b><span>Cores e preenchimento: escolher alternativa, marcar, ligar filtro, passar o mouse.</span></li>
+        <li><b class="num">220 ms</b><span>Aparecer e sumir: avisos, resultado da correção, troca de aba.</span></li>
+        <li><b>Toque</b><span>O botão encolhe para 98% enquanto está pressionado.</span></li>
+        <li><b>Curva</b><span>Começa rápido e assenta devagar, para soar firme e não elástico.</span></li>
+        <li><b>Nunca</b><span>Confete, vibração de tela ou animação ao errar. Errar faz parte de estudar.</span></li>
+      </ul>
+    </section>
+
+    <section class="band" id="voz" aria-labelledby="h-voz">
+      <h2 id="h-voz">Tom de voz</h2>
+      <p class="band-intro">Direto e acolhedor, como aprovado.</p>
+      <ol class="rules">
+        <li>Trate por você, em frases curtas.</li>
+        <li>Diga o que aconteceu e o que fazer a seguir.</li>
+        <li>Sem exclamação, gíria ou emoji.</li>
+        <li>Em erro, explique sem culpar quem estuda.</li>
+        <li>Números com contexto: “3 de 6 respostas”, não só “50%”.</li>
+        <li>Não exagere certeza: “provisório”, “ainda não dá para concluir”.</li>
+      </ol>
+      <table class="voice">
+        <thead><tr><th scope="col">Assim</th><th scope="col">Não assim</th></tr></thead>
+        <tbody>
+          <tr><td>Você errou. A resposta certa é D.</td><td>Ops! Resposta errada!!</td></tr>
+          <tr><td>Não foi possível salvar sua resposta. Tente de novo.</td><td>Erro 500: falha na requisição.</td></tr>
+          <tr><td>Poucas respostas: 3 de 6. Ainda não dá para concluir.</td><td>Você vai mal neste tema.</td></tr>
+          <tr><td>Gabarito definido pelo MedTeca. A banca não publicou gabarito oficial.</td><td>Gabarito correto.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Referência visual da Etapa 5 (D-028 a D-031), descrita em docs/design-e-ux.md. Não é código do app. Textos marcados [FICTÍCIO] são exemplos sem conteúdo clínico.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function parse(s) {
+    var m = /oklch\(\s*([\d.]+)%\s+([\d.]+)\s+([\d.]+)/.exec(s || '');
+    return m ? [m[1] / 100, +m[2], +m[3]] : null;
+  }
+  function lum(c) {
+    var h = c[2] * Math.PI / 180, a = c[1] * Math.cos(h), b = c[1] * Math.sin(h);
+    var l = Math.pow(c[0] + 0.3963377774 * a + 0.2158037573 * b, 3);
+    var m = Math.pow(c[0] - 0.1055613458 * a - 0.0638541728 * b, 3);
+    var s = Math.pow(c[0] - 0.0894841775 * a - 1.291485548 * b, 3);
+    function cl(v) { return Math.min(1, Math.max(0, v)); }
+    var r = cl(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s);
+    var g = cl(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s);
+    var bl = cl(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+  }
+  function fmt(n, d) { return n.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function measure() {
+    var cs = getComputedStyle(root);
+    document.querySelectorAll('[data-fg]').forEach(function (el) {
+      var f = parse(cs.getPropertyValue(el.dataset.fg)), b = parse(cs.getPropertyValue(el.dataset.bg));
+      var out = el.querySelector('.sw-val');
+      if (!f || !b || !out) return;
+      var x = lum(f), y = lum(b), r = (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05), min = parseFloat(el.dataset.min);
+      out.textContent = fmt(r, 1) + ':1 ' + el.dataset.on + (r >= min ? '' : ', abaixo do mínimo de ' + fmt(min, 1));
+    });
+  }
+  var themeInputs = document.querySelectorAll('input[name="aparencia"]');
+  function setTheme(t, fromUser) {
+    if (t === 'light' || t === 'dark') root.setAttribute('data-theme', t);
+    else { root.removeAttribute('data-theme'); t = 'system'; }
+    themeInputs.forEach(function (i) { i.checked = i.value === t; });
+    if (fromUser) save('medteca-aparencia', t);
+    measure();
+  }
+  themeInputs.forEach(function (i) { i.addEventListener('change', function () { setTheme(i.value, true); }); });
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  if (mq && mq.addEventListener) mq.addEventListener('change', measure);
+  setTheme(root.getAttribute('data-theme') || 'system', false);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  document.querySelectorAll('.js-toggle').forEach(function (b) {
+    b.addEventListener('click', function () { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); });
+  });
+
+  /* Procedência: a explicação da revisão abre por botão */
+  document.querySelectorAll('.prov-rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.getElementById(b.getAttribute('aria-controls')).hidden = !open;
+    });
+  });
+
+  /* Riscar alternativas */
+  document.querySelectorAll('[data-demo]').forEach(function (demo) {
+    var CERTA = 'D', answered = false;
+    var rows = Array.prototype.slice.call(demo.querySelectorAll('.opt'));
+    var status = demo.querySelector('.demo-status');
+    function setStrike(row, on) {
+      row.classList.toggle('is-struck', on);
+      row.querySelector('[data-strike]').setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    rows.forEach(function (row) {
+      var input = row.querySelector('input'), sb = row.querySelector('[data-strike]');
+      sb.addEventListener('click', function () {
+        if (answered) return;
+        var on = !row.classList.contains('is-struck');
+        setStrike(row, on);
+        if (on && input.checked) input.checked = false;
+        status.textContent = '';
+      });
+      input.addEventListener('change', function () {
+        if (input.checked) setStrike(row, false);
+        status.textContent = '';
+      });
+    });
+    demo.querySelector('[data-responder]').addEventListener('click', function () {
+      if (answered) return;
+      var sel = demo.querySelector('input:checked');
+      if (!sel) { status.textContent = 'Escolha uma opção antes de responder.'; return; }
+      answered = true;
+      var v = sel.value, ok = v === CERTA;
+      rows.forEach(function (row) {
+        var l = row.getAttribute('data-letter'), tag = row.querySelector('.alt-tag');
+        row.classList.add('is-done');
+        row.querySelector('input').disabled = true;
+        row.querySelector('[data-strike]').disabled = true;
+        if (l === CERTA) {
+          row.classList.add('is-right');
+          tag.textContent = ok ? 'Sua resposta, certa' : (row.classList.contains('is-struck') ? 'Resposta certa. Você tinha riscado esta.' : 'Resposta certa');
+        } else if (l === v) {
+          row.classList.add('is-wrong');
+          tag.textContent = 'Sua resposta';
+        }
+      });
+      status.textContent = ok ? 'Você acertou.' : 'Você errou. A resposta certa é D.';
+      demo.querySelector('[data-responder]').disabled = true;
+    });
+    demo.querySelector('[data-recomecar]').addEventListener('click', function () {
+      answered = false; status.textContent = '';
+      demo.querySelector('[data-responder]').disabled = false;
+      rows.forEach(function (row) {
+        var input = row.querySelector('input');
+        row.classList.remove('is-done', 'is-right', 'is-wrong');
+        setStrike(row, false);
+        input.disabled = false; input.checked = false;
+        row.querySelector('[data-strike]').disabled = false;
+        row.querySelector('.alt-tag').textContent = '';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
