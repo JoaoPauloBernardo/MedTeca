@@ -68,3 +68,13 @@ Um servidor AWS Lightsail em São Paulo (2 GB de RAM, 60 GB de SSD), com app, pr
   - dimensionamento da instância: memória e CPU do app, do processo de tarefas e do PostgreSQL rodando juntos em 2 GB;
   - custo total, incluindo armazenamento, transferência (em São Paulo a franquia é a metade), backups, e-mail (D-023), impostos (IOF sobre a cobrança em dólar) e domínio.
 - **Backup**: o teste mensal de restauração (RNF-10) restaura de fato uma cópia num banco separado e confere os dados e o funcionamento do app (D-026).
+
+## Atualização da Etapa 6, bloco 5 (2026-11-24)
+
+Conforme D-033 (`docs/seguranca-e-privacidade.md`, seção 5), aprovada com ressalvas:
+
+- **Backups.** Saem do armazenamento de objetos do Lightsail e vão para um bucket S3 em São Paulo, cifrados no servidor e travados por 30 dias (Object Lock em modo compliance). A política está aprovada conceitualmente; a questão jurídica Jur-24 segue pendente. O armazenamento do Lightsail fica com as imagens (D-022). Isso substitui o trecho da Decisão sobre backups; o restante continua valendo.
+- **Disco.** Entra um disco adicional cifrado de 16 GB para os dados, as chaves e o espaço reservado dos registros críticos. A justificativa inclui a separação dos dados. A documentação consultada não é conclusiva sobre a cifragem do disco do sistema, e isso segue pendente (V24).
+- **Memória.** Os 2 GB ficam aprovados inicialmente. A estimativa de 1,3 a 1,7 GB é uma inferência; a V28 mede o consumo real, inclusive durante o deploy sem queda. Não há aumento automático para 4 GB. Se a memória faltar, o usuário decide a partir dos resultados, do impacto financeiro e das alternativas, considerando que o plano de 4 GB pode ultrapassar o orçamento de R$ 50 a 150.
+- **Custo.** A nova estimativa é de R$ 104 a 135 por mês antes do IOF ou de impostos locais (V12, V29), contra os cerca de R$ 77 da Decisão.
+- **Operação.** Os itens "Exige, na Etapa 6" foram detalhados em D-033.

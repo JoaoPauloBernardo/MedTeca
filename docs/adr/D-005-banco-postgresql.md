@@ -60,3 +60,12 @@ PostgreSQL, começando na versão 18. A versão exata é fixada na implementaç�
 
 - **Versão**: o projeto mantém o PostgreSQL 18 por enquanto. O PostgreSQL 19 foi lançado em 19/11/2026, e a 18 foi escolhida por maturidade e compatibilidade.
 - **Operação**: o banco é autogerenciado, em contêiner no servidor de D-010. O banco gerenciado do Lightsail não é usado. Isso resolve o item "Exige" acima. Se um dia houver migração para um banco gerenciado, conferir antes se ele oferece a versão em uso.
+
+## Atualização da Etapa 6, bloco 5 (2026-11-24)
+
+Conforme D-033 (`docs/seguranca-e-privacidade.md`, seção 5):
+
+- **Sem porta de rede.** O PostgreSQL não escuta em porta de rede (`listen_addresses` vazio). Ele só aceita conexões locais por socket, autenticadas pela identidade do processo (`peer`), com um papel de banco por componente e sem senha.
+- **Disco.** Os dados ficam num disco adicional cifrado do Lightsail.
+- **ASVS 12.3.1.** Está registrada a leitura de que o socket local atende o requisito, porque não há tráfego de rede a cifrar. Se uma revisão discordar, isso vira exceção.
+- **Logs.** Os parâmetros de log definidos no bloco 4 (D-032) continuam valendo.

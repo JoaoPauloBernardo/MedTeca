@@ -1,8 +1,10 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Bloco 4 (registros e monitoramento) aprovado e registrado.
+**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento) e 5 (infraestrutura e operação) aprovados e registrados; o bloco 5, com ressalvas.
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
+
+**Aprovado (bloco 5)**: 2026-11-24 - usuário: "Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."
 
 Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por bloco, as decisões de segurança e privacidade, ligadas aos requisitos de `docs/requisitos-mvp.md` e às decisões de `docs/decisions.md`. Aprovar o que está aqui não autoriza implementação (D-017).
 
@@ -14,7 +16,7 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 | 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2"); registro pendente |
 | 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3"); registro pendente |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
-| 5 | Infraestrutura e operação | Não iniciado; recebe as verificações V1 a V21 |
+| 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
 | 6 | Qualidade | Não iniciado |
 
 O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estão registradas: o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens, a tabela B.12 (destino de cada registro na exclusão da conta), a revisão semestral de privilégios e o procedimento de emergência do único administrador. Elas entram neste documento quando o registro desses blocos for autorizado.
@@ -24,8 +26,9 @@ O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não
 - **Doc**: confirmado em documentação oficial, conferida em 2026-11-24 (fontes na seção 4.N).
 - **Inferência**: conclusão técnica do consultor, sem confirmação em documentação.
 - **Testar**: só uma prova na implementação confirma.
-- **V-n**: verificação reservada ao bloco 5 (seção 4.L).
-- **Jur-n**: questão para o advogado (seção 4.M). A análise jurídica deste documento é preliminar.
+- **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5. A situação de todas está na seção 5.M, e nenhuma foi concluída.
+- **Jur-n**: questão para o advogado (seções 4.M e 5.N). A análise jurídica deste documento é preliminar.
+- **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P).
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -266,6 +269,7 @@ As linhas da tabela vêm em parte de um resumo da referência de autorização e
 | Conta raiz | tudo | com MFA e fora do uso diário |
 
 - Os dois papéis são assumidos pelo usuário individual do administrador, com MFA (RNF-17).
+- **Atualização do bloco 5 (D-033; P5-01 e P5-24):** a identidade `medteca-envio` deixa de ser um usuário IAM e passa a ser o papel `medteca-envio-registros`, assumido por certificado via IAM Roles Anywhere. As permissões e a restrição ao IP do servidor continuam as mesmas (seção 5.E).
 - **Doc:** a proteção contra exclusão "blocks all deletion operations until it is explicitly disabled", e o exemplo da documentação é apagar o grupo.
 - As páginas de `DeleteLogStream` e `PutRetentionPolicy` não citam a proteção. Por isso, considera-se que encurtar o prazo não é bloqueado; se apagar um fluxo é bloqueado fica para V1.
 
@@ -274,6 +278,7 @@ As linhas da tabela vêm em parte de um resumo da referência de autorização e
 - A credencial de envio é um segredo persistente guardado no servidor, e não uma credencial temporária obtida por um perfil de instância. Fontes antigas indicam que o Lightsail não oferece papel de instância (V4).
 - O uso da credencial fica restrito ao IP fixo do servidor, por condição da política do IAM (V5).
 - Fica para o bloco 5 (V5): armazenamento, permissões no sistema operacional, rotação, revogação e troca sem interromper o envio.
+- **Atualização do bloco 5 (D-033):** a chave persistente foi trocada por um certificado de componente, que vale 1 ano e gera credenciais temporárias de 1 hora. Ele fica no disco adicional cifrado, só no contêiner do enviador, e a revogação é feita por lista de certificados revogados. O desenho da V5 está na seção 5.E; a prova continua pendente.
 
 **E.4 CloudTrail**
 
@@ -424,7 +429,7 @@ O saneamento por padrões reduz o risco, mas não garante que nenhum dado pessoa
 
 | Espaço | Limites |
 |---|---|
-| Espaço reservado dos críticos | 2 GB, tamanho fixo, separado do disco principal (V9) |
+| Espaço reservado dos críticos | 2 GB, tamanho fixo, separado do disco principal (V9). Bloco 5: arquivo de tamanho fixo no disco adicional cifrado (seção 5.C) |
 | Logs operacionais no disco principal | 500 MB e no máximo 7 dias |
 | Registro do sistema | 500 MB e 7 dias (V20) |
 
@@ -543,7 +548,7 @@ Fica para a Etapa 7: a política de privacidade e o registro das operações de 
 
 ### L. Verificações reservadas ao bloco 5
 
-Todas pendentes.
+Todas pendentes. A triagem aprovada no bloco 5 deu um destino a cada uma, sem concluir nenhuma; a situação atual está na seção 5.M.
 
 | # | O que verificar |
 |---|---|
@@ -595,6 +600,450 @@ Pendentes de avaliação profissional. Continuam a lista de 16 perguntas do bloc
 - [CloudWatch no Lightsail com chaves de acesso](https://aws.amazon.com/blogs/compute/monitoring-memory-usage-lightsail-instance/) (fonte antiga)
 - [OWASP ASVS 5.0, capítulo V16](https://github.com/OWASP/ASVS/blob/2b300716ebbef654788d0a14d6c878cecc70c2e9/5.0/en/0x25-V16-Security-Logging-and-Error-Handling.md)
 
+## 5. Infraestrutura e operação (bloco 5, D-033)
+
+### 5.1 Como o bloco foi decidido
+
+- **Três rodadas de perguntas** em 2026-11-24. As doze escolhas estão na seção A.
+- **Proposta** com as decisões P5-01 a P5-25.
+- **Aprovação:** "Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo." (2026-11-24). As ressalvas estão em 5.3.
+
+### 5.2 Decisões aprovadas
+
+Todas aprovadas, respeitando as ressalvas de 5.3.
+
+| ID | Decisão | Seção |
+|---|---|---|
+| P5-01 | IAM Roles Anywhere com autoridade própria, um certificado por componente, modo `credential-process`, validade de 1 ano e lista de certificados revogados | E |
+| P5-02 | Papéis e permissões por componente, com condição no nome do componente e no IP de origem | E |
+| P5-03 | Segredos no AWS Systems Manager Parameter Store, com inventário e política de chaves | F |
+| P5-04 | Backup diário cifrado com age, num bucket S3 em São Paulo travado em modo compliance por 30 dias; o servidor só grava | G.2 |
+| P5-05 | Imagens com versionamento e cópia semanal travada | G.3 |
+| P5-06 | Teste mensal de restauração com reaplicação das exclusões de conta | G.4 |
+| P5-07 | Disco adicional cifrado de 16 GB para dados e chaves; zram | C.2 |
+| P5-08 | PostgreSQL sem porta de rede, com autenticação peer e um papel por componente | G.1 |
+| P5-09 | Ubuntu LTS, Docker com configuração restrita, firewall com 80 e 443, atualizações automáticas com reinício às 4h | C |
+| P5-10 | SSH com chave e porta aberta sob demanda; terminal pelo navegador desligado por padrão | D |
+| P5-11 | Conta raiz da AWS com dois fatores e fora do uso diário | D |
+| P5-12 | Domínio .com.br com DNSSEC, CAA e registros de e-mail | H.1, H.2 |
+| P5-13 | Caddy com HTTPS automático, TLS 1.2 e 1.3 e os cabeçalhos de segurança | H.3, H.4 |
+| P5-14 | Painel interno do Django só por túnel SSH; documentação da API desligada em produção | H.5 |
+| P5-15 | Lista de destinos externos permitidos | H.6 |
+| P5-16 | CI publicando no ECR via OIDC, com tags imutáveis e as 10 imagens mais recentes | I.1 |
+| P5-17 | Deploy por comando, sem queda, com migrações em duas fases e evento de deploy | I.2, I.3 |
+| P5-18 | Ambiente de teste sob demanda, sem e-mail e com segredos próprios | I.4 |
+| P5-19 | Monitor Route 53 por HTTPS sem busca de texto e verificação diária do certificado | J.1, J.2 |
+| P5-20 | Trilha do CloudTrail por 180 dias e regras do EventBridge | J.3 |
+| P5-21 | Alertas novos do bloco 5 | J.4 |
+| P5-22 | Planos de recuperação | K |
+| P5-23 | Triagem das verificações V1 a V21 e verificações novas V22 a V34 | M |
+| P5-24 | Mudanças em P4-15, D-027, D-010, D-005 e D-022 | B |
+| P5-25 | Nenhuma declaração de conformidade com o ASVS; leitura do 12.3.1 registrada | O |
+
+### 5.3 Ressalvas da aprovação
+
+1. **Memória e orçamento.**
+   - A configuração de 2 GB do Lightsail fica aprovada inicialmente.
+   - A estimativa de consumo entre 1,3 e 1,7 GB é uma inferência, não uma medição.
+   - A V28 deve comprovar o consumo real durante a operação, inclusive durante o deploy sem queda.
+   - Não há aumento automático para o plano de 4 GB. Se os 2 GB forem insuficientes, o consultor apresenta os resultados, o impacto financeiro e as alternativas para decisão do usuário, considerando que o plano de 4 GB pode ultrapassar o orçamento mensal de R$ 50 a 150.
+2. **Cifragem do disco.**
+   - O disco adicional cifrado de 16 GB está aprovado.
+   - Não está confirmado que o disco do sistema do Lightsail seja sem cifragem: a documentação disponível não foi conclusiva, e a V24 segue pendente até a confirmação técnica.
+   - A separação dos dados é justificativa própria do disco adicional, que não depende só dessa hipótese.
+3. **Backups e LGPD.**
+   - A política de backups com Object Lock em modo compliance, 30 dias de retenção e cifragem está aprovada conceitualmente.
+   - Os dados de contas excluídas podem permanecer nos backups durante o prazo de retenção, com a exclusão reaplicada na restauração.
+   - A Jur-24 segue pendente de análise jurídica e não se considera resolvida só pela inclusão da informação na política de privacidade.
+   - O uso de dados reais no teste mensal de restauração fica documentado para análise jurídica (5.N).
+4. **Registro.**
+   - A triagem das verificações está aprovada, mas nenhuma verificação foi concluída. A V22 a V34 seguem sujeitas às verificações indicadas, e a V24, em especial, segue pendente de confirmação.
+   - A aprovação não é declaração de conformidade com o OWASP ASVS.
+
+### A. Escolhas
+
+| Tema | Escolha do usuário |
+|---|---|
+| Acesso do servidor à AWS | "Certificado, acesso temporário" (IAM Roles Anywhere) |
+| Segredos | "Cofre da AWS" (Parameter Store) |
+| Backups | "S3 em SP, travado e cifrado" |
+| Montagem | "Infraestrutura como código" (OpenTofu) |
+| Domínio | ".com.br no Registro.br" |
+| SSH | "Porta fechada, aberta sob demanda" |
+| Deploy | "Por um comando seu" |
+| Ambiente de teste | "Sob demanda, criado e apagado" |
+| Monitor | "Route 53 da AWS" |
+| Atualizações do sistema | "Automáticas, reinício às 4h" |
+| Versão nova | "Sem queda" |
+| Banco | "Socket local, sem senha" |
+
+### B. Correções e mudanças em decisões aprovadas
+
+1. **Terminal pelo navegador.** Ele entra só com o login da AWS, sem a chave SSH. Por isso fica desligado por padrão; ligá-lo é uma mudança no firewall, que exige o console com MFA e dispara alerta. No dia a dia valem os dois portões do bloco 1 (MFA da AWS e chave SSH); numa emergência, um só, registrado. A relação com o procedimento de emergência do bloco 1 está em 5.P.3.
+2. **Monitor.** O Route 53 verifica por HTTPS sem busca de texto, porque `/saude` responde 503 quando algo falha.
+3. **P4-15 (bloco 4).** A credencial de envio de registros passa a ser um papel assumido por certificado. O RNF-24 continua valendo.
+4. **D-027.** O deploy automático não é adotado; o deploy é por comando (I).
+5. **D-010.** Os backups saem do bucket do Lightsail e vão para o S3 travado; o custo foi revisto (L).
+6. **D-005.** O PostgreSQL fica sem porta de rede, com os dados no disco adicional cifrado.
+
+### C. Servidor
+
+- **C.1 Instância.** Lightsail com 2 GB em São Paulo, aprovado inicialmente (ressalva 1), com IP fixo, que não tem custo enquanto está anexado (Doc). Ubuntu LTS na versão mais recente oferecida pelo Lightsail (V22).
+- **C.2 Disco adicional cifrado (16 GB, US$ 1,60 por mês).**
+  - **Doc:** os discos adicionais e os snapshots do Lightsail são cifrados em repouso por padrão.
+  - A documentação consultada não é conclusiva sobre o disco do sistema. Relatos em fóruns indicam que ele não seria cifrado, o que não está confirmado (V24, pendente).
+  - **Justificativa:** o disco adicional separa os dados sensíveis do disco do sistema. Ele guarda, em `/srv/medteca`, os dados do PostgreSQL, o espaço reservado dos registros críticos (um arquivo de 2 GB de tamanho fixo, desenho da V9), os certificados dos componentes e o certificado TLS.
+  - A área de troca de memória fica comprimida na RAM (zram), para que páginas de memória não sejam gravadas no disco do sistema (inferência).
+- **C.3 Rede.** O firewall do Lightsail abre só as portas 80 e 443; a 22 abre sob demanda (D). O PostgreSQL não escuta em porta nenhuma.
+- **C.4 Atualizações.** As atualizações de segurança são instaladas todo dia. Quando exigem reinício, o servidor reinicia às 04:00 de Brasília (07:00 UTC). O backup roda às 03:00.
+- **C.5 Docker.**
+  - contêineres sem root, com IDs de usuário fixos;
+  - sistema de arquivos só de leitura onde der;
+  - sem ganho de privilégio e com o mínimo de capacidades;
+  - limite de memória por serviço;
+  - imagens pelo digest;
+  - nenhum contêiner com acesso ao socket do Docker.
+- **C.6 Serviços.**
+  - Caddy;
+  - app web, com duas cópias durante a troca de versão;
+  - executor de tarefas;
+  - PostgreSQL;
+  - enviadores de registros críticos e operacionais;
+  - tarefas agendadas: backup, retenção, exportação da auditoria e batimentos.
+- **C.7 Memória.** A estimativa é de 1,3 a 1,7 GB em uso, mais a versão nova durante a troca (inferência). A V28 mede na operação. Não há aumento automático: vale a ressalva 1.
+
+### D. Acesso administrativo
+
+- **SSH:** só com chave ed25519 protegida por senha (FIDO2 é opcional). Sem login por senha nem como root; um usuário administrativo, com sudo registrado no grupo `servidor`.
+- **Porta 22:** fechada. O administrador a abre só para o próprio IP, pelo console ou pelo OpenTofu, com MFA, e fecha ao sair; cada abertura gera alerta (J.4).
+- **Terminal pelo navegador:** desligado por padrão (B.1); ligá-lo gera alerta.
+- **Conta raiz da AWS:** dois fatores de MFA cadastrados, passkey e reserva, e fora do uso diário. No dia a dia, o administrador usa o próprio usuário com MFA e os papéis do bloco 4.
+- O procedimento de emergência do bloco 1 continua como aprovado (5.P.3).
+
+### E. Credenciais da AWS (IAM Roles Anywhere)
+
+- **Autoridade própria:** criada no computador do administrador, com a chave privada guardada com ele (gerenciador de senhas e cópia de reserva cifrada). **Doc:** o certificado da autoridade precisa ter `CA: true` e assinatura SHA-256 ou mais forte.
+- **Certificados dos componentes:** um por componente, com validade de 1 ano e aviso 30 dias antes do vencimento. Cada um fica no disco cifrado, legível só pelo dono (permissão 0400), e montado só no contêiner do componente. A revogação é feita importando uma lista de certificados revogados (Doc).
+- **Credenciais:** cada contêiner obtém as suas pelo modo `credential-process`. O modo `serve` não é usado, porque nele qualquer processo local pode ler as credenciais (Doc). As credenciais valem 1 hora; o serviço aceita de 15 minutos a 12 horas (Doc).
+- **Custo e região:** o serviço não tem custo próprio e tem endpoint em São Paulo (fontes da seção R).
+
+| Papel | Quem usa | Pode |
+|---|---|---|
+| `medteca-envio-registros` | enviadores | criar fluxos e acrescentar eventos nos quatro grupos (bloco 4) |
+| `medteca-backup` | tarefa de backup | só gravar objetos no bucket de backups |
+| `medteca-email` | executor de tarefas | enviar e-mail pelo SES, só com o remetente do domínio |
+| `medteca-imagem` | deploy | baixar imagens do repositório no ECR |
+| `medteca-segredos-<componente>` | app web e executor de tarefas | ler só os parâmetros do próprio componente |
+
+- **Condições:** o nome do componente no certificado e o IP fixo do servidor.
+- **Bucket de imagens do Lightsail:** acesso anexando a instância ao bucket, sem chave. Isso dá acesso total ao bucket (Doc), e por isso existe a cópia travada (G.3).
+- Se a V4 mostrar que o Lightsail oferece papel de instância, essa opção é reavaliada.
+
+### F. Segredos e inventário de chaves (ASVS 11.1.1, 11.1.2, 13.3.1)
+
+| Segredo ou chave | Onde fica | Quem acessa | Troca |
+|---|---|---|---|
+| Chave do Django | Parameter Store, cifrada | app web e executor de tarefas | anual, aceitando a chave anterior durante a transição |
+| Chaves do HMAC de e-mails sem conta | Parameter Store | app web | anual (4.D.3) |
+| Chave que cifra os segredos de TOTP da equipe | Parameter Store; cifra AES-256-GCM, com a versão da chave junto do dado | app web | com nova cifragem |
+| Chave pública dos backups (age, X25519) | repositório (não é segredo) | tarefa de backup | em caso de perda ou suspeita |
+| Chave privada dos backups | com o administrador; nunca no servidor | administrador | idem |
+| Chave privada da autoridade dos certificados | com o administrador | administrador | idem |
+| Certificados dos componentes | disco cifrado, só no contêiner de cada um | o componente | anual |
+| Certificado TLS público | Caddy | Caddy | automática (Doc) |
+| Chave SSH | computador do administrador, com senha | administrador | em caso de perda ou suspeita |
+| Senha do banco | não existe (peer) | | |
+
+- **Política de chaves:** ciclo de vida segundo o NIST SP 800-57 (gerar, distribuir, guardar, trocar, revogar e destruir). Um segredo compartilhado fica com no máximo duas partes; uma chave privada, com uma só.
+- **Leitura:** o app lê os segredos ao iniciar e os mantém só na memória. Nada em arquivo de ambiente, no Git ou na imagem.
+- **Ambiente de teste:** caminhos e segredos próprios, nunca os de produção.
+- **Custo:** parâmetros padrão sem custo; chave gerenciada pela AWS sem custo mensal, com franquia de 20 mil pedidos por mês (Doc).
+- **Dependência:** reiniciar o app exige a AWS no ar; o que já está rodando continua funcionando.
+
+### G. Banco e backups
+
+**G.1 PostgreSQL**
+
+- `listen_addresses` fica vazio: o banco não escuta em nenhuma porta de rede e só aceita conexões pelo socket local (Doc).
+- O socket tem permissão 0770 para um grupo próprio (Doc).
+- O banco só aceita autenticação `peer`, que funciona só em conexões locais no Linux (Doc).
+- Um mapa liga o usuário do sistema de cada contêiner ao papel no banco: `medteca_app`, `medteca_exportador`, `medteca_retencao`, `medteca_dono` e `medteca_backup` (leitura de tudo, para o backup). Os IDs de usuário precisam ser iguais entre os contêineres (V34).
+- **ASVS 12.3.1:** fica registrada a leitura de que não há tráfego de rede a cifrar. Se uma revisão discordar, isso vira exceção.
+
+**G.2 Backup diário (RNF-08, RNF-09)**
+
+- Cópia completa do banco com `pg_dump` às 03:00, cifrada com age para a chave pública.
+- O destino é um bucket S3 em São Paulo, com versionamento e Object Lock em modo compliance com retenção padrão de 30 dias. **Doc:** nesse modo, ninguém apaga antes do prazo, nem a conta raiz.
+- Uma regra de ciclo de vida apaga os backups depois do prazo (V25).
+- O bucket bloqueia acesso público e recusa conexões sem TLS.
+- O servidor só grava: não lista, não lê e não apaga.
+- Aprovado conceitualmente (ressalva 3).
+
+**G.3 Imagens.** Versionamento ligado no bucket do Lightsail (Doc) e cópia completa semanal no bucket travado, por 30 dias.
+
+**G.4 Teste mensal de restauração (RNF-10)**
+
+1. Acontece no ambiente de teste sob demanda.
+2. O administrador assume o papel de restauração, com MFA, e a chave privada dele é carregada só na memória do ambiente.
+3. O backup é restaurado e passa pelas conferências do app.
+4. As exclusões de conta feitas depois do backup são reaplicadas a partir dos eventos de exclusão concluída do grupo `seguranca`, que ficam 180 dias. A fonte das exclusões diverge do bloco 3 (5.P.1).
+5. O resultado é registrado: data, backup usado, duração e achados.
+6. O ambiente é apagado no mesmo dia e nunca envia e-mail.
+
+O uso de dados reais nesse teste fica documentado para análise jurídica (Jur-24).
+
+**G.5 Metas.** Perda máxima de 24 horas de dados (RNF-08) e recuperação em até 24 horas (resposta "Até 24 horas").
+
+**G.6 Contas excluídas nos backups.** Os dados podem ficar até 30 dias nos backups, sem poder ser apagados antes por causa da trava, e uma restauração reaplica a exclusão. A Jur-24 segue pendente.
+
+### H. Domínio, HTTPS e cabeçalhos
+
+**H.1 Domínio.** .com.br no Registro.br, no CPF do usuário, registrado por vários anos e com aviso de renovação. Segundo fator na conta do Registro.br e DNSSEC no DNS gratuito (V27).
+
+**H.2 DNS.**
+- o endereço do servidor;
+- IPv6, se for usado;
+- CAA limitado às autoridades de certificação usadas pelo Caddy (V26);
+- SPF, DKIM e DMARC, e um MAIL FROM próprio para o SES (D-023).
+
+**H.3 Caddy**
+
+- Certificados automáticos (Let's Encrypt, com ZeroSSL como reserva), renovação automática e redirecionamento de HTTP para HTTPS (Doc; RNF-11).
+- TLS mínimo 1.2 e máximo 1.3, com padrões modernos (Doc).
+- Ignora os cabeçalhos X-Forwarded-* de clientes não confiáveis e, por padrão, não confia em nenhum proxy (Doc). Isso atende a 4.D.5; a V13 confirma o cabeçalho que chega ao app.
+
+**H.4 Cabeçalhos (V21; ASVS 3.4.x)**
+
+- HSTS de 1 ano com subdomínios (3.4.1). Precisa ser configurado (V26). A pré-carga nos navegadores fica para depois que o site estiver estável (3.7.4, que é L3).
+- CSP do bloco 4 (4.D.4).
+- `nosniff`.
+- `Referrer-Policy: strict-origin-when-cross-origin`, com `no-referrer` nas páginas com token.
+- `frame-ancestors 'none'`.
+- `Permissions-Policy` fechando câmera, microfone e localização.
+- COOP e CORP `same-origin`.
+- `Cache-Control: no-store` nas respostas da API com dados pessoais (14.3.2).
+- `Clear-Site-Data` ao sair (14.3.1).
+- Sem o cabeçalho `Server` (V26).
+
+**H.5 Exposição (13.4.x)**
+
+- DEBUG desligado.
+- Sem listagem de diretórios; o método TRACE é recusado.
+- A imagem não leva o `.git`.
+- A documentação da API (OpenAPI) fica desligada em produção.
+- O painel interno do Django, a administração técnica, só abre por túnel SSH. Ele é diferente do painel do editor (EDIT), que continua no app.
+
+**H.6 Destinos externos permitidos (13.1.1, 13.2.4)**
+
+- serviços da AWS: SSM, IAM Roles Anywhere, CloudWatch Logs, S3, ECR, SES e o bucket do Lightsail;
+- Pwned Passwords;
+- Let's Encrypt e ZeroSSL;
+- servidores de hora;
+- repositórios de pacotes do sistema.
+
+O app só se conecta a destinos dessa lista.
+
+### I. Deploy e ambientes
+
+- **I.1 CI (D-027).**
+  - Testes e imagem montada sem segredos.
+  - A imagem é publicada no ECR em São Paulo via OIDC, com a condição de que o pedido venha do repositório do projeto e do ramo principal (Doc).
+  - O ECR usa tags imutáveis e guarda as 10 imagens mais recentes.
+- **I.2 Deploy por comando.**
+  1. O administrador abre a porta e roda `deploy <digest>`.
+  2. O servidor baixa a imagem pelo digest e roda a fase "expandir" das migrações.
+  3. A versão nova sobe ao lado da antiga, e o proxy troca para ela quando `/saude` responde bem.
+  4. A versão antiga é encerrada, e o evento `deploy` (quem, digest e hora) vai para `seguranca`.
+
+  Voltar uma versão é o mesmo comando com o digest anterior.
+- **I.3 Migrações em duas fases.** "Expandir" primeiro e "contrair" numa versão seguinte; uma mudança destrutiva nunca entra junto da versão que ainda depende do formato antigo.
+- **I.4 Ambiente de teste.**
+  - É criado e apagado pelo OpenTofu, com papéis e segredos próprios.
+  - Nunca envia e-mail.
+  - Usa dados fictícios, exceto na restauração mensal.
+
+### J. Monitoramento (complementa a seção 4.F)
+
+- **J.1 Route 53.** Chama `/saude` por HTTPS a cada 30 segundos, de vários lugares, sem busca de texto. O alarme e o SNS ficam na região da Virgínia, onde as métricas existem (Doc). Não há dado pessoal envolvido.
+- **J.2 Certificado.** O Route 53 não valida certificados (Doc), então uma tarefa diária confere a validade do certificado público e avisa quando faltarem 21 dias.
+- **J.3 Trilha do CloudTrail.** Eventos de gerenciamento guardados por 180 dias num bucket em São Paulo. **Doc:** as regras do EventBridge sobre chamadas de API exigem uma trilha ativa. Esse é o desenho da V3 e da V16.
+- **J.4 Alertas novos por e-mail, sem dados pessoais:**
+  - porta SSH aberta;
+  - terminal pelo navegador ligado;
+  - mudança em papéis ou políticas do IAM, ou no bucket de backups;
+  - backup ausente por mais de 26 horas;
+  - certificado TLS vencendo;
+  - certificado de componente a 30 dias do vencimento;
+  - disco do sistema ou disco de dados acima de 80%;
+  - reinício que não voltou, captado pelo monitor;
+  - estado da instância (V32).
+
+### K. Planos de recuperação
+
+Os roteiros completos são escritos na implementação.
+
+1. **Servidor comprometido:**
+   1. isolar o servidor;
+   2. preservar as evidências no registro do incidente (5.P.2);
+   3. revogar os certificados e trocar todos os segredos;
+   4. recriar o servidor pelo OpenTofu e restaurar o último backup bom;
+   5. reaplicar as exclusões de conta;
+   6. seguir o plano de incidentes da Etapa 7.
+2. **Perda da chave privada dos backups:** gerar um novo par e fazer um backup na hora. Os backups antigos ficam ilegíveis até expirarem.
+3. **Perda da chave da autoridade:** criar outra autoridade e reemitir os certificados.
+4. **Perda de acesso à AWS:** recuperação pela conta raiz, com o fator de reserva.
+5. **Domínio expirado:** prevenido pelo registro por vários anos e pelo aviso de renovação.
+6. **Restauração completa:** em até 24 horas.
+7. **Região de São Paulo fora do ar:** aguardar, porque o beta não tem segunda região.
+
+### L. Custo estimado
+
+| Item | US$ por mês | Base |
+|---|---|---|
+| Lightsail 2 GB | 12,00 | D-010 |
+| Disco adicional cifrado de 16 GB | 1,60 | Doc |
+| Bucket do Lightsail (imagens) | 1,00 | D-010 |
+| S3 em São Paulo: backups, cópia das imagens e trilha | 0,30 a 1,00 | estimativa (V12) |
+| CloudWatch | 1,00 a 3,00 | estimativa do bloco 4 (4.J) |
+| Route 53 por HTTPS sem busca de texto | 1,00 a 2,75 | Doc; depende de o Lightsail contar como endpoint da AWS (V19) |
+| ECR | 0 a 0,30 | Doc: 500 MB grátis no primeiro ano |
+| SES e ambiente de teste | 0,20 a 0,60 | estimativa |
+| Parameter Store, KMS, IAM Roles Anywhere, SNS | 0 | Doc (SNS a conferir) |
+| **Total** | **17 a 22** | |
+
+Pela PTAX usada na D-010 (R$ 5,8889), o total fica entre **R$ 104 e 135 por mês**, somando o domínio (R$ 40 por ano). Fora disso ficam o IOF, se a cobrança for em dólar, ou os impostos locais, se a AWS faturar em reais (V29). A estimativa da D-010 era de cerca de R$ 77. O valor continua dentro do orçamento de R$ 50 a 150, mas perto do teto. Um plano de 4 GB não está incluído (ressalva 1).
+
+### M. Verificações
+
+Triagem aprovada no bloco 5. **Nenhuma verificação foi concluída.** "Desenho decidido" quer dizer que o bloco definiu o caminho; falta fazer e provar.
+
+| V | O que verificar | Situação |
+|---|---|---|
+| V1 | Proteção contra exclusão: se cobre fluxos e mudança de prazo; custo; registro no CloudTrail | Pendente: provar na implementação |
+| V2 | Entrada nos papéis e sessões do IAM Roles Anywhere no histórico do CloudTrail; classificação das consultas ao CloudWatch Logs; custo dos eventos de dados. O RNF-20 depende disso | Pendente: provar na implementação |
+| V3 | Mecanismo do alerta de mudança na proteção, no prazo ou na política | Desenho decidido (J.3); falta configurar e provar |
+| V4 | Papel de instância no Lightsail | Pendente; com o IAM Roles Anywhere adotado, reavaliar só se o papel existir |
+| V5 | Credencial de envio: armazenamento, permissões, rotação, revogação, troca sem interrupção e IP | Desenho decidido (E); falta provar |
+| V6 | Ações do IAM exatas por identidade e prova negativa | Pendente: descrever no OpenTofu e provar |
+| V7 | Enviador que cumpra 4.H.4 | Pendente: escolher e provar na implementação |
+| V8 | Modo não bloqueante do Docker e contagem de descartes | Pendente: provar |
+| V9 | Mecanismo do espaço reservado | Desenho decidido (C.2); falta provar |
+| V10 | Fonte de hora no Lightsail e relógio que volta | Pendente: conferir (chrony; fonte a definir) |
+| V11 | Comportamento dos alarmes: dado ausente, mudança de estado, INSUFFICIENT_DATA, filtros, eventos atrasados e volume | Pendente: provar |
+| V12 | Preços em São Paulo e nível gratuito | Pendente: estimativa em L; fechar com a calculadora e a primeira fatura |
+| V13 | Proxy: cabeçalho de IP; logs sem IP, query string ou fragmento; erros de TLS | Desenho decidido (H.3); falta provar |
+| V14 | Parâmetros de log do PostgreSQL | Pendente: provar |
+| V15 | Backups e cópias de disco sem registros | Desenho decidido (G.2: só `pg_dump`, sem snapshots); falta provar |
+| V16 | Trilha do CloudTrail por mais de 90 dias | Desenho decidido (J.3: 180 dias); falta configurar |
+| V17 | Papéis no banco, RETURNING e fila na mesma transação | Pendente: provar |
+| V18 | Segredos: chaves do HMAC e credencial de envio | Desenho decidido (F); falta provar |
+| V19 | Monitor externo | Desenho decidido (J.1); falta conferir se o Lightsail conta como endpoint da AWS |
+| V20 | Limites de taxa e cotas do journald | Pendente: configurar e provar |
+| V21 | CSP e cabeçalhos | Desenho decidido (H.4); falta provar |
+| V22 | Ubuntu LTS disponível no Lightsail | Pendente: conferir |
+| V23 | Como o terminal pelo navegador do Lightsail autentica e se o acesso fica registrado | Pendente: conferir |
+| V24 | Cifragem do disco do sistema (não documentada) e dos discos adicionais (documentada) | **Pendente de confirmação técnica** (ressalva 2) |
+| V25 | Object Lock com ciclo de vida, marcadores de exclusão e custo em São Paulo | Pendente: conferir |
+| V26 | HSTS, cabeçalho `Server` e CAA no Caddy | Pendente: conferir |
+| V27 | Registro.br: segundo fator, DNSSEC e dados públicos do titular | Pendente: conferir |
+| V28 | Consumo real de memória, inclusive no deploy sem queda | **Pendente: medir na operação** (ressalva 1) |
+| V29 | Faturamento da AWS no Brasil: dólar com IOF ou real com impostos locais | Pendente: conferir |
+| V30 | Parameter Store: histórico de versões e registro das leituras | Pendente: conferir |
+| V31 | Regras do EventBridge para as chamadas do Lightsail | Pendente: conferir |
+| V32 | Alarme de estado da instância do Lightsail: custo e limites | Pendente: conferir |
+| V33 | ECR: transferência para o Lightsail e varredura de imagens | Pendente: conferir |
+| V34 | Autenticação peer entre contêineres, com IDs de usuário iguais | Pendente: provar |
+
+### N. Questões jurídicas
+
+Pendente de avaliação profissional; acompanha a consulta jurídica de D-002 e as questões Jur-17 a Jur-23 (4.M).
+
+- **Jur-24.** Duas partes:
+  - **(a)** Dados de contas excluídas ficam nos backups por até 30 dias e não podem ser apagados antes por causa da trava (Object Lock em modo compliance). Uma restauração reaplica a exclusão. Isso é compatível com a LGPD (art. 16 e art. 18)?
+  - **(b)** O teste mensal de restauração usa dados reais num ambiente temporário, com as mesmas proteções da produção, apagado no mesmo dia. Esse uso precisa de base legal ou de registro próprio?
+
+  A questão não se considera resolvida só pela inclusão dessas informações na política de privacidade.
+
+### O. ASVS
+
+- **Requisitos cobertos pelo desenho deste bloco, sem prova ainda:**
+  - 3.4.1 e 3.4.3 a 3.4.6 (cabeçalhos);
+  - 11.1.1 e 11.1.2 (política de chaves e inventário, seção F);
+  - 12.1.x e 12.2.x (TLS no Caddy);
+  - 13.1.1, 13.2.1 a 13.2.4, 13.3.1, 13.3.2 e 13.4.1 a 13.4.5;
+  - 14.3.1 e 14.3.2.
+- **Leitura registrada, que pode virar exceção:** o 12.3.1, pelo socket local sem rede.
+- **A aprovação deste bloco não é declaração de conformidade com o OWASP ASVS.** Nenhuma declaração é feita antes das verificações e das provas (P4-19, P5-25).
+
+### P. Inconsistências registradas para avaliação
+
+Encontradas durante o registro. Nenhuma foi resolvida; os textos aprovados ficam como estão até a decisão do usuário.
+
+1. **Fonte das exclusões reaplicadas na restauração.**
+   - **Bloco 3** (seção B.8, aprovada e ainda não registrada): uma lista de exclusões própria, com só o identificador interno e a data. Fica fora do banco e dos backups, cifrada, com acesso só na restauração e registro de cada uso. Cada linha é apagada 30 dias depois da exclusão, e a lista é tratada como dado pessoal.
+   - **Bloco 5** (G.4): reaplica a partir dos eventos de exclusão concluída do grupo `seguranca`, que ficam 180 dias.
+   - **Divergência:** duas fontes diferentes, com prazos e controles diferentes. O critério RNF-51 vale para qualquer das duas. Pendente: decisão do usuário.
+2. **Preservação de evidências e RNF-45.**
+   - **Bloco 5** (K.1): preservar as evidências de um servidor comprometido no registro do incidente.
+   - **Bloco 4** (RNF-45 e 4.H.7): o RNF-45 proíbe cópias de disco com a pasta de registros e o espaço reservado; o 4.H.7 só prevê copiar os registros do período para o registro do incidente.
+   - **Divergência:** uma cópia forense do disco incluiria os registros, o espaço reservado e dados pessoais. Pendente: se a cópia forense é permitida num incidente, com que prazo e com que acesso.
+3. **Procedimento de emergência do bloco 1 e terminal pelo navegador.**
+   - **Bloco 1** (aprovado e ainda não registrado): o procedimento de emergência do único administrador exige login na AWS com MFA mais a chave SSH.
+   - **Bloco 5** (B.1, P5-10): o terminal pelo navegador fica desligado e é ligado só em emergência. Ele entra só com o login da AWS, um portão, com registro e alerta.
+   - **Divergência:** numa emergência sem a chave SSH, o caminho do bloco 5 tem um portão só. Pendente: confirmar se esse caminho vale para o procedimento do bloco 1 e ajustar o texto do bloco 1 no registro dele.
+4. **Disco do sistema e logs operacionais (menor).**
+   - **Bloco 5** (C.2): nada sensível fica no disco do sistema.
+   - **Bloco 4** (4.H.3 e 4.G.2): os logs operacionais ficam no disco principal, e os relatos do navegador podem guardar resíduo de dado pessoal mesmo depois do saneamento (Jur-22).
+   - **Divergência:** pode haver resíduo de dado pessoal no disco do sistema, cuja cifragem segue sem confirmação (V24). Pendente: aceitar o resíduo ou levar os logs operacionais para o disco cifrado.
+
+### Q. Efeitos nos documentos
+
+Registrado em 2026-11-24:
+
+- `docs/decisions.md`:
+  - D-033 aprovada, com ressalvas e com ADR;
+  - notas em D-005, D-010 (com o trecho dos backups substituído), D-022, D-027 e D-032.
+- ADRs:
+  - novo `docs/adr/D-033-infraestrutura-e-operacao.md`;
+  - notas de atualização nos ADRs de D-005, D-010 e D-032.
+- `docs/requisitos-mvp.md`: critérios RNF-46 a RNF-69 e três pendências novas.
+- Este documento:
+  - seção 5;
+  - notas nas seções 4.E.2, 4.E.3, 4.H.3 e 4.L.
+- `README.md`.
+
+Fica para quando o registro dos blocos 1 e 3 for autorizado:
+
+- o ajuste do procedimento de emergência (5.P.3);
+- a fonte das exclusões (5.P.1).
+
+### R. Fontes conferidas em 2026-11-24
+
+- **IAM Roles Anywhere:**
+  - [introdução](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/introduction.html);
+  - [modelo de confiança](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/trust-model.html);
+  - [assistente de credenciais](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html);
+  - [endpoints](https://docs.aws.amazon.com/general/latest/gr/rolesanywhere.html);
+  - [anúncio sem custo adicional](https://aws.amazon.com/about-aws/whats-new/2023/12/iam-roles-anywhere-additional-aws-regions/).
+- **Lightsail:**
+  - [preços](https://aws.amazon.com/lightsail/pricing/);
+  - [permissões de bucket](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-understanding-bucket-permissions.html);
+  - [snapshots](https://docs.aws.amazon.com/lightsail/latest/userguide/understanding-instance-snapshots-in-amazon-lightsail.html);
+  - [disco adicional cifrado](https://aws.amazon.com/lightsail/features/highly-available-storage/);
+  - [regras de firewall](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-editing-firewall-rules.html).
+- **Segredos:** preços do [Parameter Store](https://aws.amazon.com/systems-manager/pricing/), do [Secrets Manager](https://aws.amazon.com/secrets-manager/pricing/) e do [KMS](https://aws.amazon.com/kms/pricing/).
+- **S3:** [Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html).
+- **Route 53:** [preços](https://aws.amazon.com/route53/pricing/) e [monitoramento das verificações](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/monitoring-health-checks.html).
+- **Eventos:** [EventBridge e CloudTrail](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event-cloudtrail.html) e [serviços do CloudTrail](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-aws-service-specific-topics.html).
+- **ECR:** [preços](https://aws.amazon.com/ecr/pricing/).
+- **GitHub:** [ambientes](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-deployments/managing-environments-for-deployment) e [OIDC com a AWS](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services).
+- **Caddy:** [reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy), [HTTPS automático](https://caddyserver.com/docs/automatic-https) e [TLS](https://caddyserver.com/docs/caddyfile/directives/tls).
+- **PostgreSQL 18:** [autenticação peer](https://www.postgresql.org/docs/18/auth-peer.html) e [conexões](https://www.postgresql.org/docs/18/runtime-config-connection.html).
+- **Domínio:** [Resolução CGI.br 2008/008](https://cgi.br/resolucoes/documento/2008/CGI.br_Resolucao_2008_008.pdf) e [valor anual do .br](https://teletime.com.br/14/10/2026/br-6-milhoes/), em fontes secundárias a confirmar no site do Registro.br.
+- **UptimeRobot:** [termos](https://uptimerobot.com/terms).
+- **Cifragem do disco do Lightsail:** [discussão](https://repost.aws/questions/QUdJ1KRZVbSla6QjzytIQ6DA/are-lightsail-system-discs-encrypted), uma fonte não oficial e inconclusiva (V24).
+
 ## Histórico
 
 - 2026-11-24: documento criado no registro do bloco 4 da Etapa 6, com autorização do usuário ("Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."; "Atualize a documentação e os registros de decisão necessários"). Seção 4 registrada. Os blocos 1 a 3 foram aprovados no mesmo dia e aguardam registro.
+- 2026-11-24: bloco 5 aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). Seção 5 registrada, com as ressalvas, a triagem das verificações (nenhuma concluída), a Jur-24 e quatro inconsistências para avaliação do usuário. Notas nas seções 4.E.2, 4.E.3, 4.H.3 e 4.L. Nenhum recurso foi criado na AWS e nenhum código foi implementado.

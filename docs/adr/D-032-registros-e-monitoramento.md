@@ -90,3 +90,12 @@ A proposta passou por três rodadas de revisão externa trazidas pelo usuário e
   - a verificação V2 mostrar que a entrada no papel de leitor não fica registrada (o RNF-20 depende disso);
   - o custo em São Paulo sair do orçamento;
   - o projeto virar empresa, quando valem reavaliar o armazenamento com bloqueio contra exclusão e a aplicação do Marco Civil.
+
+## Atualização da Etapa 6, bloco 5 (2026-11-24)
+
+Conforme D-033 (`docs/seguranca-e-privacidade.md`, seção 5):
+
+- **Credencial de envio.** Passa a ser o papel `medteca-envio-registros`, assumido por certificado via IAM Roles Anywhere (P5-01 e P5-24), no lugar do usuário IAM com chave fixa da P4-15. As permissões e a restrição ao IP do servidor continuam (RNF-24).
+- **Espaço reservado.** Os registros críticos ficam num arquivo de 2 GB, de tamanho fixo, no disco adicional cifrado (desenho da V9).
+- **Alertas de mudança na proteção.** O mecanismo é a trilha do CloudTrail de 180 dias com as regras do EventBridge (desenho da V3 e da V16).
+- Todas as verificações continuam pendentes.
