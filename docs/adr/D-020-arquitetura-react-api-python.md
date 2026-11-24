@@ -46,3 +46,7 @@ Frontend React que conversa com uma API em Python. No deploy, um único serviço
 - Abrimos mão de: ter um só projeto e uma só linguagem. A primeira carga é maior.
 - Exige: um contrato de API tipado entre os dois projetos (OpenAPI, D-004) e testes dos dois lados.
 - Revisitar se: o Python deixar de ser preferido; um app nativo entrar no MVP, o que contradiz D-001; ou páginas públicas precisarem de bom posicionamento em buscadores, o que se resolve com uma página inicial estática, sem mudar o núcleo.
+
+## Atualização da Etapa 6, bloco 6 (2026-11-24)
+
+Conforme D-034: "revisão do usuário" inclui ler e revisar o código de todos os pull requests. O frontend é feito pelo Claude e revisado pelo usuário também no código, com o merge sempre manual, feito por ele.

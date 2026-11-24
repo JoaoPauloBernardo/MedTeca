@@ -99,3 +99,18 @@
   - a V4 mostrar que o Lightsail oferece papel de instância;
   - o custo real (V12, V29) sair do orçamento;
   - a Jur-24 indicar outra regra para os backups.
+
+## Atualização da Etapa 6, bloco 6 (2026-11-24)
+
+Conforme D-034 (`docs/seguranca-e-privacidade.md`, seções 5.4 e 6):
+
+- **Autorizações recorrentes.** As rotinas automáticas desta decisão continuam valendo, dentro dos parâmetros aprovados: atualizações de segurança com reinício às 04:00, backup diário, cópia semanal das imagens, renovação do certificado TLS, verificação diária do certificado, monitor externo, trilha do CloudTrail, retenção no ECR e publicação da imagem pelo CI depois do merge. As cinco regras do usuário (2026-11-24):
+  1. uma rotina automática aprovada pode continuar executando dentro dos parâmetros, horários, escopo e limites originalmente aprovados;
+  2. qualquer alteração relevante na frequência, horário, escopo, permissões, retenção ou comportamento exige aprovação prévia do usuário;
+  3. uma operação automatizada que não esteja nas políticas aprovadas exige autorização específica;
+  4. deploy, volta da versão em produção, restauração de dados, alterações de infraestrutura, segredos, IAM e as demais operações sensíveis dependem de autorização explícita a cada operação;
+  5. o usuário pode suspender ou revogar uma autorização recorrente a qualquer momento.
+- **Deploy e volta de versão.** O "administrador" que roda o deploy é o usuário. Volta de código (pull request de reversão, com merge do usuário), volta da versão em produção (o comando de deploy com o digest anterior) e restauração de dados são operações distintas; as duas últimas só acontecem com autorização explícita do usuário para aquela operação.
+- **Operações periódicas manuais.** O teste mensal de restauração, a troca anual de chaves e a renovação anual dos certificados dos componentes mantêm a frequência aprovada, e cada execução depende de autorização explícita do usuário.
+- **Retenção no ECR.** Passa a manter a versão em produção e as duas anteriores que estiveram em produção, além das 10 imagens mais recentes da `main`, sem regra genérica para imagens sem etiqueta. Isso substitui o trecho da P5-16 sobre as 10 imagens.
+- **Custo.** A franquia de 500 MB do ECR citada na estimativa só vale para contas criadas antes de 15/07/2025 (V51).

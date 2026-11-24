@@ -60,3 +60,7 @@ Identidade Esmeralda, como descrita em `docs/design-e-ux.md`:
 - Abrimos mão de: casca de ovo como cor de texto no fundo claro; mais de um uso decorativo do roxo.
 - Exige: o roxo restrito a três usos; a escolha antes da correção em tinta escura; contraste conferido nos dois modos a cada cor nova.
 - Revisitar se: um designer refinar o nome escrito e o ícone, o que já está previsto e não muda a ideia; ou testes com estudantes mostrarem confusão entre a esmeralda e o verde de acerto.
+
+## Atualização da Etapa 6, bloco 6 (2026-11-24)
+
+Conforme D-034: a revisão do usuário sobre o design inclui ler e revisar o código que o implementa, em todos os pull requests, além de conferir as telas.

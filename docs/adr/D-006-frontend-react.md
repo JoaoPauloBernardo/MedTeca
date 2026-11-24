@@ -50,3 +50,7 @@ Frontend em React com TypeScript, construído com Vite, usando React Aria Compon
 ## Observações do encerramento da Etapa 3 (2026-11-23)
 
 - O React Aria Components oferece componentes sem estilos visuais prontos. O sistema visual e os estilos próprios do MedTeca (cores, tipografia, espaçamento, componentes visuais e animações) são construídos pelo projeto, na Etapa 5.
+
+## Atualização da Etapa 6, bloco 6 (2026-11-24)
+
+Conforme D-034: a revisão do usuário inclui ler e revisar o código de todos os pull requests, não só conferir telas. O Claude implementa, testa, documenta e explica as decisões técnicas; o usuário estuda o código, questiona, revisa e decide o merge, que é sempre manual.

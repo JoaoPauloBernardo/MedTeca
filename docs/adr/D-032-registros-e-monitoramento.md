@@ -99,3 +99,7 @@ Conforme D-033 (`docs/seguranca-e-privacidade.md`, seção 5):
 - **Espaço reservado.** Os registros críticos ficam num arquivo de 2 GB, de tamanho fixo, no disco adicional cifrado (desenho da V9).
 - **Alertas de mudança na proteção.** O mecanismo é a trilha do CloudTrail de 180 dias com as regras do EventBridge (desenho da V3 e da V16).
 - Todas as verificações continuam pendentes.
+
+## Atualização da Etapa 6, bloco 6 (2026-11-24)
+
+Conforme D-034 (`docs/seguranca-e-privacidade.md`, seção 5.4): o envio dos registros, a retenção no CloudWatch e na auditoria do banco, a rotação da cópia local, a limpeza do espaço reservado, os batimentos e os alertas são autorizações recorrentes, dentro dos parâmetros aprovados neste ADR. Mudança relevante de frequência, horário, escopo, permissões, retenção ou comportamento exige aprovação prévia do usuário, e ele pode suspender ou revogar qualquer uma delas a qualquer momento.
