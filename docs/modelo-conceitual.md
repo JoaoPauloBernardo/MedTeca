@@ -124,6 +124,7 @@ erDiagram
     CONTA ||--o{ CONVITE : "envia"
     CONTA ||--o{ ACEITE_TERMOS : "aceita"
     ACEITE_TERMOS }o--|| VERSAO_TERMOS : "da versão"
+    CONTA |o--o{ AUDITORIA_SENSIVEL : "realiza ação sensível"
 
     CONTA ||--o{ SESSAO_TREINO : "treina"
     SESSAO_TREINO ||--|{ ITEM_SESSAO : "sequência"
@@ -173,6 +174,7 @@ Na implementação, as regras marcadas com "banco" devem ser garantidas também 
 | RM-15 | Questões de prova oficial mantêm as alternativas e a ordem da banca em todas as versões. | Código e revisão | M-30 |
 | RM-16 | O prazo do simulado é calculado e aplicado pelo servidor. O horário informado pelo aparelho não prova que uma resposta foi dada no prazo. | Código, com registro no banco | M-32 |
 | RM-17 | A trilha editorial e os demais registros editoriais apontam para a pessoa editorial, e não guardam identidade pessoal diretamente. | Banco | M-31, M-35, M-38 |
+| RM-18 | O registro de auditoria de ações sensíveis só recebe inclusões da aplicação: o usuário do banco do app só insere; um exportador só lê; só uma identidade separada apaga, e apenas registros com mais de 180 dias; nenhum papel altera registros. | Banco | M-39, RNF-38 |
 
 ### Rastreabilidade
 
@@ -188,7 +190,7 @@ Na implementação, as regras marcadas com "banco" devem ser garantidas também 
 | EDIT | VERSAO_QUESTAO, REFERENCIA, IMAGEM, IMAGEM_NA_VERSAO, FONTE_CONTEUDO, AUTORIZACAO_USO, PESSOA_EDITORIAL, PROVA, BANCA | M-13 a M-18, M-28, M-29, M-33, M-38 |
 | FLUXO | VERSAO_QUESTAO, REVISAO, RETIRADA, EVENTO_EDITORIAL, PESSOA_EDITORIAL | M-02, M-23, M-24, M-26, M-27, M-31, M-34, M-35, M-38 |
 | REP | REPORTE | M-22 |
-| RNF | Fora do modelo de dados: backups, logs e desempenho são tratados em D-010, D-025 e D-026 | — |
+| RNF | AUDITORIA_SENSIVEL (RNF-37, RNF-38). O restante fica fora do modelo de dados: backups, registros e desempenho são tratados em D-010, D-032 (que substitui D-025) e D-026 | M-39 |
 
 ### Comparação com a lista de integridade de conteúdo do projeto
 
@@ -256,15 +258,23 @@ Segunda revisão trazida pelo usuário. O texto de M-03, M-07, M-21 e M-23 foi a
   - se o estudante é avisado quando uma reclassificação muda o seu desempenho (DES, M-05).
 - **Etapa 6:**
   - risco de reidentificar respostas anonimizadas em grupos pequenos;
-  - proteção dos links de convite;
+  - proteção dos links de convite (o formato do link, com o token no fragmento, foi definido em D-032; o restante segue com o registro do bloco 1 da Etapa 6);
   - se a prova de aceite dos termos precisa ser guardada depois da exclusão da conta;
   - o que fazer com o cadastro do ator editorial quando a conta é excluída (M-31);
-  - prazos de retenção.
+  - prazos de retenção (os dos registros foram definidos em D-032; os demais seguem com o registro do bloco 3 da Etapa 6).
 - **Evolução posterior (M-34):** hash encadeado da trilha, armazenamento externo imutável e testes de detecção de alterações.
 - **Para registrar com autorização no fim da etapa:**
   - tirar os recálculos dos usos de D-024 (M-09);
   - no catálogo: resolver a pendência de CAT-03 (M-08); responder metade da pendência da spec de SIM (M-11); registrar a exceção ao recálculo de CONT-09 e CONT-15 (M-30) e o tratamento das tentativas não recalculáveis em DES-01, DES-07 e REV-01 (M-37); acrescentar o critério de bloqueio de exibição por revogação (M-33);
   - D-008 passa a Aprovada, com ADR.
+
+## Etapa 6, bloco 4: auditoria de ações sensíveis (2026-11-24)
+
+Acréscimo aprovado no bloco 4 da Etapa 6 (registros e monitoramento, D-032). Não altera nenhuma decisão da Etapa 4.
+
+| ID | Decisão | Situação | Fonte |
+|---|---|---|---|
+| M-39 | **Auditoria de ações sensíveis.** Ações de poder e consultas sensíveis geram um registro de auditoria no banco, gravado na mesma transação da ação. Entram: concessões, remoções e suspensões de papel; uso de concessão sensível; consultas ao autor de um reporte, ao estudo individual e à correspondência entre código e nome; o procedimento de emergência; consultas à própria auditoria. Se a gravação falhar, a ação não acontece e os dados não são devolvidos. Cada registro guarda quem agiu (identificador interno da conta), papel, ação, alvo (tipo e identificador), motivo quando exigido, código da requisição e hora; não guarda IP. É separada da trilha editorial (M-23), porque trata de acesso e de poderes, e não de conteúdo. Fica 180 dias e é exportada para os registros de segurança. A leitura humana é só do administrador, por comando no servidor, com motivo e registro próprio, sem tela no MVP. O controle de uso das concessões sensíveis fica na própria concessão (M-19), e não na auditoria. As permissões no banco seguem RM-18. | Confirmada | Bloco 4 da Etapa 6, P4-12; aprovação "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada." (2026-11-24); D-032; RNF-37, RNF-38; detalhes em `docs/seguranca-e-privacidade.md`, seção 4.C.2 |
 
 ## Histórico
 
@@ -278,3 +288,4 @@ Segunda revisão trazida pelo usuário. O texto de M-03, M-07, M-21 e M-23 foi a
 - 2026-11-23: revisão final. Texto de M-03 (limpo da parte substituída), M-07, M-21 e M-23 (alinhado a M-31) ajustado, sem mudar o sentido de nenhuma decisão confirmada. RM-05 passou a comparar pessoas. Propostas M-36, M-37 e M-38 aguardam o usuário.
 - 2026-11-23: M-36 e M-38 confirmadas; M-37 confirmada com o ajuste do usuário (tentativas não recalculáveis ficam no histórico, mas fora da lista ativa de erros). M-18 substituída em parte por M-38. No diagrama, AUTOR e ATOR_EDITORIAL viraram PESSOA_EDITORIAL; RM-05, RM-17, a rastreabilidade e a comparação com a lista de integridade foram atualizadas.
 - 2026-11-23: **Etapa 4 aprovada formalmente** ("Aprovar Etapa 4"). As mudanças em outros documentos listadas em "O que fica para depois" dependem de autorização específica.
+- 2026-11-24: Etapa 6, bloco 4 aprovado (D-032). M-39 confirmada (auditoria de ações sensíveis); regra RM-18; entidade AUDITORIA_SENSIVEL no diagrama; rastreabilidade de RNF atualizada (D-025 substituída por D-032); duas pendências da Etapa 6 ganharam notas. Nenhuma decisão da Etapa 4 foi alterada.

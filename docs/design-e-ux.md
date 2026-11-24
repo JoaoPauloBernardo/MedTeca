@@ -150,6 +150,7 @@ Direto e acolhedor.
 | Nível de revisão | "Revisão editorial", com mês e ano; ao tocar: "Uma pessoa diferente do autor revisou esta versão antes de publicar. Não é revisão médica." | CONT-28, CONT-29 |
 | Certa que tinha sido riscada | "Resposta certa. Você tinha riscado esta." | RISC-05 |
 | Resposta não reavaliada | "Resultado pelo gabarito da versão respondida; não reavaliado pelo gabarito atual" | CONT-24 |
+| Erro inesperado | "Algo deu errado do nosso lado. Tente de novo em instantes. Se continuar, fale com a gente e informe o código 7F3A91C2.", em que o código é o da requisição | RNF-43 (D-032) |
 
 "MedTeca", e não "equipe", porque hoje a pessoa editorial é uma só (M-38). A revisão editorial não equivale a revisão médica (M-26); quando a D-003 definir a revisão médica, ela entra como um segundo nível ao lado da editorial.
 
@@ -227,9 +228,9 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 | Estante | REV-01 a REV-07, SIM-05, SIM-08, DES-05, CONT-07, CONT-10, CONT-19, CONT-24, FLUXO-15, FLUXO-16 |
 | Desempenho | DES-01 a DES-13, CONT-05 |
 | Conta | CONTA-05, CONTA-07, CONTA-09 a CONTA-12, CONTA-18, CONTA-24, CONTA-25, REP-03 |
-| Fora da conta | CONTA-01 a CONTA-06, CONTA-08, CONTA-09, CONTA-14 |
+| Fora da conta | CONTA-01 a CONTA-06, CONTA-08, CONTA-09, CONTA-14, RNF-36 |
 | Painel do editor | EDIT-01 a EDIT-13, FLUXO-01 a FLUXO-17, REP-01, REP-02, CONTA-02, CONTA-16, CONTA-17 |
-| Todas as telas do estudante | RNF-01 a RNF-04, RNF-14, RNF-15 |
+| Todas as telas do estudante | RNF-01 a RNF-04, RNF-14, RNF-15, RNF-43 |
 
 ## 13. Em aberto
 
@@ -246,3 +247,4 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 ## Histórico
 
 - 2026-11-24: documento criado no fechamento da Etapa 5, com autorização do usuário ("Aprovar Etapa 5").
+- 2026-11-24: Etapa 6, bloco 4 (D-032). Texto do erro inesperado com código acrescentado aos textos aprovados (RNF-43); rastreabilidade com RNF-36 (tokens dos links de e-mail no fragmento, nas telas fora da conta) e RNF-43.

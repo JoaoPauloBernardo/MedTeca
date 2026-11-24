@@ -88,7 +88,7 @@ Escolhas aprovadas na Etapa 3. O raciocínio de cada uma está no [registro de d
 | Imagens | Armazenamento de objetos privado em São Paulo | D-022 |
 | E-mail | Amazon SES em São Paulo | D-023 |
 | Tarefas em segundo plano | Fila no próprio PostgreSQL | D-024 |
-| Logs e monitoramento | Logs no servidor, com acesso individual por SSH, e monitor externo de disponibilidade | D-025 |
+| Registros e monitoramento | Registros também no AWS CloudWatch Logs em São Paulo, com alertas fora do servidor, e monitor externo de disponibilidade; erros sem serviço externo | D-032 (substitui D-025) |
 | Testes | pytest, Vitest, Playwright e axe-core, com verificação rastreável por requisito | D-026 |
 | Integração contínua | GitHub Actions | D-027 |
 | Idioma | Interface em português do Brasil | D-016 |
@@ -110,6 +110,7 @@ flowchart LR
             DB[("PostgreSQL 18<br/>dados e fila de tarefas")]
         end
         OS[("Armazenamento de objetos<br/>imagens e backups")]
+        CW["CloudWatch Logs<br/>registros e alertas"]
     end
 
     S --> DB
@@ -117,6 +118,8 @@ flowchart LR
     S -->|imagens, após checar a permissão| OS
     W -->|e-mails| SES["Amazon SES<br/>São Paulo"]
     DB -. backup diário .-> OS
+    SRV -. registros .-> CW
+    MON["Monitor externo<br/>de disponibilidade"] -. verifica .-> S
 ```
 
 - **O app é carregado uma vez.** Depois disso, as telas mudam no próprio aparelho, e os dados vêm da API. A próxima questão é carregada antes do toque, para a troca ser rápida.
@@ -155,9 +158,10 @@ O uso de IA para gerar ou revisar conteúdo ainda não foi decidido (D-012) e n�
   - senhas guardadas com Argon2id;
   - permissões negadas por padrão e aplicadas no backend.
 - **Logs sem segredos:** nunca registram senhas, tokens ou credenciais, e identificam o usuário por um código interno.
+- **Registros fora do servidor:** os registros vão também para o CloudWatch Logs em São Paulo. Os de segurança ficam 6 meses, com IP; os do app, 30 dias, sem IP. Os alertas funcionam mesmo com o servidor fora do ar (D-032).
 - **Backups:** diários, guardados por 30 dias, com teste mensal que restaura de fato uma cópia.
 
-O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança ficam para a Etapa 6.
+O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança estão sendo definidos na Etapa 6. Os registros e o monitoramento já foram aprovados e estão em [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md).
 
 ### Acessibilidade
 
@@ -180,7 +184,7 @@ Situação em 24/11/2026:
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
 | 5. Identidade visual, UX e fluxos de navegação | Aprovada |
-| 6. Segurança, qualidade e infraestrutura | Próxima etapa, ainda não iniciada |
+| 6. Segurança, qualidade e infraestrutura | Em andamento: blocos 1 a 4 aprovados; bloco 4 (registros e monitoramento) registrado |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
 **Decisões ainda pendentes:**
@@ -221,6 +225,7 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 | [docs/modelo-conceitual.md](docs/modelo-conceitual.md) | Modelo conceitual dos dados: entidades, relações, regras de integridade e rastreabilidade até os requisitos |
 | [docs/design-e-ux.md](docs/design-e-ux.md) | Identidade visual, sistema de design, tom de voz, navegação, fluxos e tamanhos de tela, com os requisitos atendidos por tela |
 | [docs/design/](docs/design/) | Referência visual da Etapa 5: identidade, sistema de design e navegação, em páginas HTML para abrir no navegador. Não é código do app |
+| [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md) | Segurança e privacidade da Etapa 6, por bloco. Por enquanto, registros e monitoramento (bloco 4), com as verificações e as questões jurídicas pendentes |
 | [docs/adr/](docs/adr/) | Registros de decisões de arquitetura (ADRs) com o raciocínio completo das decisões mais importantes. Cada ADR tem link no registro de decisões |
 
 As decisões passam por estes estados: **Pendente → Proposta → Aprovada → Substituída**, e as propostas recusadas ficam como **Descartada**. Cada requisito tem um ID; a especificação de cada funcionalidade e os seus testes citam esse ID, ligando o que foi pedido ao que foi verificado (D-026).
