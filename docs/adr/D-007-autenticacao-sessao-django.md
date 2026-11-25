@@ -72,3 +72,17 @@
 - **Cookies**:
   - o cookie de sessão é Secure, HttpOnly e SameSite, com o prefixo __Host-;
   - o token CSRF precisa chegar ao frontend, por cookie legível ou por um endpoint. Se for por cookie, esse cookie é Secure e SameSite, mas não HttpOnly, porque o frontend precisa lê-lo para reenviá-lo. Segundo a documentação do Django (configuração CSRF_COOKIE_HTTPONLY), isso não reduz a proteção.
+
+## Atualização da Etapa 6, bloco 1 (aprovado em 2026-11-24, registrado em 2026-11-25)
+
+Aprovação: "Aprovar bloco 1" (2026-11-24). Detalhes em `docs/seguranca-e-privacidade.md`, seção 1; critérios CONTA-26 a CONTA-55.
+
+- **Pendências resolvidas:**
+  - **teto de sessão (7.3.2):** 30 dias para o estudante; 24 h para a equipe, que sai depois de 1 h sem uso;
+  - **segundo fator (6.3.3):** obrigatório para a equipe (editor, revisor e administrador), com passkey preferencial e app autenticador (TOTP) como alternativa; o estudante entra só com senha, pela exceção E1, com o risco aceito pelo responsável pelo projeto.
+- **Entrega do CSRF:** cookie separado `__Host-csrftoken` (Secure, SameSite=Lax), com o token no cabeçalho `X-CSRFToken` de toda alteração; `CSRF_USE_SESSIONS` não é usado.
+- **Política de senha, com os números finais:** de 15 a 64 caracteres, sem regras de composição e sem troca periódica; senhas vazadas recusadas em três camadas (lista local, Pwned Passwords e subconjunto local), com a exceção temporária E3 quando o serviço cai.
+- **Sessões:** cookie `__Host-sessionid` (Secure, HttpOnly, SameSite=Lax); sessões simultâneas sem limite, listadas na Conta para encerrar; troca ou recuperação de senha encerra as outras sessões e avisa por e-mail.
+- **Também decididos:** limites de tentativas com cookie de aparelho, sem bloqueio permanente; reautenticação para ações sensíveis; tabela de tokens; procedimento de emergência do único administrador, com a alternativa do terminal pelo navegador definida na resolução da 5.P.3 (2026-11-25).
+- **Exceções ao ASVS:** E1 (sem segundo fator para estudantes), E2 (Sair fora de vista abaixo de 600 px) e E3 (senhas vazadas raras durante a falta do serviço).
+- **Biblioteca dos fluxos:** continua sendo escolhida na spec de CONTA.

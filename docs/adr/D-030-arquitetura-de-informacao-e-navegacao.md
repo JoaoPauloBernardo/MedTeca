@@ -56,3 +56,7 @@ Custo e complexidade não foram critérios nestas escolhas.
 - Abrimos mão de: trocar de aba no meio de uma sessão; uma aba própria para simulados.
 - Exige: ao trocar de tela, levar o foco ao título da nova tela; desligar "não resolvidas" e "erradas" no modo simulado (SIM-09); avisar no início do simulado que fechar o app não para o tempo (M-11, M-32); preservar resposta, riscos, posição e cronômetro ao mudar de faixa girando o aparelho (RNF-14).
 - Revisitar se: o uso no tablet em pé pedir a divisão também abaixo de 1024 px; ou o painel do editor precisar funcionar no tablet, o que hoje está fora do MVP (EDIT-03).
+
+## Atualização da Etapa 6, bloco 1 (aprovado em 2026-11-24, registrado em 2026-11-25)
+
+A partir de 600 px, a Conta passa a ficar também no pé do trilho e da barra lateral, com o Sair à vista (CONTA-51), atendendo ao ASVS 7.4.4. O botão Conta no canto do Início continua. Abaixo de 600 px, o Sair fica na Conta, a dois toques: é a exceção E2, com o encerramento a distância pela lista de sessões como compensação (`docs/seguranca-e-privacidade.md`, seção 1.C). Aprovação: resposta à segunda revisão externa do bloco 1 e "Aprovar bloco 1" (2026-11-24).

@@ -83,7 +83,7 @@ Escolhas aprovadas na Etapa 3. O raciocínio de cada uma está no [registro de d
 | Frontend | React com TypeScript | D-006 |
 | Componentes de interface | React Aria Components, que cuidam da acessibilidade sem impor visual; o sistema visual é próprio do MedTeca | D-006 |
 | Banco de dados | PostgreSQL 18 no próprio servidor, sem porta de rede, com os dados num disco cifrado | D-005, D-033 |
-| Autenticação | Sessão do Django em cookie protegido, proteção contra CSRF obrigatória e senhas guardadas com Argon2id | D-007 |
+| Autenticação | Sessão do Django em cookie protegido, proteção contra CSRF obrigatória e senhas de 15 caracteres ou mais, guardadas com Argon2id e conferidas contra vazamentos; segundo fator obrigatório para a equipe, com passkey | D-007 |
 | Infraestrutura | Um servidor AWS Lightsail em São Paulo, com Docker Compose, descrito como código (OpenTofu) | D-010, D-033 |
 | Imagens | Armazenamento de objetos privado em São Paulo | D-022 |
 | E-mail | Amazon SES em São Paulo | D-023 |
@@ -167,7 +167,7 @@ O uso de IA para gerar ou revisar conteúdo ainda não foi decidido (D-012) e n�
 - **Backups:** diários, cifrados e travados contra exclusão por 30 dias num bucket em São Paulo, com teste mensal que restaura de fato uma cópia (D-033).
 - **Servidor fechado:** banco sem porta de rede, SSH aberto só sob demanda e segredos no cofre da AWS, fora do disco (D-033).
 
-O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança estão sendo definidos na Etapa 6. Os registros e o monitoramento (D-032), a infraestrutura e a operação (D-033) e a qualidade e a cadeia de suprimentos (D-034) já foram aprovados e estão em [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md).
+O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança estão sendo definidos na Etapa 6. As contas e o acesso (D-007, bloco 1), os registros e o monitoramento (D-032), a infraestrutura e a operação (D-033) e a qualidade e a cadeia de suprimentos (D-034) já foram aprovados e estão em [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md).
 
 ### Acessibilidade
 
@@ -190,7 +190,7 @@ Situação em 24/11/2026:
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
 | 5. Identidade visual, UX e fluxos de navegação | Aprovada |
-| 6. Segurança, qualidade e infraestrutura | Em andamento: blocos 1 a 6 aprovados; blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) registrados |
+| 6. Segurança, qualidade e infraestrutura | Em andamento: blocos 1 a 6 aprovados; blocos 1 (contas e acesso), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) registrados |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
 **Decisões ainda pendentes:**
@@ -231,7 +231,7 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 | [docs/modelo-conceitual.md](docs/modelo-conceitual.md) | Modelo conceitual dos dados: entidades, relações, regras de integridade e rastreabilidade até os requisitos |
 | [docs/design-e-ux.md](docs/design-e-ux.md) | Identidade visual, sistema de design, tom de voz, navegação, fluxos e tamanhos de tela, com os requisitos atendidos por tela |
 | [docs/design/](docs/design/) | Referência visual da Etapa 5: identidade, sistema de design e navegação, em páginas HTML para abrir no navegador. Não é código do app |
-| [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md) | Segurança e privacidade da Etapa 6, por bloco. Por enquanto, registros e monitoramento (bloco 4), infraestrutura e operação (bloco 5) e qualidade e cadeia de suprimentos (bloco 6), com as autorizações recorrentes, as verificações, as questões jurídicas e as inconsistências pendentes |
+| [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md) | Segurança e privacidade da Etapa 6, por bloco. Por enquanto, contas e acesso (bloco 1), registros e monitoramento (bloco 4), infraestrutura e operação (bloco 5) e qualidade e cadeia de suprimentos (bloco 6), com as autorizações recorrentes, as verificações, as questões jurídicas e as inconsistências pendentes |
 | [docs/adr/](docs/adr/) | Registros de decisões de arquitetura (ADRs) com o raciocínio completo das decisões mais importantes. Cada ADR tem link no registro de decisões |
 
 As decisões passam por estes estados: **Pendente → Proposta → Aprovada → Substituída**, e as propostas recusadas ficam como **Descartada**. Cada requisito tem um ID; a especificação de cada funcionalidade e os seus testes citam esse ID, ligando o que foi pedido ao que foi verificado (D-026).

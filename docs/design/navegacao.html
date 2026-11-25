@@ -241,6 +241,7 @@ button, input { font: inherit; color: inherit; }
 .wf-i { display: block; inline-size: 12px; block-size: 5px; border-radius: 3px; background: var(--color-muted); }
 .wf-i.is-on { background: var(--color-accent); }
 .wf-wide .wf-i { inline-size: auto; block-size: 6px; margin-inline: var(--space-xs); }
+.wf-tablet .wf-foot, .wf-wide .wf-foot { margin-block-start: auto; margin-block-end: var(--space-2xs); }
 .wf-body { display: grid; gap: var(--space-2xs); align-content: start; padding: var(--space-xs); min-inline-size: 0; }
 .wf-l { display: block; block-size: 5px; border-radius: 3px; background: color-mix(in oklab, var(--color-muted) 35%, var(--color-paper)); }
 .wf-l.w-60 { inline-size: 60%; } .wf-l.w-80 { inline-size: 80%; } .wf-l.w-40 { inline-size: 40%; }
@@ -651,12 +652,13 @@ h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
         </div>
         <div class="map-col">
           <h3><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg>Conta</h3>
-          <p class="map-where">Pelo botão no canto do Início.</p>
+          <p class="map-where">Pelo botão no canto do Início. A partir de 600 px, também no pé do trilho e da barra lateral, com o Sair à vista.</p>
           <ul>
             <li><b>Apelido e aparência</b><span class="ids">O apelido é opcional; a aparência fica guardada no aparelho. CONTA-⁠05</span></li>
             <li><b>Reportes enviados</b><span class="ids">Com o resultado. REP-⁠03</span></li>
             <li><b>Termos e privacidade</b><span class="ids">Com a versão aceita e a data. CONTA-⁠09</span></li>
             <li><b>Exportar meus dados</b><span class="ids">Um arquivo legível por máquina, só com o que é seu e sem o texto das questões. Ele é preparado em segundo plano e fica disponível para baixar. CONTA-⁠10, CONTA-⁠18, CONTA-⁠24, D-⁠024</span></li>
+            <li><b>Sessões e fatores</b><span class="ids">Sessões ativas, para encerrar uma ou todas; para a equipe, passkeys e app autenticador. CONTA-⁠34, CONTA-⁠46 a CONTA-⁠48</span></li>
             <li><b>Excluir conta e Sair</b><span class="ids">Excluir apaga a conta e o vínculo com as respostas; sair encerra a sessão neste aparelho. CONTA-⁠07, CONTA-⁠11, CONTA-⁠12, CONTA-⁠25</span></li>
           </ul>
         </div>
@@ -705,17 +707,17 @@ h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
         </figure>
         <figure class="size">
           <span class="wf wf-tablet" aria-hidden="true">
-            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span></span>
+            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i wf-foot"></span></span>
             <span class="wf-body"><span class="wf-l w-60"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-l"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-btn"></span></span>
           </span>
-          <figcaption><h3>Tablet em pé e celular deitado</h3><p>De 600 a 1023 px. Trilho lateral com ícones e nomes, que deixa o celular deitado com a altura livre. Uma coluna.</p></figcaption>
+          <figcaption><h3>Tablet em pé e celular deitado</h3><p>De 600 a 1023 px. Trilho lateral com ícones e nomes, que deixa o celular deitado com a altura livre; Conta e Sair no pé. Uma coluna.</p></figcaption>
         </figure>
         <figure class="size">
           <span class="wf wf-wide" aria-hidden="true">
-            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span></span>
+            <span class="wf-nav"><span class="wf-i is-on"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i"></span><span class="wf-i wf-foot"></span></span>
             <span class="wf-body"><span class="wf-l w-40"></span><span class="wf-l"></span><span class="wf-l w-80"></span><span class="wf-b"></span><span class="wf-b"></span><span class="wf-btn"></span></span>
           </span>
-          <figcaption><h3>Tablet deitado e computador</h3><p>1024 px ou mais. Barra lateral com nomes. Listas e desempenho ganham duas colunas.</p></figcaption>
+          <figcaption><h3>Tablet deitado e computador</h3><p>1024 px ou mais. Barra lateral com nomes; Conta e Sair no pé. Listas e desempenho ganham duas colunas.</p></figcaption>
         </figure>
         <figure class="size">
           <span class="wf wf-focus" aria-hidden="true">

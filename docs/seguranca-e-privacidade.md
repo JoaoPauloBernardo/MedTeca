@@ -1,6 +1,8 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
+**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
+
+**Aprovado (bloco 1)**: 2026-11-24 - usuário: "Aprovar bloco 1"
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
 
@@ -14,14 +16,14 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 
 | Bloco | Tema | Situação |
 |---|---|---|
-| 1 | Contas e acesso | Aprovado em 2026-11-24 ("Aprovar bloco 1"); registro pendente |
+| 1 | Contas e acesso | Aprovado em 2026-11-24 ("Aprovar bloco 1") e registrado em 2026-11-25 (D-007); seção 1 |
 | 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2"); registro pendente |
 | 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3"); registro pendente |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
 | 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
 | 6 | Qualidade e cadeia de suprimentos | Aprovado e registrado em 2026-11-24 (D-034); seção 6 e seção 5.4 |
 
-O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estão registradas: o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens, a tabela B.12 (destino de cada registro na exclusão da conta), a revisão semestral de privilégios e o procedimento de emergência do único administrador. Elas entram neste documento quando o registro desses blocos for autorizado.
+O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estavam registradas. As do bloco 1 (o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens e o procedimento de emergência do único administrador) estão na seção 1 desde 2026-11-25. As dos blocos 2 e 3 (entre elas, a tabela B.12, com o destino de cada registro na exclusão da conta, e a revisão semestral de privilégios) entram quando o registro desses blocos for autorizado.
 
 ## Convenções
 
@@ -31,6 +33,174 @@ O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não
 - **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5; a situação dessas está na seção 5.M. A V35 a V51 vêm do bloco 6 (seção 6.L), e a V52 a V55, das resoluções da seção 5.P. Nenhuma foi concluída.
 - **Jur-n**: questão para o advogado (seções 4.M, 5.N e 6.M). A análise jurídica deste documento é preliminar.
 - **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P). As quatro registradas no bloco 5 foram resolvidas pelo usuário em 2026-11-25.
+
+## 1. Contas e acesso (bloco 1, D-007)
+
+### 1.1 Como o bloco foi decidido
+
+- **Duas rodadas de perguntas** em 2026-11-24, com as escolhas resumidas na seção A. O usuário pediu facilidade de login para o estudante: o público é da saúde e pouco familiarizado com tecnologia, e "se ficar pedindo muita autenticação e fazendo eles saírem muito do site eles vão abandonar".
+- **Duas revisões externas**, trazidas pelo usuário, corrigiram a proposta. Na segunda, dois erros do consultor foram corrigidos: a descrição do CSRF, que ele tinha ligado à sessão, e a da passkey, que não deixa de valer sozinha quando o aparelho se perde.
+- **Aprovação:** "Aprovar bloco 1" (2026-11-24), sobre a versão final.
+- **Registro autorizado** em 2026-11-25, depois do registro dos blocos 4 a 6. A seção D traz o que blocos posteriores mudaram.
+
+### A. Decisões aprovadas
+
+1. **Meta:** ASVS L2, com exceções escritas (seção C).
+2. **Senha:** de 15 a 64 caracteres, sem regras de composição, aceita colar e o gerenciador de senhas, sem troca periódica e recusando senhas vazadas.
+3. **Segundo fator:**
+   - obrigatório para a equipe (editor, revisor e administrador), com a passkey como fator preferencial, por ser resistente a sites falsos;
+   - app autenticador (TOTP) como alternativa;
+   - o estudante entra só com senha (exceção E1).
+4. **Sessão:** estudante até 30 dias; equipe até 24 h, saindo depois de 1 h sem uso.
+5. **Sessões simultâneas:** sem limite (ASVS 7.1.2). O estudante usa celular, tablet e computador, e todas as sessões aparecem na Conta para encerrar. A conta compartilhada é um risco de negócio, a tratar com a D-011.
+6. **Troca ou recuperação de senha:** encerra as outras sessões e avisa por e-mail.
+7. **"Conta" no pé da barra lateral a partir de 600 px**, com o Sair à vista. Isso acrescenta um item à navegação da D-030 (nota na D-030 e em `docs/design-e-ux.md`).
+
+### B. Ajustes técnicos
+
+**B.1 Senhas vazadas, com alternativa local.** Três camadas, nesta ordem:
+
+- **Lista local de senhas proibidas, sempre conferida:** senhas comuns com 15 ou mais caracteres e palavras do contexto (ASVS 6.2.4 e 6.2.11).
+- **Pwned Passwords, por consulta:** recebe só os 5 primeiros caracteres do resumo da senha e espera no máximo 2 s (6.2.12). O serviço está na lista de destinos externos do bloco 5 (5.H.6).
+- **Subconjunto local de vazadas, quando o serviço cair:**
+  - **o que é:** os cerca de 10 milhões de resumos que mais aparecem na base pública do próprio Pwned Passwords;
+  - **tamanho:** algumas centenas de megabytes, ou menos num filtro compacto;
+  - **atualização:** preparado fora do servidor e atualizado a cada trimestre;
+  - **por que não a base inteira:** ela ocupa dezenas de gigabytes e não cabe com folga no servidor aprovado (D-010). O tamanho exato e a licença de uso da base são conferidos na implementação.
+
+As vazadas raras, fora do subconjunto, passam sem checagem enquanto o serviço estiver fora (exceção E3). Na próxima entrada da pessoa, a checagem completa é refeita e, se a senha estiver vazada, aparece um aviso sugerindo trocar, sem bloquear.
+
+**B.2 CSRF, como o Django funciona.** Cookie de CSRF separado, o padrão do Django; `CSRF_USE_SESSIONS` não é usado.
+
+- **O segredo:** fica no cookie `__Host-csrftoken` (Secure, SameSite=Lax, Path=/). Esse cookie é legível pelo JavaScript, e a documentação do Django diz que torná-lo HttpOnly não traz ganho prático.
+- **Ida ao servidor:** o app lê o cookie e envia o token no cabeçalho `X-CSRFToken` de toda alteração. O token é mascarado a cada envio, uma proteção do próprio Django.
+- **Independência da sessão:** o segredo não depende da sessão, e o Django troca o segredo a cada login.
+- **Origem:** o Django confere o cabeçalho Origin contra o próprio endereço; sem Origin, em HTTPS, confere o Referer.
+- **Na API:** a autenticação por sessão do Django Ninja exige o token. A configuração exata é conferida na especificação de CONTA.
+- **Proibições e testes:** nenhuma alteração por GET; nenhum CORS; testes que enviam alterações sem token e esperam recusa (D-007).
+- **Por que não `CSRF_USE_SESSIONS`:** pediria um endpoint só para entregar o token e um pedido a mais ao abrir o app, sem ganho real. Se houver uma falha de script injetado (XSS), o atacante age dentro da página de qualquer jeito.
+
+**B.3 Sessão.**
+
+- **Cookie:** `__Host-sessionid` (Secure, HttpOnly, Path=/, SameSite=Lax).
+- **Força da chave:** a chave do Django tem cerca de 165 bits; o ASVS pede 128 (7.2.3).
+- **Guarda e renovação:** a sessão fica no servidor, é renovada a cada login (7.2.4) e é apagada ao sair (7.4.1).
+- **Por que Lax:** com Strict, quem chegasse por um link de e-mail apareceria deslogado.
+
+**B.4 Passkey: registro, perda, revogação e remoção.**
+
+- **No cadastro da equipe:** cada passkey recebe um nome e uma data (por exemplo, "iPhone, nov. 2026"), e 10 códigos de recuperação são gerados na hora, para guardar. Recomendação: registrar dois fatores, como duas passkeys, ou passkey e app.
+- **O servidor só guarda a chave pública.** Face ID e digital ficam no aparelho, então o MedTeca não trata dado biométrico.
+- **Perder o aparelho não revoga a passkey.** Ela continua registrada no servidor e, se for sincronizada (iCloud ou Google), continua também nos outros aparelhos da pessoa. Quem pegar o aparelho ainda precisa desbloqueá-lo.
+- **Revogar:** a pessoa entra com outro fator; na Conta, remove a passkey perdida, o que vale para todos os aparelhos sincronizados; encerra a sessão daquele aparelho na lista. Remover um fator pede reautenticação (7.5.1) e encerra as outras sessões.
+- **Sem nenhum outro fator:** o administrador reabilita a conta depois de confirmar a identidade (6.4.4).
+- **Auditoria:** registro e remoção de fatores viram eventos de segurança (seção 4.C).
+
+**B.5 Emergência do único administrador.** Vale quando ele perdeu todos os fatores ou há suspeita de que a conta foi tomada.
+
+1. **Confirmação de identidade:** controle das duas contas da infraestrutura, a da AWS com o segundo fator dela e a chave SSH individual do servidor. São dois controles independentes da conta no MedTeca. Atualização da resolução da 5.P.3 (2026-11-25): se a chave SSH também tiver sido perdida, o terminal pelo navegador do Lightsail é a alternativa, ligado com alerta, com registro e revisão depois; em seguida, ele é desligado, uma chave nova é cadastrada e a antiga é revogada. A fronteira real é a conta da AWS, protegida por passkey: a chave SSH protege contra erro e contra roubo isolado, mas não é barreira independente contra quem controla a conta da AWS (Inferência). O prazo de 7 dias para a revisão segue como proposta não aprovada.
+2. **Autorização:** o responsável pelo projeto autoriza por escrito, com o motivo, no registro de incidentes. Enquanto houver um só administrador, é a mesma pessoa. Recomendação: ter um segundo administrador antes da abertura ao público, para que cada um aprove a emergência do outro.
+3. **Execução, por comando no servidor** (por SSH ou, na alternativa acima, pelo terminal do navegador):
+   - o comando não roda sem um motivo escrito;
+   - remove todos os fatores da conta e encerra todas as sessões dela;
+   - exige troca de senha;
+   - gera um link de recadastro de uso único, válido por 30 minutos, mostrado no terminal e nunca enviado por e-mail;
+   - no recadastro, cria passkey e códigos novos.
+4. **Auditoria:**
+   - o comando grava um evento só de inclusão (M-34), com o usuário e a chave SSH usados, a data, a conta e o motivo; o procedimento também entra na auditoria de ações sensíveis (4.C.2);
+   - o login no servidor fica registrado (RNF-20); a abertura do terminal pelo navegador fica na trilha do CloudTrail, e o alerta dela não substitui esse registro (5.P.3, V54);
+   - depois, o administrador revisa os eventos recentes da conta: logins, papéis, publicações e autorizações;
+   - se houver sinal de que a conta foi tomada, abre o processo de incidente (bloco 3).
+5. **Prevenção:** códigos de recuperação impressos em local seguro e duas passkeys, uma no celular e outra no computador.
+
+**B.6 Limite de tentativas sem permitir trancar a conta de outra pessoa.** Usa o padrão de "cookie de aparelho" descrito pela OWASP:
+
+- **Aparelho confiável:** depois de um login certo, o aparelho recebe um cookie `__Host-` assinado e HttpOnly; o servidor guarda só o resumo dele.
+- **Falhas por conta e por aparelho ou endereço:** 5 falhas seguidas daquele aparelho ou endereço levam a uma espera de 30 s, que dobra até 15 min, só para aquele par. Um terceiro não afeta o celular do estudante.
+- **Aparelho confiável tem limite próprio:** 10 falhas. Ele não sofre as esperas causadas por outros.
+- **Ataque espalhado por muitos endereços:** acima de 100 falhas por hora numa conta, só aparelhos não confiáveis passam a esperar 15 min. O evento é registrado e gera alerta (bloco 4).
+- **Por endereço de rede:** 50 falhas em 15 min, um limite alto por causa da rede da faculdade.
+- **Nunca há bloqueio permanente.**
+- **Recuperação de senha:** limite por conta e endereço, com resposta sempre igual; teto de 5 e-mails de recuperação por hora por conta, para ninguém lotar a caixa de alguém. Risco residual: um terceiro pode esgotar esse teto e atrasar em até uma hora a recuperação legítima.
+- **Trocar a senha** invalida os aparelhos confiáveis, menos o atual.
+- **Outros:** código do app autenticador, 5 tentativas e depois espera; mensagens genéricas e tempo de resposta igual; sem CAPTCHA.
+
+**B.7 Tokens.**
+
+| Token | Gerado como | Guardado como | Validade | Deixa de valer |
+|---|---|---|---|---|
+| Sessão | Django, cerca de 165 bits | No servidor | 30 dias para o estudante; 24 h e 1 h sem uso para a equipe | Sair, expirar, troca de senha, desativação, administrador |
+| CSRF | Django, mascarado a cada envio | Cookie `__Host-csrftoken` | Até o próximo login | Troca no login |
+| Aparelho confiável | Aleatório de 256 bits | Resumo SHA-256 | 90 dias | Troca de senha, sair de todas, exclusão |
+| Recuperação de senha | Aleatório de 256 bits | Resumo SHA-256 | 30 min | Uso, novo pedido, troca de senha |
+| Convite | Aleatório de 256 bits | Resumo SHA-256 | 7 dias | Uso, novo convite (CONTA-23) |
+| Recadastro de emergência | Aleatório de 256 bits | Resumo SHA-256 | 30 min | Uso |
+| Códigos de recuperação | Aleatórios, 10 | Argon2id, por terem pouca entropia (6.5.2) | Até o uso | Uso único; gerar novos anula os antigos |
+| Segredo do app autenticador | Aleatório | Cifrado, com a chave fora do banco | Até remover | Remoção do fator |
+| Passkey | No aparelho | Só a chave pública | Até remover | Remoção pela pessoa ou pelo administrador |
+
+- **Links de e-mail:** a página que recebe o link não repassa o endereço adiante (`Referrer-Policy: no-referrer`), troca o código por uma sessão curta e vai para um endereço limpo. Atualizado pelo bloco 4: o token vai no fragmento do link e só segue ao servidor no corpo de uma requisição POST com CSRF (RNF-36).
+- **Logs:** gravam o caminho sem o código (RNF-12).
+
+**B.8 Reautenticação.**
+
+- **Pedem a senha de novo:** trocar a senha (com a senha atual); mexer em fatores; encerrar outras sessões; excluir a conta; exportar os dados, que também gera um aviso por e-mail.
+- **Trocar o e-mail:** o MVP não prevê. Se entrar, pede senha, confirmação no e-mail novo e aviso no antigo.
+- **Equipe:** atribuir papéis, conceder permissões sensíveis e atestar autorização pedem a passkey de novo.
+
+**B.9 Outros.**
+
+- Não existe conta padrão; o primeiro administrador nasce por comando (6.3.2).
+- O administrador encerra sessões de alguém (7.4.5).
+- Desativar ou excluir uma conta encerra todas as sessões dela (7.4.2).
+
+### C. Exceções ao ASVS
+
+**E1. Sem segundo fator para estudantes (6.3.3, L2).**
+
+- **Dados da conta do estudante:** e-mail, apelido, tentativas, desempenho, marcações, reportes e sessões. São dados pessoais (LGPD, art. 5º, I). Não são, pela natureza, dados pessoais sensíveis (art. 5º, II: origem racial ou étnica, convicção religiosa, opinião política, filiação sindical ou a organização religiosa, filosófica ou política, saúde, vida sexual, dado genético ou biométrico).
+- **Ressalvas:** um reporte em texto livre pode trazer dado de saúde, apesar do aviso para não escrever dados pessoais (M-22); a passkey não envolve biometria no servidor; tudo continua sujeito ao dever de segurança (art. 46) e à comunicação de incidentes (art. 48).
+- **Risco, sem minimizar:**
+  - **como acontece:** senha reaproveitada de outro vazamento ou capturada num site falso; o limite de tentativas não protege contra site falso;
+  - **o que o invasor consegue:** ver histórico, desempenho, marcações e reportes; exportar os dados (com aviso por e-mail); trocar a senha e tirar o acesso do dono; enviar reportes falsos; excluir a conta, o que é irreversível, porque as respostas são desvinculadas e não dá para restaurar;
+  - **consequência:** pode ser um incidente que exige comunicação.
+- **Compensações:** senha de 15 caracteres; lista local, Pwned Passwords e subconjunto local; limites com cookie de aparelho; aviso na troca de senha e na exportação; reautenticação para excluir e exportar; lista de sessões.
+- **Quem aceita o risco:** o responsável pelo projeto, na aprovação deste bloco.
+- **Rever:** na abertura ao público, na cobrança, após qualquer incidente ou se o app passar a guardar dados sensíveis. O primeiro passo seria passkey opcional para estudantes.
+
+**E2. Sair fora de vista no celular (7.4.4, L2).**
+
+- **Escopo:** abaixo de 600 px, o Sair fica na Conta, a dois toques. A partir de 600 px, ele está no pé do trilho ou da barra lateral, como o usuário aprovou.
+- **Risco residual:** no celular de outra pessoa, a sessão pode ficar aberta até 30 dias.
+- **Compensação:** encerrar a sessão a distância pela lista da Conta.
+- **Rever:** se o uso mostrar acesso frequente em aparelhos de terceiros.
+
+**E3. Senhas vazadas raras durante a falta do serviço (6.2.12, L2), temporária.**
+
+- **Escopo:** só enquanto o Pwned Passwords estiver fora. A lista local e o subconjunto seguem valendo.
+- **Compensações:** a checagem completa é refeita na próxima entrada; o evento é registrado; se a falta passar de 24 h, gera alerta (alerta 5 do bloco 4).
+- **Fim da exceção:** encerra sozinha quando o serviço volta.
+
+### D. O que blocos posteriores mudaram
+
+- **Bloco 4 (D-032):** os tokens dos links de e-mail vão no fragmento do endereço (RNF-36); os eventos de segurança, os limites e os alertas do bloco 1 entram nos registros e alertas da seção 4; o procedimento de emergência entra na auditoria de ações sensíveis (4.C.2).
+- **Bloco 5 (D-033):** a chave que cifra os segredos do app autenticador fica no Parameter Store, com cifra AES-256-GCM e a versão da chave junto do dado (5.F); o Pwned Passwords está na lista de destinos externos (5.H.6).
+- **Resolução da 5.P.3 (2026-11-25):** o terminal pelo navegador é a alternativa à chave SSH perdida no procedimento de emergência (B.5).
+- **Bloco 6 (D-034):** a revisão do código, o fluxo por pull request e as autorizações de operação valem também para tudo o que implementar este bloco.
+
+### E. Critérios no catálogo
+
+Os critérios CONTA-26 a CONTA-55 de `docs/requisitos-mvp.md` transcrevem as decisões e os ajustes deste bloco no formato EARS. O CONTA-06 (30 dias sem uso) continua valendo; o teto de 30 dias desde o login é o CONTA-32.
+
+### F. Efeitos nos documentos
+
+Registrado em 2026-11-25, numa branch de trabalho, para revisão e merge do usuário:
+
+- `docs/decisions.md`: notas na D-007 (pendências resolvidas: teto de sessão, segundo fator e entrega do CSRF) e na D-030 (Conta no pé do trilho e da barra lateral); notas de atualização nos ADRs das duas.
+- `docs/requisitos-mvp.md`: critérios CONTA-26 a CONTA-55.
+- `docs/design-e-ux.md` e `docs/design/navegacao.html`: a Conta no pé do trilho e da barra lateral, com o Sair à vista.
+- Este documento: seção 1 e cabeçalho.
+- `README.md`.
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -1630,3 +1800,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-24: bloco 5 aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). Seção 5 registrada, com as ressalvas, a triagem das verificações (nenhuma concluída), a Jur-24 e quatro inconsistências para avaliação do usuário. Notas nas seções 4.E.2, 4.E.3, 4.H.3 e 4.L. Nenhum recurso foi criado na AWS e nenhum código foi implementado.
 - 2026-11-24: bloco 6 aprovado ("Aprovar bloco 6"), depois das correções do usuário. Seção 6 registrada (P6-01 a P6-28, V35 a V51, Jur-25) e seção 5.4 (autorizações recorrentes e operações sensíveis). Notas em 5.I.1, 5.I.2, 5.L e na V33. As recomendações sobre a regra da `main` ficam pendentes de decisão. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho."). Nada foi alterado no GitHub ou na AWS e nenhum código foi implementado.
 - 2026-11-25: as quatro inconsistências da seção 5.P foram resolvidas pelo usuário ("Aprovar"), depois de duas revisões pedidas por ele. Resoluções registradas na própria 5.P, com as verificações V52 a V55; notas em 4.H.3 (inclusive a correção do item que ainda punha o banco no disco principal), 4.H.7, 5.B.1, 5.C.2, 5.G.4, 5.K.1, 5.Q, 5.4.4 e 6.O. O prazo de 7 dias para a revisão depois de uma emergência segue como proposta não aprovada. Os ajustes nos textos dos blocos 1 e 3 entram no registro deles. Registro autorizado pelo usuário ("Sim, registrar").
+- 2026-11-25: bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado na seção 1, a partir do texto da versão final aprovada, com a seção D (o que os blocos 4 a 6 e a resolução da 5.P.3 mudaram) e o ajuste do procedimento de emergência (B.5). Critérios CONTA-26 a CONTA-55. Os blocos 2 e 3 seguem aprovados e sem registro. Registro pedido pelo usuário ("vamos pra próxima parte").
