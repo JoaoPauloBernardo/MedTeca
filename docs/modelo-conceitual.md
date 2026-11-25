@@ -257,10 +257,10 @@ Segunda revisão trazida pelo usuário. O texto de M-03, M-07, M-21 e M-23 foi a
   - se existe o tipo de referência "outro" (EDIT);
   - se o estudante é avisado quando uma reclassificação muda o seu desempenho (DES, M-05).
 - **Etapa 6:**
-  - risco de reidentificar respostas anonimizadas em grupos pequenos;
+  - risco de reidentificar respostas anonimizadas em grupos pequenos (resolvido no bloco 2 da Etapa 6, registrado em 2026-11-25: durante o beta, tratadas como dado pessoal desvinculado, só nos números agregados com 10 pessoas ou mais; o bloco 3, aprovado e ainda sem registro, transforma essas respostas em contagens e muda M-07, M-21, M-22, M-36 e RM-13);
   - proteção dos links de convite (o formato do link, com o token no fragmento, foi definido em D-032; o restante segue com o registro do bloco 1 da Etapa 6);
   - se a prova de aceite dos termos precisa ser guardada depois da exclusão da conta;
-  - o que fazer com o cadastro do ator editorial quando a conta é excluída (M-31);
+  - o que fazer com o cadastro do ator editorial quando a conta é excluída (M-31) (resolvido no bloco 2 da Etapa 6: o nome vira um código, com a correspondência à parte, só para o administrador com concessão individual; o prazo de guarda fica com o registro do bloco 3);
   - prazos de retenção (os dos registros foram definidos em D-032; os demais seguem com o registro do bloco 3 da Etapa 6).
 - **Evolução posterior (M-34):** hash encadeado da trilha, armazenamento externo imutável e testes de detecção de alterações.
 - **Para registrar com autorização no fim da etapa:**
@@ -287,5 +287,6 @@ Acréscimo aprovado no bloco 4 da Etapa 6 (registros e monitoramento, D-032). N�
 - 2026-11-23: decisões da revisão. M-30, M-31 e M-33 confirmadas; M-32 e M-34 confirmadas com refinamentos do usuário; M-35 derivada de M-31; M-03 substituída em parte por M-30. Diagrama, regras (RM-03, RM-06, RM-11 e as novas RM-15 a RM-17), rastreabilidade e pendências atualizados.
 - 2026-11-23: revisão final. Texto de M-03 (limpo da parte substituída), M-07, M-21 e M-23 (alinhado a M-31) ajustado, sem mudar o sentido de nenhuma decisão confirmada. RM-05 passou a comparar pessoas. Propostas M-36, M-37 e M-38 aguardam o usuário.
 - 2026-11-23: M-36 e M-38 confirmadas; M-37 confirmada com o ajuste do usuário (tentativas não recalculáveis ficam no histórico, mas fora da lista ativa de erros). M-18 substituída em parte por M-38. No diagrama, AUTOR e ATOR_EDITORIAL viraram PESSOA_EDITORIAL; RM-05, RM-17, a rastreabilidade e a comparação com a lista de integridade foram atualizadas.
+- 2026-11-25: Etapa 6, bloco 2 (permissões e privacidade) registrado. Duas pendências da Etapa 6 resolvidas, com notas: o risco de reidentificar respostas desvinculadas e o cadastro editorial de quem sai (M-31). Nenhuma decisão do modelo foi alterada; as mudanças do bloco 3 entram com o registro dele.
 - 2026-11-23: **Etapa 4 aprovada formalmente** ("Aprovar Etapa 4"). As mudanças em outros documentos listadas em "O que fica para depois" dependem de autorização específica.
 - 2026-11-24: Etapa 6, bloco 4 aprovado (D-032). M-39 confirmada (auditoria de ações sensíveis); regra RM-18; entidade AUDITORIA_SENSIVEL no diagrama; rastreabilidade de RNF atualizada (D-025 substituída por D-032); duas pendências da Etapa 6 ganharam notas. Nenhuma decisão da Etapa 4 foi alterada.

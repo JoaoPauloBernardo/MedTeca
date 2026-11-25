@@ -1,8 +1,10 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
+**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 2 (permissões e privacidade), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
 
 **Aprovado (bloco 1)**: 2026-11-24 - usuário: "Aprovar bloco 1"
+
+**Aprovado (bloco 2)**: 2026-11-24 - usuário: "Aprovar bloco 2"
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
 
@@ -17,13 +19,13 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 | Bloco | Tema | Situação |
 |---|---|---|
 | 1 | Contas e acesso | Aprovado em 2026-11-24 ("Aprovar bloco 1") e registrado em 2026-11-25 (D-007); seção 1 |
-| 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2"); registro pendente |
+| 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2") e registrado em 2026-11-25; seção 2 |
 | 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3"); registro pendente |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
 | 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
 | 6 | Qualidade e cadeia de suprimentos | Aprovado e registrado em 2026-11-24 (D-034); seção 6 e seção 5.4 |
 
-O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estavam registradas. As do bloco 1 (o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens e o procedimento de emergência do único administrador) estão na seção 1 desde 2026-11-25. As dos blocos 2 e 3 (entre elas, a tabela B.12, com o destino de cada registro na exclusão da conta, e a revisão semestral de privilégios) entram quando o registro desses blocos for autorizado.
+O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estavam registradas. As do bloco 1 (o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens e o procedimento de emergência do único administrador) estão na seção 1 desde 2026-11-25. As do bloco 2 (a matriz de permissões e as regras de privacidade) estão na seção 2 desde 2026-11-25. As do bloco 3 (entre elas, a tabela B.12, com o destino de cada registro na exclusão da conta, e a revisão semestral de privilégios) entram quando o registro desse bloco for autorizado.
 
 ## Convenções
 
@@ -201,6 +203,115 @@ Registrado em 2026-11-25, numa branch de trabalho, para revisão e merge do usu�
 - `docs/design-e-ux.md` e `docs/design/navegacao.html`: a Conta no pé do trilho e da barra lateral, com o Sair à vista.
 - Este documento: seção 1 e cabeçalho.
 - `README.md`.
+
+## 2. Permissões e privacidade (bloco 2)
+
+### 2.1 Como o bloco foi decidido
+
+- **Quatro escolhas do usuário** em 2026-11-24, todas iguais à recomendação, na seção A.
+- **Proposta completa** com a matriz de permissões e as regras de privacidade.
+- **Aprovação:** "Aprovar bloco 2" (2026-11-24).
+- **Registro** em 2026-11-25, depois dos blocos 1, 4, 5 e 6. A seção G traz o que blocos posteriores mudaram.
+
+### A. Decisões aprovadas
+
+1. **Números agregados para a equipe:** só aparecem com 10 pessoas ou mais (resolve o CONTA-19).
+2. **Autor do reporte:** o editor não vê quem reportou. Só o administrador vê, para tratar abuso, e a consulta fica registrada (resolve a pendência de REP).
+3. **Estudo individual:** ninguém vê pelo painel, nem o administrador. A exceção é um pedido do próprio estudante, atendido pelo servidor e registrado.
+4. **Pessoa da equipe que exclui a conta:** o nome vira um código. A correspondência fica à parte, só para o administrador (resolve o M-31; o prazo de guarda fica para o bloco 3).
+
+### B. Matriz de permissões (CONTA-20, ASVS 8.1.1)
+
+Uma conta pode acumular papéis (CONTA-15), mas cada ação segue a própria regra (CONTA-21).
+
+| Ação | Estudante | Editor | Revisor | Administrador |
+|---|---|---|---|---|
+| Resolver questões, treinar, fazer simulado, marcar, ver o próprio histórico e desempenho | Sim | — | — | — |
+| Reportar erro | Sim | — | — | — |
+| Cuidar da própria conta: apelido, sessões, exportar, excluir, sair | Sim | Sim | Sim | Sim |
+| Criar e editar rascunhos: origem, gabarito e situação, comentário, referências, imagens | — | Sim | — | — |
+| Enviar para revisão | — | Sim | — | — |
+| Aprovar ou devolver uma versão | — | — | Sim, nunca de que seja autor ou cadastrador (FLUXO-03, RM-05) | — |
+| Confirmar gabarito preliminar como oficial, com o documento da banca (CONT-16, CONT-21) | — | Sim | — | — |
+| Retirar de circulação, com motivo (FLUXO-09) | — | Sim | — | — |
+| Fila de reportes: ler e concluir, sem ver o autor | — | Sim | — | — |
+| Ver números agregados das questões, a partir de 10 pessoas | — | Sim | Sim | — |
+| Registrar a fonte do conteúdo e anexar a evidência | — | Sim | — | — |
+| Atestar a autorização de uso ou marcar como não autorizada | — | — | — | Sim, com concessão individual (EDIT-06, M-19) |
+| Convidar, reenviar convite, atribuir papéis, cadastrar a pessoa editorial | — | — | — | Sim (D-018) |
+| Desativar conta e encerrar as sessões de alguém | — | — | — | Sim |
+| Ver o autor de um reporte | — | — | — | Só para tratar abuso, com registro |
+| Ver o estudo individual de alguém | — | — | — | Só pelo servidor, a pedido do estudante, com registro |
+| Ver a correspondência entre código e nome | — | — | — | Só com concessão individual, com registro |
+| Ver os logs | Só quem tiver concessão individual, inclusive entre administradores (RNF-17) | | | |
+
+**Sem login:** a pessoa só consegue entrar, recuperar a senha, aceitar um convite e ler os termos e a política de privacidade. **Nenhuma questão é pública.**
+
+### C. Como as regras são aplicadas
+
+- **Negado por padrão:** o que a matriz não permite é recusado (CONTA-20).
+- **Conferência no servidor:** a cada requisição e para cada objeto, verifica-se se aquele dado é da pessoa e se o papel permite a ação. Nada fica só escondido na tela (ASVS 8.2.1, 8.2.2, 8.3.1; CONTA-22).
+- **Conferência campo a campo:** o editor recebe o reporte sem o campo do autor, e a remoção acontece no servidor, não só na tela (8.2.3).
+- **Mudança de papel na hora:** como os papéis são lidos a cada requisição, retirar um papel corta o acesso imediatamente, sem esperar a sessão acabar.
+- **Papel de equipe exige segundo fator:** se uma conta de estudante ganha papel de equipe, ela precisa cadastrar o segundo fator no próximo login, antes de usar qualquer função da equipe (bloco 1, CONTA-31).
+- **Toda recusa vira evento de segurança** (ASVS 16.3.2), tratado no bloco 4 (seção 4.C, RNF-23).
+
+### D. Regras de privacidade
+
+1. **Números agregados:**
+   - contam pessoas distintas, não respostas;
+   - abaixo de 10, aparece "poucas respostas para mostrar";
+   - na contagem por alternativa, números abaixo de 3 aparecem como "menos de 3";
+   - os números da equipe são atualizados uma vez por dia, e não a cada resposta, para que ninguém compare o antes e o depois e descubra o que um colega acabou de marcar. O desempenho do estudante continua calculado na hora (M-09). A visão diária da equipe é a "visão pré-calculada" que o M-09 já permite, sem mudar o modelo.
+2. **Reportes:**
+   - o sistema guarda o vínculo com o autor só para devolver a resposta (REP-03);
+   - se a conta for excluída, o reporte fica sem autor (M-22);
+   - **risco residual:** o texto livre pode trazer dado pessoal apesar do aviso da tela.
+3. **Atendimento ao estudante:**
+   - o pedido precisa vir do e-mail da própria conta;
+   - a consulta só lê os dados, nunca altera uma tentativa (RM-09);
+   - o motivo fica registrado.
+4. **Saída de alguém da equipe:**
+   - a trilha editorial não muda, porque já aponta para a pessoa editorial (M-31);
+   - o nome no cadastro vira um código;
+   - quem pode ver a correspondência é o administrador com concessão individual, e cada consulta fica registrada.
+5. **Respostas desvinculadas** (a pendência "avaliar se a anonimização é real"):
+   - **o que fica:** depois da exclusão de uma conta, ficam a versão da questão, a alternativa, o resultado, a modalidade e o mês (M-21, M-36), sem nenhum identificador;
+   - **o risco:** num beta pequeno, entre colegas que se conhecem, alguém de dentro ainda poderia deduzir de quem eram aquelas respostas. A LGPD só considera anonimizado o dado que não pode ser revertido por meios razoáveis (art. 12);
+   - **decisão:** durante o beta, essas respostas são tratadas como **dado pessoal desvinculado**, e não como dado anônimo. Elas nunca aparecem uma a uma para ninguém e só alimentam os números agregados, com o limite de 10. A política de privacidade diz "desvinculadas e usadas só para estatística", sem prometer anonimato (bloco 3). Rever quando a base de usuários crescer.
+
+### E. O que ficou para outros blocos
+
+- **Bloco 3:** guardar ou não a prova de aceite dos termos depois da exclusão (M-21); prazo de guarda da correspondência entre código e nome. Aprovado em 2026-11-24, entra com o registro do bloco 3.
+- **Consulta jurídica (D-002):** que metadados de uma questão retirada por licenciamento podem aparecer no histórico.
+- **Bloco 4:** formato dos eventos de segurança e dos registros de consulta. Resolvido na D-032: eventos na seção 4.C e auditoria de ações sensíveis no banco (4.C.2, M-39).
+- **Dependência operacional que já existia (D-015):** publicar exige um revisor diferente do autor (FLUXO-03). No beta, se o usuário for autor e administrador, outra pessoa precisa ser revisora.
+
+### F. Exceções ao ASVS
+
+Nenhuma neste bloco.
+
+### G. O que blocos posteriores mudaram
+
+- **Bloco 1 (D-007):** o segundo fator exigido do papel de equipe é o do CONTA-31 (passkey preferencial, app autenticador como alternativa).
+- **Bloco 4 (D-032):** as consultas ao autor de um reporte, ao estudo individual e à correspondência entre código e nome entram na auditoria de ações sensíveis, gravada na mesma transação da consulta (4.C.2, M-39, RNF-37).
+- **Bloco 3 (aprovado em 2026-11-24; detalhes no registro dele):**
+  - na exclusão da conta, as respostas viram contagens de pessoas distintas por versão e alternativa, e as tentativas são apagadas; as contagens continuam tratadas como dado pessoal desvinculado, e o item D.5 passa a valer para elas;
+  - a estatística da equipe ganha regras contra dedução: população definida, sem filtro de período nem de modalidade, contagens nunca exibidas à parte e supressão complementar (se uma alternativa aparece como "menos de 3", a segunda menor também é ocultada);
+  - concessões sensíveis expiram depois de 90 dias sem uso, papéis de equipe parados são suspensos depois de 6 meses e os privilégios passam por revisão semestral.
+
+### H. Critérios no catálogo
+
+Os critérios CONTA-56 a CONTA-69 de `docs/requisitos-mvp.md` transcrevem as decisões deste bloco no formato EARS. O CONTA-19 continua valendo e ganhou o limiar e o método nos CONTA-56 a CONTA-59.
+
+### I. Efeitos nos documentos
+
+Registrado em 2026-11-25, numa branch de trabalho, para revisão e merge do usuário:
+
+- `docs/requisitos-mvp.md`: critérios CONTA-56 a CONTA-69; pendências resolvidas: CONTA-19, a matriz de permissões, o M-31, o autor do reporte e a análise da anonimização.
+- `docs/modelo-conceitual.md`: notas nas pendências da Etapa 6 (M-31 e respostas desvinculadas).
+- Este documento: seção 2 e cabeçalho.
+- `docs/decisions.md` (histórico) e `README.md`.
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -1801,3 +1912,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-24: bloco 6 aprovado ("Aprovar bloco 6"), depois das correções do usuário. Seção 6 registrada (P6-01 a P6-28, V35 a V51, Jur-25) e seção 5.4 (autorizações recorrentes e operações sensíveis). Notas em 5.I.1, 5.I.2, 5.L e na V33. As recomendações sobre a regra da `main` ficam pendentes de decisão. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho."). Nada foi alterado no GitHub ou na AWS e nenhum código foi implementado.
 - 2026-11-25: as quatro inconsistências da seção 5.P foram resolvidas pelo usuário ("Aprovar"), depois de duas revisões pedidas por ele. Resoluções registradas na própria 5.P, com as verificações V52 a V55; notas em 4.H.3 (inclusive a correção do item que ainda punha o banco no disco principal), 4.H.7, 5.B.1, 5.C.2, 5.G.4, 5.K.1, 5.Q, 5.4.4 e 6.O. O prazo de 7 dias para a revisão depois de uma emergência segue como proposta não aprovada. Os ajustes nos textos dos blocos 1 e 3 entram no registro deles. Registro autorizado pelo usuário ("Sim, registrar").
 - 2026-11-25: bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado na seção 1, a partir do texto da versão final aprovada, com a seção D (o que os blocos 4 a 6 e a resolução da 5.P.3 mudaram) e o ajuste do procedimento de emergência (B.5). Critérios CONTA-26 a CONTA-55. Os blocos 2 e 3 seguem aprovados e sem registro. Registro pedido pelo usuário ("vamos pra próxima parte").
+- 2026-11-25: bloco 2 (permissões e privacidade), aprovado em 2026-11-24 ("Aprovar bloco 2"), registrado na seção 2, a partir do texto da proposta aprovada, com a seção G (o que os blocos 1, 3 e 4 mudaram). Critérios CONTA-56 a CONTA-69. O bloco 3 segue aprovado e sem registro. Registro pedido pelo usuário ("está perfeito vamos seguir!").
