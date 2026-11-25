@@ -1,10 +1,12 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 2 (permissões e privacidade), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
+**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 2 (permissões e privacidade), 3 (LGPD), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
 
 **Aprovado (bloco 1)**: 2026-11-24 - usuário: "Aprovar bloco 1"
 
 **Aprovado (bloco 2)**: 2026-11-24 - usuário: "Aprovar bloco 2"
+
+**Aprovado (bloco 3)**: 2026-11-24 - usuário: "Aprovar bloco 3"
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
 
@@ -20,12 +22,12 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 |---|---|---|
 | 1 | Contas e acesso | Aprovado em 2026-11-24 ("Aprovar bloco 1") e registrado em 2026-11-25 (D-007); seção 1 |
 | 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2") e registrado em 2026-11-25; seção 2 |
-| 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3"); registro pendente |
+| 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3") e registrado em 2026-11-25 (D-009); seção 3. Critérios e modelo conceitual no PR seguinte |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
 | 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
 | 6 | Qualidade e cadeia de suprimentos | Aprovado e registrado em 2026-11-24 (D-034); seção 6 e seção 5.4 |
 
-O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estavam registradas. As do bloco 1 (o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens e o procedimento de emergência do único administrador) estão na seção 1 desde 2026-11-25. As do bloco 2 (a matriz de permissões e as regras de privacidade) estão na seção 2 desde 2026-11-25. As do bloco 3 (entre elas, a tabela B.12, com o destino de cada registro na exclusão da conta, e a revisão semestral de privilégios) entram quando o registro desse bloco for autorizado.
+O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estavam registradas. As do bloco 1 (o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens e o procedimento de emergência do único administrador) estão na seção 1 desde 2026-11-25. As do bloco 2 (a matriz de permissões e as regras de privacidade) estão na seção 2 desde 2026-11-25. As do bloco 3 (entre elas, a tabela B.12, com o destino de cada registro na exclusão da conta, e a revisão semestral de privilégios) estão na seção 3 desde 2026-11-25.
 
 ## Convenções
 
@@ -33,7 +35,7 @@ O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não
 - **Inferência**: conclusão técnica do consultor, sem confirmação em documentação.
 - **Testar**: só uma prova na implementação confirma.
 - **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5; a situação dessas está na seção 5.M. A V35 a V51 vêm do bloco 6 (seção 6.L), e a V52 a V55, das resoluções da seção 5.P. Nenhuma foi concluída.
-- **Jur-n**: questão para o advogado (seções 4.M, 5.N e 6.M). A análise jurídica deste documento é preliminar.
+- **Jur-n**: questão para o advogado (seções 3.E, 4.M, 5.N e 6.M). A Jur-01 a Jur-16 vêm do bloco 3. A análise jurídica deste documento é preliminar.
 - **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P). As quatro registradas no bloco 5 foram resolvidas pelo usuário em 2026-11-25.
 
 ## 1. Contas e acesso (bloco 1, D-007)
@@ -282,7 +284,7 @@ Uma conta pode acumular papéis (CONTA-15), mas cada ação segue a própria reg
 
 ### E. O que ficou para outros blocos
 
-- **Bloco 3:** guardar ou não a prova de aceite dos termos depois da exclusão (M-21); prazo de guarda da correspondência entre código e nome. Aprovado em 2026-11-24, entra com o registro do bloco 3.
+- **Bloco 3:** guardar ou não a prova de aceite dos termos depois da exclusão (M-21); prazo de guarda da correspondência entre código e nome. Registrado na seção 3: os dois seguem para o advogado (Jur-05 e Jur-06).
 - **Consulta jurídica (D-002):** que metadados de uma questão retirada por licenciamento podem aparecer no histórico.
 - **Bloco 4:** formato dos eventos de segurança e dos registros de consulta. Resolvido na D-032: eventos na seção 4.C e auditoria de ações sensíveis no banco (4.C.2, M-39).
 - **Dependência operacional que já existia (D-015):** publicar exige um revisor diferente do autor (FLUXO-03). No beta, se o usuário for autor e administrador, outra pessoa precisa ser revisora.
@@ -295,7 +297,7 @@ Nenhuma neste bloco.
 
 - **Bloco 1 (D-007):** o segundo fator exigido do papel de equipe é o do CONTA-31 (passkey preferencial, app autenticador como alternativa).
 - **Bloco 4 (D-032):** as consultas ao autor de um reporte, ao estudo individual e à correspondência entre código e nome entram na auditoria de ações sensíveis, gravada na mesma transação da consulta (4.C.2, M-39, RNF-37).
-- **Bloco 3 (aprovado em 2026-11-24; detalhes no registro dele):**
+- **Bloco 3 (aprovado em 2026-11-24; detalhes na seção 3):**
   - na exclusão da conta, as respostas viram contagens de pessoas distintas por versão e alternativa, e as tentativas são apagadas; as contagens continuam tratadas como dado pessoal desvinculado, e o item D.5 passa a valer para elas;
   - a estatística da equipe ganha regras contra dedução: população definida, sem filtro de período nem de modalidade, contagens nunca exibidas à parte e supressão complementar (se uma alternativa aparece como "menos de 3", a segunda menor também é ocultada);
   - concessões sensíveis expiram depois de 90 dias sem uso, papéis de equipe parados são suspensos depois de 6 meses e os privilégios passam por revisão semestral.
@@ -312,6 +314,301 @@ Registrado em 2026-11-25, numa branch de trabalho, para revisão e merge do usu�
 - `docs/modelo-conceitual.md`: notas nas pendências da Etapa 6 (M-31 e respostas desvinculadas).
 - Este documento: seção 2 e cabeçalho.
 - `docs/decisions.md` (histórico) e `README.md`.
+
+## 3. LGPD (bloco 3, D-009)
+
+### 3.1 Como o bloco foi decidido
+
+- **Quatro escolhas do usuário** em 2026-11-24, todas iguais à recomendação: "Você, pessoa física, no beta"; "Guardar só contagens"; "Excluir após 24 meses sem uso"; "Claude rascunha, advogado revisa".
+- **Revisão externa** trazida pelo usuário ("Vamos revisar certinho pra eu nao ter problemas futuros"). O consultor conferiu as Resoluções CD/ANPD nº 15/2024 e nº 2/2022 em republicações (LegisWeb e Normas Brasil, não no Diário Oficial), o que corrigiu três afirmações dele: os critérios de comunicação de incidente, os prazos em dobro e os prazos dos direitos do titular.
+- **Seis ajustes pedidos pelo usuário** antes da aprovação: a exceção desatualizada do prazo em dobro; a população da estatística da equipe; a garantia de que sair não muda os números; a supressão também nas alternativas removidas; o destino de todos os registros na exclusão (B.12); a revisão periódica de privilégios inativos.
+- **Aprovação:** "Aprovar bloco 3" (2026-11-24), sobre a versão consolidada com os seis ajustes.
+- **Registro** em 2026-11-25. Os critérios do catálogo e as mudanças no modelo conceitual (seção C) entram num PR seguinte. A seção F traz o que blocos posteriores mudaram.
+- **A análise jurídica deste bloco é preliminar.** As bases legais são propostas para o advogado, e nenhuma pergunta da seção E impede fechar o bloco no planejamento; elas impedem abrir o beta.
+
+### B.1 Decisões aprovadas
+
+- **Controlador:** o usuário, pessoa física, no beta.
+- **Na exclusão da conta, as respostas viram contagens.**
+- **Exclusão após 24 meses sem uso**, com aviso 30 dias antes.
+- **Termos e política:** o Claude rascunha; um advogado revisa.
+
+### B.2 Exclusão de conta: contagens e reportes
+
+**Contagens.** Na mesma transação da exclusão, o sistema primeiro soma e depois apaga as tentativas.
+
+- **Pessoas distintas:** para cada versão da questão, conta quantas pessoas responderam e quantas escolheram cada alternativa.
+- **Qual resposta conta:** a primeira resposta de cada pessoa em cada versão, por coerência com o DES-01. Não muda nenhuma regra de desempenho do estudante.
+- **Quem entra na estatística da equipe:** para cada versão de uma questão, as **pessoas distintas** cuja **primeira resposta naquela versão** foi dada no treino ou no simulado.
+  - **Entram:** contas ativas e desativadas; a soma das contas excluídas, pela mesma regra; respostas dadas com gabarito preliminar.
+  - **Ficam de fora:** questões em branco no simulado, porque não são tentativas (SIM-07); quem é autor, cadastrou ou revisou qualquer versão daquela questão, porque já sabia a resposta, regra que a ligação com a pessoa editorial permite (M-38); conteúdo de teste (M-29), que nunca é publicado.
+  - **Período:** desde sempre, sem recorte.
+- **Recálculo:** uma mudança de gabarito sempre cria versão nova (FLUXO-04, CONT-15). As contagens de cada versão continuam válidas, e a contagem por alternativa permite reavaliar as respostas antigas pelo gabarito novo, pela identidade das alternativas (M-30). Alternativa que não existe mais fica fora do cálculo, com a quantidade à vista, como no M-37.
+- **Limites do bloco 2:** 10 pessoas no mínimo, "menos de 3" por alternativa e atualização diária (seção 2.D.1).
+- **Proteção contra dedução:**
+  - a equipe nunca vê as contagens separadas das respostas das contas ativas;
+  - a estatística da equipe não tem filtro por período nem por modalidade, já que as contagens não têm data nem modalidade e um filtro permitiria subtrair;
+  - **supressão complementar:** se uma alternativa aparece como "menos de 3", a segunda menor também é ocultada, para que o total menos as outras não revele o valor;
+  - **alternativas removidas:** ao reavaliar respostas antigas pelo gabarito novo, a quantidade de respostas a alternativas que não existem mais aparece como "fora do cálculo" e segue as mesmas regras: abaixo de 3, "menos de 3"; se um valor oculto puder ser deduzido pela subtração, o segundo menor também é ocultado. Isso vale também ao exibir a distribuição de versões antigas.
+- **Sair não muda os números:**
+  - uma só função calcula as respostas das contas ativas e soma a contribuição de quem sai; na exclusão, a primeira resposta da pessoa em cada versão passa do lado "contas ativas" para o lado "contagens", com a mesma alternativa;
+  - quem estava fora pela regra acima continua fora e não entra nas contagens;
+  - o total exibido fica igual, tanto na saída voluntária quanto na exclusão por inatividade;
+  - os números da equipe também não mudam por causa dos reportes, porque o reporte concluído guarda o registro;
+  - **prova:** um critério testável, que vira teste automático (D-026), diz que a estatística da equipe antes e depois de qualquer exclusão é idêntica.
+- **Depois da exclusão:** nenhuma resposta individual pode ser consultada, por construção.
+- **Natureza das contagens:** agregar não é, automaticamente, anonimizar. Enquanto houver possibilidade razoável de identificação indireta (art. 12), as contagens são tratadas como dado pessoal desvinculado.
+- **Tensão que fica para o advogado (Jur-04):** se elas não contarem como anonimizadas, guardá-las depois da exclusão também esbarra no art. 16, IV. O plano B é apagar a contribuição de quem saiu, e o desenho guarda as contagens à parte justamente para permitir isso.
+
+**Reportes de quem exclui a conta.**
+
+- **Aberto:** o texto fica sem autor até o editor concluir.
+- **Concluído:** o texto livre é apagado. Ficam questão, versão, situação e mês.
+- **Exceção:** obrigação legal, exercício regular de direitos ou investigação legítima, como um abuso. O administrador marca o reporte antes de concluir, com o motivo; o acesso fica restrito e registrado; o prazo é definido na marcação e revisto a cada 6 meses, com teto a definir com o advogado (Jur-06).
+- **O REP-03 continua valendo para contas ativas.** Sem conta, não há a quem devolver a resposta.
+
+### B.3 Inventário dos dados
+
+As bases legais são todas **propostas para o advogado** (Jur-01).
+
+| Dado | Para quê | Base legal proposta | Guarda |
+|---|---|---|---|
+| E-mail, senha (Argon2id), apelido | Conta e acesso | Execução de contrato (art. 7º, V) | Enquanto a conta existir |
+| Tentativas, desempenho, marcações, sessões de estudo | Serviço de estudo | Execução de contrato | Enquanto a conta existir; depois, só as contagens (B.2) |
+| Contagens de contas excluídas | Estatística das questões | Legítimo interesse (art. 7º, IX), se não forem anonimizadas | Por tempo indefinido; plano B em B.2 |
+| Reportes | Corrigir conteúdo e responder | Execução de contrato | Conforme B.2 |
+| Aceite dos termos | Prova do aceite | Exercício regular de direitos (art. 7º, VI) | Enquanto a conta existir; depois, pergunta para o advogado (Jur-05) |
+| Convites | Permitir o cadastro | Procedimentos preliminares de contrato a pedido do titular (art. 7º, V), se o convite for a pedido; senão, legítimo interesse | Ver B.9 e B.12 |
+| Sessões e aparelhos confiáveis | Segurança da conta | Legítimo interesse | 30 dias a sessão do estudante, 90 dias o aparelho |
+| Logs e registros de segurança | Segurança e prevenção de fraude | Legítimo interesse, com avaliação escrita | Bloco 4 (seção 4) |
+| Pessoa editorial e correspondência entre código e nome | Autoria e auditoria | Legítimo interesse e exercício regular de direitos | Prazo da correspondência: advogado (Jur-06) |
+| Arquivo de exportação | Atender acesso e portabilidade (arts. 18 e 19) | Cumprimento de obrigação legal (art. 7º, II) | 7 dias |
+| Lista de exclusões | Reaplicar exclusões após restaurar backup | Cumprimento de obrigação legal (eliminação, arts. 16 e 18) | Substituída em 2026-11-25 pelos eventos de exclusão do grupo `seguranca`, de 180 dias (resolução da 5.P.1; ver B.8) |
+| Backups | Recuperação | Legítimo interesse | 30 dias (RNF-09) |
+
+### B.4 Quem mais toca nos dados
+
+- **AWS:** guardar em São Paulo **não elimina** fluxos internacionais.
+  - Esses fluxos podem vir do suporte técnico, de subprocessadores, de acesso remoto e de serviços globais da conta.
+  - Ação: conferir os termos de serviço, o adendo de proteção de dados e a lista de subprocessadores da AWS.
+  - Avaliar se cabe o regulamento de transferência internacional da ANPD. O consultor acredita que seja a Resolução CD/ANPD nº 19/2024, sem ter confirmado (Jur-09).
+- **Pwned Passwords:**
+  - a senha continua guardada só como Argon2id;
+  - na consulta, o SHA-1 da senha digitada é calculado só na memória, e só os 5 primeiros caracteres vão para o endpoint de faixa;
+  - a resposta, com o cabeçalho que pede preenchimento para não revelar nada pelo tamanho, é comparada no servidor;
+  - o SHA-1 completo nunca é transmitido, guardado nem registrado em log;
+  - o endpoint NTLM não é usado;
+  - a consulta complementa as verificações locais do bloco 1 (seção 1.B.1) e não as substitui;
+  - se o prefixo é dado pessoal fica para o advogado (Jur-07).
+- **Fontes:**
+  - Literata e Figtree ficam no servidor do MedTeca, com a versão fixada e o arquivo de licença conferido na hora de baixar;
+  - regra geral: nenhuma chamada a terceiro sem necessidade, inclusive scripts e CDNs;
+  - as páginas de referência em `docs/design/` usam Google Fonts, mas são documentação, não o app.
+- **Rastreamento de erros:** resolvido no bloco 4, sem serviço externo (D-032).
+- **Cookies:** só os essenciais (sessão, CSRF e aparelho confiável), informados na política, sem banner. O advogado confirma (Jur-08).
+
+### B.5 Direitos do titular
+
+| Pedido | Prazo pela LGPD | Para pequeno porte, se o enquadramento for confirmado |
+|---|---|---|
+| Confirmação ou acesso, formato simplificado (art. 19, I) | Imediatamente | Até 15 dias (Res. 2, art. 15) |
+| Declaração clara e completa (art. 19, II) | Até 15 dias | Em dobro, até 30 dias (Res. 2, art. 14, III) |
+| Demais direitos do art. 18 (correção, eliminação, portabilidade, informação, oposição) | "Nos prazos e nos termos previstos em regulamento" (art. 18, §5º); o consultor não confirmou se a ANPD já publicou esse regulamento (Jur-13) | Em dobro, "nos termos de regulamentação específica" (Res. 2, art. 14, I) |
+
+- **No app:** acesso, exportação, exclusão e apelido são atendidos na hora.
+- **Pelo canal de privacidade:** a meta interna é 15 dias para qualquer pedido, sem contar com o prazo em dobro, o que cumpre o prazo mais curto confirmado.
+- **Correção de e-mail:** pelo canal, depois de confirmar o endereço antigo e o novo.
+- **Revogação de consentimento:** não se aplica, porque nenhum tratamento usa consentimento.
+
+### B.6 Incidentes (Res. CD/ANPD nº 15/2024)
+
+**Quando é preciso comunicar (art. 5º).** Só quando o incidente puder afetar significativamente os titulares **e**, ao mesmo tempo, envolver ao menos um destes: dados sensíveis; dados de crianças, adolescentes ou idosos; dados financeiros; dados de autenticação em sistemas; dados sob sigilo; dados em larga escala.
+
+"Afetar significativamente" inclui impedir o exercício de direitos ou o uso do serviço, ou causar dano material ou moral (discriminação, dano à imagem, fraude, roubo de identidade).
+
+**No MedTeca:** o critério mais provável é **dados de autenticação**: e-mails com resumos de senha, sessões e segredos de segundo fator. Um vazamento disso que permita tomar contas tende a exigir comunicação. Uma queda curta sem acesso a dados, ou um incidente contido sem dados afetados, tende a não exigir. **Todo incidente é registrado mesmo assim.**
+
+| Etapa | Prazo geral | Pequeno porte, se confirmado |
+|---|---|---|
+| Comunicar a ANPD (art. 6º) | 3 dias úteis a partir de quando se soube que dados pessoais foram afetados | 6 dias úteis (art. 6º, §8º) |
+| Comunicar os titulares (art. 9º) | 3 dias úteis | 6 dias úteis (art. 9º, §6º) |
+| Complementar a comunicação à ANPD (art. 6º, §3º) | 20 dias úteis | 40 dias úteis (art. 6º, §8º) |
+| Declarar à ANPD que os titulares foram avisados (art. 9º, §4º) | Até 3 dias úteis depois do fim do prazo dos titulares | O texto não fala em dobro |
+| Registrar o incidente, comunicado ou não (art. 10) | Por no mínimo 5 anos, com o conteúdo mínimo do §1º, inclusive o motivo de não comunicar | Igual |
+
+- **Exceção ao prazo em dobro:** a Resolução 15 (art. 2º) reescreveu o art. 14, II da Resolução 2, e a exceção de integridade física ou moral saiu da redação. Por isso ela não é aplicada.
+- **Regra prática:** trabalhar sempre com os prazos gerais.
+
+### B.7 Exclusão por inatividade e revisão de privilégios
+
+- **O que conta como uso:** um login com sucesso, ou qualquer ação feita pela própria pessoa já conectada, como abrir uma questão. Uma sessão aberta sem uso não conta. O "último uso" é guardado só com a data do dia.
+- **Estudante:** 24 meses sem uso. O aviso sai 30 dias antes, e a exclusão segue o mesmo procedimento da exclusão voluntária (CONTA-11 e B.2).
+- **Equipe:** não há exclusão automática, porque a conta está ligada a responsabilidades editoriais. Os privilégios seguem a revisão abaixo, que substitui a regra de 24 meses para eles.
+- **Aviso que não chega:** a exclusão segue mesmo assim, porque o aviso é uma cortesia e não uma condição. A falha de entrega fica registrada. O advogado confirma (Jur-11).
+- **Cancelar:** qualquer login ou uso no período cancela. O e-mail leva à tela de entrada, sem link de cancelamento com código.
+- **Depois de excluída:** a conta não volta. Um novo convite cria uma conta vazia.
+- **Revisão periódica de privilégios inativos:**
+  - **concessões sensíveis** (ver logs, atestar autorização, ver a correspondência entre código e nome, ver o autor de reporte) expiram sozinhas depois de **90 dias sem uso**; conceder de novo pede a passkey (bloco 1);
+  - **papéis de equipe** (editor, revisor) ficam suspensos depois de **6 meses sem uso**, e só o administrador reativa; a parte de estudante da conta continua normal;
+  - **revisão a cada 6 meses:** o administrador revê a lista de papéis e concessões, com a data do último uso, retira o que não é mais necessário e registra a revisão na trilha só de inclusão;
+  - **o administrador** não se suspende sozinho, para ninguém trancar o sistema; o sistema avisa se ele passar 90 dias sem uso; com um único administrador, a revisão é dele mesmo; quando houver um segundo, um revisa o outro.
+
+### B.8 Backups e lista de exclusões
+
+Texto aprovado em 2026-11-24:
+
+- **Finalidade:** um dado excluído pode ficar nos backups por até 30 dias. Ao restaurar um backup, o sistema reaplica todas as exclusões feitas depois dele.
+- **Conteúdo:** identificador interno da conta e data da exclusão. Nada mais.
+- **Onde fica:** fora do banco e fora dos backups do banco, porque um backup restaurado traria uma lista velha. Fica cifrada, com acesso só para o procedimento de restauração, e cada uso é registrado.
+- **Prazo e descarte:** cada linha é apagada sozinha quando não houver mais backup anterior àquela exclusão, ou seja, 30 dias depois dela.
+- **Não é anônima:** junto com um backup antigo, o identificador leva à pessoa. Por isso é tratada como dado pessoal, com acesso restrito, até ser apagada.
+
+**Substituída em 2026-11-25 (resolução da 5.P.1).** A lista própria não é criada. A fonte única para reaplicar exclusões são os eventos de exclusão solicitada e concluída do grupo `seguranca`, guardados por 180 dias, com o marco do backup, processamento idempotente e bloqueio em caso de lacuna (seção 5.P.1; RNF-90 a RNF-94). A finalidade continua a mesma.
+
+### B.9 Controlador, encarregado, convites e idade
+
+- **Controlador:** o usuário, pessoa física, no beta.
+  - A LGPD vale para o beta. Ele não é uso "exclusivamente particular e não econômico" (Res. 2, art. 1º, parágrafo único), porque há intenção comercial. O advogado confirma (Jur-03).
+  - A passagem para uma empresa é formalizada: instrumento de transferência da base; revisão dos contratos com operadores; definição de responsabilidades; aviso aos titulares; nova política.
+- **Encarregado:** a pessoa física é agente de pequeno porte (Res. 2, art. 2º) e pode não nomear encarregado (art. 11), desde que tenha canal de contato.
+  - **A dispensa não se aplica a tratamento de alto risco:** um critério geral (larga escala; afetar significativamente) mais um específico (tecnologia emergente; vigilância de área pública; decisão só automatizada; dados sensíveis ou de crianças, adolescentes e idosos).
+  - **Hipótese, não conclusão:** o MedTeca não se enquadra, já que é um beta pequeno, sem dado sensível e sem decisão automatizada com efeito sobre a pessoa. O advogado avalia (Jur-02).
+  - O canal de privacidade existe de qualquer jeito, e a dispensa não tira as demais obrigações.
+  - A Resolução 2 também permite registro de operações simplificado (art. 9º).
+- **Convites:**
+  - só se convida quem pediu para participar, e o convite registra quando e por onde foi o pedido;
+  - o e-mail do convite diz quem convidou e por quê, traz o link da política e como pedir a exclusão do endereço;
+  - o convite não usado é apagado 30 dias depois de vencer.
+- **Idade:**
+  - 18 anos é decisão de produto, e não garante que nenhum menor se cadastre;
+  - o aceite dos termos inclui "Declaro ter 18 anos ou mais", e o beta por convite reduz o risco;
+  - se o MedTeca souber de um menor, suspende o acesso, avisa por e-mail e exclui pelo procedimento normal, a menos que o advogado oriente outro caminho (art. 14; Jur-12).
+
+### B.10 Documentos da Etapa 7
+
+Todos são rascunhos do Claude, revisados pelo advogado antes do beta: política de privacidade; termos de uso; registro das operações de tratamento; avaliação do legítimo interesse dos registros de segurança; plano de resposta a incidentes.
+
+### B.11 Exceções ao ASVS
+
+Nenhuma neste bloco.
+
+### B.12 Destino de cada registro na exclusão da conta
+
+| Registro | Na exclusão da conta |
+|---|---|
+| Tentativas, com a fotografia histórica, os horários do aparelho e do servidor e a situação de aceitação (M-07, M-32) | Somadas às contagens e apagadas, na mesma transação |
+| Sessões de treino e a sequência delas (M-10) | Apagadas |
+| Simulados: questões sorteadas, início, pausas, entrega e questões em branco (M-11, M-12) | Apagados; questões em branco não entram em nenhuma contagem |
+| Marcações | Apagadas |
+| Desempenho | Não existe guardado, porque é calculado na consulta (M-09). Regra: nenhum cache por pessoa pode sobreviver à exclusão |
+| Riscos | Só existem no aparelho (RISC-06). O app apaga os dados locais da conta ao sair, e também quando percebe que a sessão deixou de existir |
+| Arquivo de exportação | Apagado na hora, sem esperar os 7 dias |
+| Registro de respostas afetadas por mudança de gabarito (CONT-20) | Os identificadores da pessoa saem da lista, e a quantidade total de respostas afetadas é mantida, para o registro do evento continuar verdadeiro |
+| Reportes | Como em B.2 |
+| Sessões de login, aparelhos confiáveis, "último uso" | Apagados |
+| Aceite dos termos | Apagado, salvo orientação contrária do advogado (Jur-05) |
+| Convite já usado | Apagado; o convite usado também é apagado 30 dias depois do uso |
+| Tarefas pendentes da conta (e-mails e exportação, D-024) | Canceladas e apagadas |
+| Logs e registros de segurança com o identificador interno | Seguem o prazo do bloco 4, sem prazo extra |
+| Auditoria de ações sensíveis (M-39) e HMACs de e-mails sem conta (4.D.3) | Expiram nos prazos normais do bloco 4, sem exclusão antecipada (linhas acrescentadas no registro, conforme 4.H.8) |
+| E-mails já enviados pela AWS | Seguem a guarda do operador. Conferir na consulta, junto com o adendo da AWS (Jur-09) |
+| Backups | Até 30 dias; na restauração, as exclusões são reprocessadas pelos eventos do grupo `seguranca` (resolução da 5.P.1) |
+| Pessoa editorial, se a conta era da equipe | Vira código (seção 2.D.4) |
+| Estatística da equipe | Sem dado por pessoa; não muda (B.2) |
+
+### C. Mudanças em decisões anteriores
+
+Aprovadas com o bloco. Os registros no catálogo e no modelo conceitual entram no PR seguinte, com ID novo para cada regra mudada e a regra antiga marcada como substituída.
+
+| ID | Regra anterior | Regra aprovada | Justificativa |
+|---|---|---|---|
+| CONTA-12 | Manter as respostas sem identificação, para estatística | Somar em contagens de pessoas distintas por versão e alternativa, depois apagar as tentativas | Art. 16, IV e art. 12 |
+| CONTA-25 | Reduzir ao mês as datas das tentativas preservadas | Removido: não sobra tentativa | Consequência do CONTA-12 |
+| M-07 | Na exclusão, a fotografia histórica "continua intacta" | A tentativa e sua fotografia são apagadas depois da contagem | Consequência do CONTA-12 |
+| M-21 | Tentativas preservadas e desvinculadas | Tentativas apagadas depois da contagem; o resto não muda | Idem |
+| M-22 | O reporte "continua, sem autor" | Aberto: sem autor até concluir. Concluído: texto apagado, ficam questão, versão, situação e mês. Exceções restritas | Texto livre pode identificar; art. 16 |
+| M-36 | Datas das tentativas reduzidas ao mês | Substituída: não sobra tentativa | Consequência |
+| RM-13 | A exclusão desvincula tentativas e reportes | A exclusão soma e apaga as tentativas; os reportes seguem o M-22 novo | Idem |
+| Bloco 2, respostas desvinculadas | Tratadas como dado pessoal desvinculado | O mesmo tratamento passa a valer para as contagens | Art. 12 |
+
+**Sem mudança de regra:**
+
+- **M-09:** o desempenho continua calculado na consulta. Conta excluída não tem desempenho, e a estatística da equipe é a visão pré-calculada que o M-09 já permite.
+- **DES-01, DES-11 a DES-13, M-37:** valem como estão para contas ativas.
+- **RM-09:** a fotografia nunca muda. Apagar não é alterar.
+- **REP-03:** sem mudança.
+- **CONT-20:** os registros de respostas afetadas por mudança de gabarito perdem os identificadores da pessoa e mantêm a quantidade total (B.12).
+
+### D. Propostas aprovadas junto com o bloco
+
+1. A estatística da equipe usa a primeira resposta de cada pessoa em cada versão.
+2. A proteção contra dedução: sem filtro de período nem de modalidade, contagens nunca exibidas à parte e supressão complementar.
+3. A regra dos reportes concluídos e as exceções de guarda.
+4. A definição de uso, a regra da equipe e do administrador, o aviso que não chega e o cancelamento na inatividade.
+5. A lista de exclusões: conteúdo, local, prazo e acesso. Substituída pela resolução da 5.P.1 (B.8).
+6. Convite só a pedido, com aviso de privacidade, apagado 30 dias depois de vencer.
+7. A declaração de idade e o tratamento de menor identificado.
+8. A meta interna de 15 dias para pedidos pelo canal.
+9. O detalhe técnico do Pwned Passwords: SHA-1 só em memória, cabeçalho de preenchimento, sem NTLM.
+10. As bases legais da tabela B.3, como proposta ao advogado.
+11. A formalização da passagem para uma empresa.
+12. A população da estatística da equipe e a garantia de que ela não muda com a exclusão.
+13. O destino de cada registro na exclusão, inclusive limpar os dados locais do aparelho e apagar o convite usado.
+14. A expiração das concessões sensíveis, a suspensão dos papéis parados e a revisão semestral.
+
+### E. Perguntas para o advogado
+
+Pendentes de avaliação profissional; acompanham a consulta jurídica de D-002 e as questões Jur-17 a Jur-25. Nenhuma impede fechar o bloco no planejamento, mas impedem abrir o beta.
+
+- **Jur-01.** Bases legais de cada tratamento (B.3).
+- **Jur-02.** Enquadramento como agente de pequeno porte e avaliação de alto risco (Res. 2, arts. 3º e 4º).
+- **Jur-03.** Se o beta pode ser considerado não econômico, o que o consultor propõe que não seja.
+- **Jur-04.** Se as contagens contam como anonimizadas (art. 12) e se podem ser guardadas depois da exclusão (art. 16, IV).
+- **Jur-05.** Guarda da prova de aceite depois da exclusão.
+- **Jur-06.** Prazo de guarda da correspondência entre código e nome, e teto das exceções de reportes.
+- **Jur-07.** Se o prefixo enviado ao Pwned Passwords é dado pessoal.
+- **Jur-08.** Cookies essenciais sem consentimento.
+- **Jur-09.** AWS: transferência internacional, adendo, subprocessadores e suporte; aplicabilidade da Resolução CD/ANPD nº 19/2024, se for esse o número.
+- **Jur-10.** Convites: base legal, para quem pediu e para quem não pediu.
+- **Jur-11.** Exclusão por inatividade quando o aviso não chega.
+- **Jur-12.** Tratamento de menor identificado (art. 14).
+- **Jur-13.** Prazos dos demais direitos do art. 18: há regulamento publicado?
+- **Jur-14.** Conferir no Diário Oficial o texto das Resoluções CD/ANPD nº 15/2024 e nº 2/2022, lidas em republicações.
+- **Jur-15.** Metadados de questão retirada por licenciamento (D-002).
+- **Jur-16.** Revisão dos termos de uso e da política de privacidade.
+
+Na versão aprovada eram 17 perguntas; a que tratava da exceção de integridade física ou moral saiu no primeiro ajuste, e a numeração acima segue a ordem das 16 que ficaram.
+
+### F. O que blocos posteriores mudaram
+
+- **Bloco 4 (D-032):** o rastreamento de erros ficou sem serviço externo; os registros de segurança têm prazos e base próprios (seção 4); a auditoria de ações sensíveis e os HMACs entraram na tabela B.12, conforme 4.H.8.
+- **Bloco 5 (D-033):** a AWS passa a incluir também CloudWatch Logs, S3, ECR, SSM e IAM Roles Anywhere, todos em São Paulo; a Jur-09 vale para eles. A Jur-24 trata dos backups travados e do teste de restauração com dados reais.
+- **Resolução da 5.P.1 (2026-11-25):** a lista de exclusões (B.8) foi substituída pelos eventos do grupo `seguranca`.
+- **Bloco 6 (D-034):** o repositório é público, e nenhum conteúdo real de questão nem dado pessoal real entra nele (seção 6.J.2).
+
+### G. Efeitos nos documentos
+
+Neste registro (2026-11-25), numa branch de trabalho, para revisão e merge do usuário:
+
+- `docs/decisions.md`: D-009 aprovada, com ADR.
+- `docs/adr/D-009-tratamento-de-dados-pessoais.md`: novo.
+- Este documento: seção 3, cabeçalho e notas nas seções 2.E e 4.H.8.
+- `docs/design-e-ux.md`: nota sobre as fontes servidas pelo próprio servidor.
+- `README.md`: a D-009 sai da lista de decisões pendentes.
+
+No PR seguinte: os critérios do catálogo (inclusive o CONTA-12 substituído e o CONTA-25 removido) e as decisões novas do modelo conceitual que substituem as da tabela C, com nota na D-008.
+
+### H. Fontes
+
+Conferidas pelo consultor em 2026-11-24, em republicações:
+
+- [Resolução CD/ANPD nº 15/2024 (LegisWeb)](https://www.legisweb.com.br/legislacao/?id=458235)
+- [Resolução CD/ANPD nº 15/2024 (Normas Brasil)](https://www.normasbrasil.com.br/norma/resolucao-15-2024_458235.html)
+- [Resolução CD/ANPD nº 2/2022 (Normas Brasil)](https://www.normasbrasil.com.br/norma/resolucao-2-2022_426801.html)
+- [Resolução CD/ANPD nº 2/2022 (gov.br)](https://www.gov.br/palmares/pt-br/midias/arquivos-menu-acesso-a-informacao/legislacao/resolucao-cd-anpd-n2-2022.pdf)
+- [Mattos Filho: regulamento de comunicação de incidente](https://www.mattosfilho.com.br/unico/regulamento-incidente-seguranca/)
+- [Migalhas: agentes de tratamento de pequeno porte](https://www.migalhas.com.br/depeso/360989/a-lgpd-e-os-agentes-de-tratamento-de-pequeno-porte)
+- [Agência Gov: comunicar incidente é preciso, mas nem sempre](https://agenciagov.ebc.com.br/noticias/202507/incidentes-de-seguranca-com-dados-pessoais-comunicar-e-preciso-mas-nem-sempre)
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -774,7 +1071,7 @@ Se nenhuma ferramenta pronta cumprir essas regras, os eventos críticos usam um 
 
 **H.7 Preservação por incidente.** Se houver um incidente, os registros do período são copiados para o registro do incidente e ficam 5 anos. Resolução da 5.P.2 (2026-11-25): além disso, só um snapshot de preservação para investigação, com autorização do usuário e cifragem provada para o tipo exato de snapshot (RNF-89, V53).
 
-**H.8 Exclusão de conta.** Os registros, a auditoria de C.2 e os HMACs de D.3 expiram nos prazos normais, sem exclusão antecipada. Isso entra como linhas novas na tabela B.12 do bloco 3 quando ela for registrada (Jur-21).
+**H.8 Exclusão de conta.** Os registros, a auditoria de C.2 e os HMACs de D.3 expiram nos prazos normais, sem exclusão antecipada. Isso entra como linhas novas na tabela B.12 do bloco 3 quando ela for registrada (Jur-21). Feito em 2026-11-25 (seção 3.B.12).
 
 ### I. Ponto jurídico (análise preliminar, sem conclusão)
 
@@ -1913,3 +2210,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-25: as quatro inconsistências da seção 5.P foram resolvidas pelo usuário ("Aprovar"), depois de duas revisões pedidas por ele. Resoluções registradas na própria 5.P, com as verificações V52 a V55; notas em 4.H.3 (inclusive a correção do item que ainda punha o banco no disco principal), 4.H.7, 5.B.1, 5.C.2, 5.G.4, 5.K.1, 5.Q, 5.4.4 e 6.O. O prazo de 7 dias para a revisão depois de uma emergência segue como proposta não aprovada. Os ajustes nos textos dos blocos 1 e 3 entram no registro deles. Registro autorizado pelo usuário ("Sim, registrar").
 - 2026-11-25: bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado na seção 1, a partir do texto da versão final aprovada, com a seção D (o que os blocos 4 a 6 e a resolução da 5.P.3 mudaram) e o ajuste do procedimento de emergência (B.5). Critérios CONTA-26 a CONTA-55. Os blocos 2 e 3 seguem aprovados e sem registro. Registro pedido pelo usuário ("vamos pra próxima parte").
 - 2026-11-25: bloco 2 (permissões e privacidade), aprovado em 2026-11-24 ("Aprovar bloco 2"), registrado na seção 2, a partir do texto da proposta aprovada, com a seção G (o que os blocos 1, 3 e 4 mudaram). Critérios CONTA-56 a CONTA-69. O bloco 3 segue aprovado e sem registro. Registro pedido pelo usuário ("está perfeito vamos seguir!").
+- 2026-11-25: bloco 3 (LGPD), aprovado em 2026-11-24 ("Aprovar bloco 3"), registrado na seção 3, a partir da versão consolidada aprovada com os seis ajustes do usuário. A lista de exclusões (B.8) aparece como substituída pela resolução da 5.P.1; a tabela B.12 recebeu as linhas previstas em 4.H.8; as perguntas ao advogado viraram Jur-01 a Jur-16. Os critérios e o modelo conceitual entram no PR seguinte, como o usuário escolheu ("Dois PRs"). Registro pedido pelo usuário ("vamos").

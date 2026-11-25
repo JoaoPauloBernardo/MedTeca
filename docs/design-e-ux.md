@@ -79,6 +79,8 @@ Cores do ícone, iguais nos dois modos: fundo oklch(99.5% 0.002 160), fio de bor
 
 Literata para ler, Figtree para usar. Tudo em rem, para acompanhar o tamanho de letra escolhido no aparelho.
 
+No app, as duas fontes são servidas pelo próprio servidor do MedTeca, com a versão fixada e o arquivo de licença conferido na hora de baixar, sem chamada a terceiros (bloco 3 da Etapa 6, D-009). As páginas de referência em `docs/design/` usam Google Fonts porque são documentação, não o app.
+
 | Papel | Fonte | Tamanho | Uso |
 |---|---|---|---|
 | Número de destaque | Literata 600 | 52 px | Taxa de acerto, com números tabulares |
@@ -251,3 +253,4 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 - 2026-11-24: Etapa 6, bloco 4 (D-032). Texto do erro inesperado com código acrescentado aos textos aprovados (RNF-43); rastreabilidade com RNF-36 (tokens dos links de e-mail no fragmento, nas telas fora da conta) e RNF-43.
 - 2026-11-25: Etapa 6, bloco 1 (D-007 e D-030), aprovado em 2026-11-24. A Conta e o Sair no pé do trilho e da barra lateral a partir de 600 px; sessões ativas e fatores de autenticação na Conta; rastreabilidade com CONTA-26 a CONTA-31, CONTA-34 a CONTA-48, CONTA-51 e CONTA-54. A página `docs/design/navegacao.html` foi atualizada no mesmo registro.
 - 2026-11-25: pedidos do usuário. O nome fictício das páginas de referência passa a ser Carol, na saudação do Início e no exemplo do campo de apelido. Entra a assinatura "Feito com amor", com um coração, no fim do Início. O coração é esmeralda, e não roxo, porque o roxo fica restrito a três usos (D-028).
+- 2026-11-25: Etapa 6, bloco 3 (D-009). Nota sobre as fontes servidas pelo próprio servidor do app, sem chamada a terceiros.
