@@ -30,7 +30,7 @@ Situação do mapa: **Aprovado** na aprovação formal da Etapa 2 ("Aprovar Etap
 | Prefixo | Funcionalidade | Origem |
 |---|---|---|
 | CONT | Integridade do conteúdo: situação do gabarito, publicação, retirada de circulação | D-014, bloco 1 |
-| CONTA | Cadastro, login, sessão, recuperação de senha, aceite dos termos, exportar e excluir conta, senhas, segundo fator da equipe e limites de tentativas | D-001 (a recuperação de senha é proposta, não consta em D-001), D-007 |
+| CONTA | Cadastro, login, sessão, recuperação de senha, aceite dos termos, exportar e excluir conta, senhas, segundo fator da equipe e limites de tentativas, permissões e privacidade entre papéis | D-001 (a recuperação de senha é proposta, não consta em D-001), D-007; bloco 2 da Etapa 6 |
 | CAT | Classificação grande área → tema e filtros | D-001, D-013 |
 | TREINO | Resolução com correção imediata | D-001 |
 | SIM | Simulado cronometrado com correção no fim | D-001 |
@@ -162,7 +162,7 @@ Quando D-003 definir a revisão médica, ela entra como um segundo nível, ao la
 | ID | Critério | Situação | Fonte |
 |---|---|---|---|
 | CONTA-13 | The system SHALL impedir que editores e revisores vejam respostas individuais de estudantes, mostrando a eles apenas números agregados. | Confirmado | Minimização (LGPD); proposta do consultor; aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
-| CONTA-19 | IF um número agregado mostrado a editores ou revisores se basear em um grupo de estudantes pequeno o bastante para permitir deduzir quem respondeu THEN the system SHALL suprimir ou agrupar esse número, conforme a política de supressão de grupos pequenos definida na Etapa 6. | Confirmado | Revisão externa (2026-11-23); limiar e método ficam para a Etapa 6; aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
+| CONTA-19 | IF um número agregado mostrado a editores ou revisores se basear em um grupo de estudantes pequeno o bastante para permitir deduzir quem respondeu THEN the system SHALL suprimir ou agrupar esse número, conforme a política de supressão de grupos pequenos definida na Etapa 6. | Confirmado | Revisão externa (2026-11-23); limiar e método ficam para a Etapa 6; aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23); limiar e método definidos no bloco 2 da Etapa 6 (CONTA-56 a CONTA-59) |
 | CONTA-22 | The system SHALL impedir que um estudante veja ou altere tentativas, marcações, reportes ou dados de conta de outro estudante. | Confirmado | Revisão externa sobre marcações individuais (2026-11-23), generalizada pelo consultor; OWASP ASVS 5.0, requisito 8.2.2 (acesso por item de dado); aprovado na aprovação formal da Etapa 2 ("Aprovar Etapa 2", 2026-11-23) |
 
 ### Papéis
@@ -213,16 +213,37 @@ Critérios que transcrevem as decisões do bloco 1, aprovado em 2026-11-24 ("Apr
 | CONTA-54 | WHEN um link de recuperação de senha completa 30 minutos THEN the system SHALL invalidá-lo. | Confirmado | D-007; seção 1.B.7; detalha CONTA-08; bloco 1 da Etapa 6 aprovado (2026-11-24) |
 | CONTA-55 | WHEN o cookie de aparelho confiável completa 90 dias THEN the system SHALL deixar de considerar o aparelho confiável. | Confirmado | D-007; seção 1.B.7; bloco 1 da Etapa 6 aprovado (2026-11-24) |
 
+### Permissões e privacidade (Etapa 6, bloco 2)
+
+Critérios que transcrevem as decisões do bloco 2, aprovado em 2026-11-24 ("Aprovar bloco 2"). A matriz de permissões, as regras de privacidade e o que o bloco 3 mudou estão em `docs/seguranca-e-privacidade.md`, seção 2.
+
+| ID | Critério | Situação | Fonte |
+|---|---|---|---|
+| CONTA-56 | IF um número agregado mostrado à equipe se basear em menos de 10 pessoas distintas THEN the system SHALL mostrar "poucas respostas para mostrar" no lugar do número. | Confirmado | Seção 2.A.1 e 2.D.1; limiar do CONTA-19; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-57 | WHEN a equipe vê a contagem por alternativa THEN the system SHALL mostrar como "menos de 3" toda contagem abaixo de 3. | Confirmado | Seção 2.D.1; método do CONTA-19; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-58 | The system SHALL contar pessoas distintas, e não respostas, nos números agregados mostrados à equipe. | Confirmado | Seção 2.D.1; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-59 | The system SHALL atualizar os números agregados mostrados à equipe uma vez por dia, e não a cada resposta. | Confirmado | Seção 2.D.1; M-09; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-60 | The system SHALL entregar os reportes ao editor sem o campo do autor, removido no servidor. | Confirmado | Seção 2.A.2 e 2.C; ASVS 8.2.3; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-61 | WHEN o administrador consulta o autor de um reporte THEN the system SHALL exigir o motivo, ligado ao tratamento de abuso, e registrar a consulta. | Confirmado | Seção 2.A.2 e 2.B; M-39; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-62 | The system SHALL impedir que qualquer conta, inclusive de administrador, veja pelo painel o estudo individual de um estudante. | Confirmado | Seção 2.A.3; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-63 | WHEN um estudante pede, pelo e-mail da própria conta, uma consulta ao próprio estudo THEN the system SHALL permitir a consulta só pelo servidor, só de leitura e com o motivo registrado. | Confirmado | Seção 2.A.3 e 2.D.3; RM-09; M-39; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-64 | WHEN uma pessoa da equipe exclui a conta THEN the system SHALL trocar o nome dela no cadastro editorial por um código e guardar a correspondência à parte, acessível só ao administrador com concessão individual e com cada consulta registrada. | Confirmado | Seção 2.A.4 e 2.D.4; M-31; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-65 | WHEN um papel é retirado de uma conta THEN the system SHALL negar as ações daquele papel a partir da requisição seguinte, sem esperar o fim da sessão. | Confirmado | Seção 2.C; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-66 | WHEN uma conta de estudante recebe papel de equipe THEN the system SHALL exigir o cadastro do segundo fator no login seguinte, antes de qualquer função da equipe. | Confirmado | Seção 2.C; CONTA-31; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-67 | WHILE não houver sessão the system SHALL permitir só entrar, recuperar a senha, aceitar um convite e ler os termos de uso e a política de privacidade, sem nenhuma questão pública. | Confirmado | Seção 2.B; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-68 | The system SHALL conferir no servidor, a cada requisição e para cada objeto, se o papel da conta permite a ação pela matriz de permissões de `docs/seguranca-e-privacidade.md`, seção 2.B. | Confirmado | Seção 2.B e 2.C; CONTA-20; ASVS 8.2.1, 8.2.2 e 8.3.1; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-69 | The system SHALL usar as respostas de contas excluídas só nos números agregados, sem mostrá-las uma a uma a ninguém. | Confirmado | Seção 2.D.5; atualizado pelo bloco 3, que transforma essas respostas em contagens; bloco 2 da Etapa 6 aprovado (2026-11-24) |
+
 ### Em aberto neste tema
 
 | Questão | Para onde vai |
 |---|---|
 | Validade do link de recuperação de senha e proteções contra abuso (limite de tentativas, não revelar se um e-mail existe). | Resolvido no bloco 1 da Etapa 6 (aprovado em 2026-11-24, registrado em 2026-11-25): link válido por 30 minutos (CONTA-54); limites e respostas iguais (CONTA-38 a CONTA-45) |
-| Com poucos usuários no beta, respostas "anonimizadas" podem ser reidentificáveis pelo contexto; avaliar se a anonimização é real. | Etapa 6 |
+| Com poucos usuários no beta, respostas "anonimizadas" podem ser reidentificáveis pelo contexto; avaliar se a anonimização é real. | Resolvido no bloco 2 da Etapa 6: durante o beta, tratadas como dado pessoal desvinculado, sem prometer anonimato (seção 2.D.5, CONTA-69); o bloco 3, aprovado e ainda sem registro, transforma essas respostas em contagens |
 | Formato específico do arquivo de exportação (por exemplo, JSON ou CSV). | Etapa 6 |
-| Política de supressão de grupos pequenos em números agregados (limiar e método), com análise de risco de reidentificação (CONTA-19). | Etapa 6 |
-| Matriz de permissões por papel, com menor privilégio e bloqueio por padrão (CONTA-20, CONTA-21). | Etapa 6. Na Etapa 3 ficou definido que as regras rodam no backend, em Django (D-004, D-020) |
-| O que fazer com o cadastro da pessoa editorial quando a conta dela é excluída: manter com base legal, pseudonimizar ou anonimizar (M-31). | Etapa 6 |
+| Política de supressão de grupos pequenos em números agregados (limiar e método), com análise de risco de reidentificação (CONTA-19). | Resolvido no bloco 2 da Etapa 6: 10 pessoas distintas no mínimo, "menos de 3" por alternativa e atualização diária (CONTA-56 a CONTA-59) |
+| Matriz de permissões por papel, com menor privilégio e bloqueio por padrão (CONTA-20, CONTA-21). | Resolvido no bloco 2 da Etapa 6: matriz em `docs/seguranca-e-privacidade.md`, seção 2.B, conferida no servidor (CONTA-68) |
+| O que fazer com o cadastro da pessoa editorial quando a conta dela é excluída: manter com base legal, pseudonimizar ou anonimizar (M-31). | Resolvido no bloco 2 da Etapa 6: o nome vira um código, com a correspondência à parte (CONTA-64); o prazo de guarda fica com o registro do bloco 3 |
 
 ## CAT: classificação e filtros
 
@@ -385,7 +406,7 @@ Não é parecer jurídico. São os pontos que precisam de esclarecimento por adv
 | Imagens de provas e de terceiros, inclusive imagens clínicas que possam identificar pacientes (dado referente à saúde é dado pessoal sensível, LGPD art. 5º, II) | D-002, EDIT-04 | Sim, se o beta usar essas imagens |
 | Autorização por escrito de autores próprios e colaboradores para questões e comentários | D-002, EDIT-04 | Sim |
 | Termos de uso e política de privacidade | D-009, CONTA-09 | Sim |
-| Anonimização com poucos usuários e supressão de grupos pequenos | CONTA-12, CONTA-19 | Não; Etapa 6 |
+| Anonimização com poucos usuários e supressão de grupos pequenos | CONTA-12, CONTA-19 | Não. Tratada no bloco 2 da Etapa 6 sem prometer anonimato (CONTA-56 a CONTA-59, CONTA-69); a natureza das contagens segue para a consulta jurídica com o bloco 3 |
 | Atendimento a pedidos de retirada feitos por titulares de direitos | FLUXO-09 | Não; antes da abertura |
 
 O beta fechado não autoriza, por si só, reproduzir provas de terceiros.
@@ -438,7 +459,7 @@ No histórico editorial (FLUXO-08), o responsável é identificado pela conta, s
 
 | Questão | Para onde vai |
 |---|---|
-| O editor vê quem enviou cada reporte, ou os reportes chegam sem identificação? | Etapa 6 |
+| O editor vê quem enviou cada reporte, ou os reportes chegam sem identificação? | Resolvido no bloco 2 da Etapa 6: os reportes chegam ao editor sem o autor; só o administrador vê, para tratar abuso, com registro (CONTA-60, CONTA-61) |
 | Campos de referência bibliográfica (livro, diretriz, artigo, link com data de acesso). | Etapa 4 |
 | Quais metadados de uma questão retirada por licenciamento podem continuar visíveis no histórico (por exemplo, área, tema, banca, ano, alternativa marcada, resultado e data) (FLUXO-16). | Etapa 6, com a consulta jurídica (D-002) |
 
@@ -658,3 +679,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-24: Etapa 6, bloco 6 (qualidade e cadeia de suprimentos) aprovado ("Aprovar bloco 6"). 19 critérios novos, confirmados: RNF-70 a RNF-88 (D-034), totalizando 220 critérios confirmados. Duas pendências novas: as configurações recomendadas para a regra da `main` e a política de licenças (Jur-25). A funcionalidade RNF no mapa passou a citar D-034. Nenhum critério existente foi alterado. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho.").
 - 2026-11-25: resoluções das quatro inconsistências da seção 5.P aprovadas pelo usuário ("Aprovar"). Seis critérios novos, confirmados: RNF-89 a RNF-94, totalizando 226 critérios confirmados. Notas na fonte do RNF-45 e do RNF-51, sem mudar o texto deles. A pendência da fonte das exclusões foi resolvida. Registro autorizado pelo usuário ("Sim, registrar").
 - 2026-11-25: Etapa 6, bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado. 30 critérios novos, confirmados: CONTA-26 a CONTA-55 (D-007), transcritos da versão final aprovada, totalizando 256 critérios confirmados. A pendência da validade do link de recuperação e das proteções contra abuso foi resolvida. Nenhum critério existente foi alterado; CONTA-32 complementa CONTA-06, e CONTA-54 detalha CONTA-08.
+- 2026-11-25: Etapa 6, bloco 2 (permissões e privacidade), aprovado em 2026-11-24 ("Aprovar bloco 2"), registrado. 14 critérios novos, confirmados: CONTA-56 a CONTA-69, transcritos da proposta aprovada, totalizando 270 critérios confirmados. Pendências resolvidas: supressão de grupos pequenos (CONTA-19), matriz de permissões, cadastro editorial de quem sai (M-31), autor do reporte e análise da anonimização. Nota na fonte do CONTA-19, sem mudar o texto dele.
