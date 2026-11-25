@@ -114,3 +114,12 @@ Conforme D-034 (`docs/seguranca-e-privacidade.md`, seções 5.4 e 6):
 - **Operações periódicas manuais.** O teste mensal de restauração, a troca anual de chaves e a renovação anual dos certificados dos componentes mantêm a frequência aprovada, e cada execução depende de autorização explícita do usuário.
 - **Retenção no ECR.** Passa a manter a versão em produção e as duas anteriores que estiveram em produção, além das 10 imagens mais recentes da `main`, sem regra genérica para imagens sem etiqueta. Isso substitui o trecho da P5-16 sobre as 10 imagens.
 - **Custo.** A franquia de 500 MB do ECR citada na estimativa só vale para contas criadas antes de 15/07/2025 (V51).
+
+## Atualização das resoluções da seção 5.P (2026-11-25)
+
+As quatro inconsistências com blocos anteriores, que ficaram registradas para avaliação, foram resolvidas pelo usuário ("Aprovar", 2026-11-25). Detalhes em `docs/seguranca-e-privacidade.md`, seção 5.P:
+
+1. **Fonte das exclusões.** Os eventos do grupo `seguranca` são a fonte única. A restauração reprocessa, de forma idempotente, todo pedido de exclusão cujo evento não está visível no snapshot do banco usado pelo backup, e bloqueia o uso se houver lacuna (RNF-92 a RNF-94, V55).
+2. **Preservação de evidências.** Snapshot de preservação para investigação só com autorização do usuário e cifragem provada para o tipo exato de snapshot; o da instância inteira só depois de provada a cifragem de todos os componentes; acesso restrito às identidades administrativas do usuário (RNF-89, V53).
+3. **Emergência.** O terminal pelo navegador é a alternativa à chave SSH perdida. O alerta depende de entrega de melhor esforço e não substitui a trilha do CloudTrail (V54). O prazo de 7 dias para a revisão segue como proposta não aprovada.
+4. **Logs operacionais.** Ficam no disco adicional cifrado, com limite técnico (RNF-91, V52).

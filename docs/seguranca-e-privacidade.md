@@ -1,6 +1,6 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas.
+**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
 
@@ -28,9 +28,9 @@ O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não
 - **Doc**: confirmado em documentação oficial, conferida em 2026-11-24 (fontes nas seções 4.N, 5.R e 6.Q).
 - **Inferência**: conclusão técnica do consultor, sem confirmação em documentação.
 - **Testar**: só uma prova na implementação confirma.
-- **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5; a situação dessas está na seção 5.M. A V35 a V51 vêm do bloco 6 (seção 6.L). Nenhuma foi concluída.
+- **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5; a situação dessas está na seção 5.M. A V35 a V51 vêm do bloco 6 (seção 6.L), e a V52 a V55, das resoluções da seção 5.P. Nenhuma foi concluída.
 - **Jur-n**: questão para o advogado (seções 4.M, 5.N e 6.M). A análise jurídica deste documento é preliminar.
-- **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P).
+- **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P). As quatro registradas no bloco 5 foram resolvidas pelo usuário em 2026-11-25.
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -432,18 +432,18 @@ O saneamento por padrões reduz o risco, mas não garante que nenhum dado pessoa
 | Espaço | Limites |
 |---|---|
 | Espaço reservado dos críticos | 2 GB, tamanho fixo, separado do disco principal (V9). Bloco 5: arquivo de tamanho fixo no disco adicional cifrado (seção 5.C) |
-| Logs operacionais no disco principal | 500 MB e no máximo 7 dias |
+| Logs operacionais no disco principal | 500 MB e no máximo 7 dias. Resolução da 5.P.4 (2026-11-25): passam para o disco adicional cifrado, com limite técnico de tamanho (V52) |
 | Registro do sistema | 500 MB e 7 dias (V20) |
 
 Prioridades:
 
 1. Os eventos críticos não disputam espaço: o espaço deles é reservado.
-2. Abaixo de 10 GB livres no disco principal, os logs operacionais deixam de ser gravados. A contagem do que foi descartado, com o motivo "disco", vai a cada minuto para o caminho crítico, que continua gravando mesmo com o disco principal cheio.
+2. Abaixo de 10 GB livres no disco principal, os logs operacionais deixam de ser gravados. A contagem do que foi descartado, com o motivo "disco", vai a cada minuto para o caminho crítico, que continua gravando mesmo com o disco principal cheio. Resolução da 5.P.4 (2026-11-25): com os logs no disco cifrado, o limite de espaço e o mecanismo que protege os 2 GB reservados são definidos e provados na V52.
 3. No espaço reservado:
    - **a partir de 70%:** os arquivos já enviados mais antigos são apagados antes dos 7 dias, porque já estão no CloudWatch;
    - **a partir de 80%:** alerta;
    - **em 100%:** vale a falha fechada de H.2, com alerta pelo monitor externo.
-4. O banco fica no disco principal, com os alarmes de disco do bloco 5.
+4. O banco fica no disco principal, com os alarmes de disco do bloco 5. Correção (2026-11-25): desde a D-033, o banco fica no disco adicional cifrado (5.C.2).
 
 **H.4 Envio e confirmação**
 
@@ -491,7 +491,7 @@ Se nenhuma ferramenta pronta cumprir essas regras, os eventos críticos usam um 
 - Backups e cópias de disco não incluem a pasta de registros nem o espaço reservado (V15).
 - A política de privacidade fala em "até 6 meses, com a exclusão concluída alguns dias depois", com o texto final revisado pelo advogado (Jur-21).
 
-**H.7 Preservação por incidente.** Se houver um incidente, os registros do período são copiados para o registro do incidente e ficam 5 anos.
+**H.7 Preservação por incidente.** Se houver um incidente, os registros do período são copiados para o registro do incidente e ficam 5 anos. Resolução da 5.P.2 (2026-11-25): além disso, só um snapshot de preservação para investigação, com autorização do usuário e cifragem provada para o tipo exato de snapshot (RNF-89, V53).
 
 **H.8 Exclusão de conta.** Os registros, a auditoria de C.2 e os HMACs de D.3 expiram nos prazos normais, sem exclusão antecipada. Isso entra como linhas novas na tabela B.12 do bloco 3 quando ela for registrada (Jur-21).
 
@@ -720,7 +720,8 @@ Se o teste de restauração não for autorizado num mês, o consultor avisa que 
 - configuração do proxy;
 - reinício manual;
 - mudança de plano da instância (vale a ressalva 1: sem aumento automático para 4 GB);
-- o procedimento de emergência do bloco 1.
+- o procedimento de emergência do bloco 1;
+- o snapshot de preservação para investigação (5.P.2).
 
 O Claude pode preparar e explicar essas operações, mas só as executa com a autorização explícita do usuário.
 
@@ -743,7 +744,7 @@ O Claude pode preparar e explicar essas operações, mas só as executa com a au
 
 ### B. Correções e mudanças em decisões aprovadas
 
-1. **Terminal pelo navegador.** Ele entra só com o login da AWS, sem a chave SSH. Por isso fica desligado por padrão; ligá-lo é uma mudança no firewall, que exige o console com MFA e dispara alerta. No dia a dia valem os dois portões do bloco 1 (MFA da AWS e chave SSH); numa emergência, um só, registrado. A relação com o procedimento de emergência do bloco 1 está em 5.P.3.
+1. **Terminal pelo navegador.** Ele entra só com o login da AWS, sem a chave SSH. Por isso fica desligado por padrão; ligá-lo é uma mudança no firewall, que exige o console com MFA e dispara alerta. No dia a dia valem os dois portões do bloco 1 (MFA da AWS e chave SSH); numa emergência, um só, registrado. A relação com o procedimento de emergência do bloco 1 está em 5.P.3, resolvida em 2026-11-25: o terminal é a alternativa à chave SSH perdida, e o alerta não substitui a trilha do CloudTrail.
 2. **Monitor.** O Route 53 verifica por HTTPS sem busca de texto, porque `/saude` responde 503 quando algo falha.
 3. **P4-15 (bloco 4).** A credencial de envio de registros passa a ser um papel assumido por certificado. O RNF-24 continua valendo.
 4. **D-027.** O deploy automático não é adotado; o deploy é por comando (I).
@@ -756,7 +757,7 @@ O Claude pode preparar e explicar essas operações, mas só as executa com a au
 - **C.2 Disco adicional cifrado (16 GB, US$ 1,60 por mês).**
   - **Doc:** os discos adicionais e os snapshots do Lightsail são cifrados em repouso por padrão.
   - A documentação consultada não é conclusiva sobre o disco do sistema. Relatos em fóruns indicam que ele não seria cifrado, o que não está confirmado (V24, pendente).
-  - **Justificativa:** o disco adicional separa os dados sensíveis do disco do sistema. Ele guarda, em `/srv/medteca`, os dados do PostgreSQL, o espaço reservado dos registros críticos (um arquivo de 2 GB de tamanho fixo, desenho da V9), os certificados dos componentes e o certificado TLS.
+  - **Justificativa:** o disco adicional separa os dados sensíveis do disco do sistema. Ele guarda, em `/srv/medteca`, os dados do PostgreSQL, o espaço reservado dos registros críticos (um arquivo de 2 GB de tamanho fixo, desenho da V9), os certificados dos componentes e o certificado TLS. Pela resolução da 5.P.4 (2026-11-25), guarda também os logs operacionais do app.
   - A área de troca de memória fica comprimida na RAM (zram), para que páginas de memória não sejam gravadas no disco do sistema (inferência).
 - **C.3 Rede.** O firewall do Lightsail abre só as portas 80 e 443; a 22 abre sob demanda (D). O PostgreSQL não escuta em porta nenhuma.
 - **C.4 Atualizações.** As atualizações de segurança são instaladas todo dia. Quando exigem reinício, o servidor reinicia às 04:00 de Brasília (07:00 UTC). O backup roda às 03:00.
@@ -850,7 +851,7 @@ O Claude pode preparar e explicar essas operações, mas só as executa com a au
 1. Acontece no ambiente de teste sob demanda.
 2. O administrador assume o papel de restauração, com MFA, e a chave privada dele é carregada só na memória do ambiente.
 3. O backup é restaurado e passa pelas conferências do app.
-4. As exclusões de conta feitas depois do backup são reaplicadas a partir dos eventos de exclusão concluída do grupo `seguranca`, que ficam 180 dias. A fonte das exclusões diverge do bloco 3 (5.P.1).
+4. As exclusões de conta solicitadas ou concluídas depois do backup são reprocessadas a partir dos eventos do grupo `seguranca`, que ficam 180 dias. Resolvido em 2026-11-25 (5.P.1): os eventos são a fonte única, com o marco do backup, processamento idempotente e bloqueio em caso de lacuna (RNF-92 a RNF-94).
 5. O resultado é registrado: data, backup usado, duração e achados.
 6. O ambiente é apagado no mesmo dia e nunca envia e-mail.
 
@@ -948,10 +949,10 @@ Os roteiros completos são escritos na implementação.
 
 1. **Servidor comprometido:**
    1. isolar o servidor;
-   2. preservar as evidências no registro do incidente (5.P.2);
+   2. preservar os registros do período no registro do incidente e, só com autorização do usuário e cifragem provada para o tipo exato, um snapshot de preservação para investigação (5.P.2);
    3. revogar os certificados e trocar todos os segredos;
    4. recriar o servidor pelo OpenTofu e restaurar o último backup bom;
-   5. reaplicar as exclusões de conta;
+   5. reprocessar as exclusões de conta pelo marco do backup (5.P.1);
    6. seguir o plano de incidentes da Etapa 7.
 2. **Perda da chave privada dos backups:** gerar um novo par e fazer um backup na hora. Os backups antigos ficam ilegíveis até expirarem.
 3. **Perda da chave da autoridade:** criar outra autoridade e reemitir os certificados.
@@ -1041,24 +1042,60 @@ Pendente de avaliação profissional; acompanha a consulta jurídica de D-002 e 
 
 ### P. Inconsistências registradas para avaliação
 
-Encontradas durante o registro. Nenhuma foi resolvida; os textos aprovados ficam como estão até a decisão do usuário.
+Encontradas durante o registro do bloco 5. **Resolvidas pelo usuário em 2026-11-25** ("Aprovar"), depois de duas revisões pedidas por ele. Cada item mantém a descrição original da divergência e traz a resolução aprovada. Os ajustes nos textos dos blocos 1 e 3 entram no registro desses blocos.
 
 1. **Fonte das exclusões reaplicadas na restauração.**
    - **Bloco 3** (seção B.8, aprovada e ainda não registrada): uma lista de exclusões própria, com só o identificador interno e a data. Fica fora do banco e dos backups, cifrada, com acesso só na restauração e registro de cada uso. Cada linha é apagada 30 dias depois da exclusão, e a lista é tratada como dado pessoal.
    - **Bloco 5** (G.4): reaplica a partir dos eventos de exclusão concluída do grupo `seguranca`, que ficam 180 dias.
    - **Divergência:** duas fontes diferentes, com prazos e controles diferentes. O critério RNF-51 vale para qualquer das duas. Pendente: decisão do usuário.
+   - **Resolução aprovada (2026-11-25):** a fonte única são os eventos do grupo `seguranca`.
+     - **Dois eventos**, gravados pelo caminho crítico do bloco 4: "exclusão solicitada", antes de o pedido ser confirmado, e "exclusão concluída", antes de a exclusão ser dada por concluída (RNF-90).
+     - **Conteúdo:** o identificador pseudônimo estável da conta (nunca o e-mail, RNF-16), o identificador do pedido, o horário em UTC e o marco da transação no banco.
+     - **Integridade:** gravação só por acréscimo, com `id` único e `seq` por processo; nenhuma identidade do app altera eventos; credencial de envio que só acrescenta; o CloudWatch não tem operação para editar um evento individual (Doc); proteção contra exclusão do grupo (RNF-93). Risco residual: quem tiver root no servidor pode alterar eventos ainda não enviados; o envio rápido limita esse risco, e a `seq` revela lacunas.
+     - **Ordem de gravação:** o pedido é gravado no banco, depois o evento, e só então o pedido é confirmado ao estudante. Se o evento falhar, o pedido não é confirmado, e uma reconciliação regrava o evento antes de seguir (V55).
+     - **Marco do backup:** o backup exporta o snapshot do banco (`pg_export_snapshot`), e o `pg_dump` usa esse snapshot (`--snapshot`); o manifesto do backup grava o marco do snapshot (`pg_current_snapshot`) e o identificador do cluster; cada evento leva o ID da transação (`pg_current_xact_id`). Na restauração, é reprocessado todo pedido cujo evento não está visível no snapshot do backup (`pg_visible_in_snapshot`, a confirmar na V55), de forma idempotente pelo identificador do pedido e decidindo pelo estado do banco restaurado (RNF-92). Uma margem de 24 horas no horário fica só como rede de segurança, para eventos cujo marco não dê para avaliar. Alternativas descartadas: só o horário UTC, frágil diante do relógio, da duração do dump e de transações longas; e o número sequencial do pedido, porque a ordem dos números não é a ordem dos commits.
+     - **Lacunas:** a conferência verifica a continuidade da `seq` no período a reprocessar; se houver lacuna, o banco restaurado fica bloqueado até a conferência manual do usuário (RNF-94).
+     - **Acesso:** a leitura dos eventos na restauração usa o papel de leitor dos registros, com MFA, e fica registrada (RNF-20).
+     - **Efeitos:** a lista própria do bloco 3 (B.8) sai no registro do bloco 3. A Jur-24 passa a considerar também essa fonte: o identificador pseudônimo continua sendo dado pessoal enquanto houver possibilidade de reidentificação, por exemplo pelos backups de até 30 dias.
 2. **Preservação de evidências e RNF-45.**
    - **Bloco 5** (K.1): preservar as evidências de um servidor comprometido no registro do incidente.
    - **Bloco 4** (RNF-45 e 4.H.7): o RNF-45 proíbe cópias de disco com a pasta de registros e o espaço reservado; o 4.H.7 só prevê copiar os registros do período para o registro do incidente.
    - **Divergência:** uma cópia forense do disco incluiria os registros, o espaço reservado e dados pessoais. Pendente: se a cópia forense é permitida num incidente, com que prazo e com que acesso.
+   - **Resolução aprovada (2026-11-25):** o termo passa a ser "snapshot de preservação para investigação".
+     - Por padrão, só os registros do período vão para o registro do incidente (4.H.7).
+     - **Nenhum snapshot é tratado como cifrado sem prova para o tipo exato de snapshot** (V53). Até a V53 provar, não se faz snapshot de preservação.
+     - **Se só o disco adicional tiver a cifragem provada,** só o snapshot de disco pode ser autorizado, com a limitação escrita: ele preserva o banco, os logs operacionais do app, o espaço reservado dos eventos críticos e os certificados; não preserva o disco do sistema (sistema operacional, binários, configuração, tarefas agendadas, registro do sistema e, se ficarem nele, imagens e contêineres do Docker), onde costumam estar os vestígios de uma invasão.
+     - **O snapshot da instância inteira**, que inclui os discos anexados (Doc), só pode ser autorizado depois de provada a cifragem de todos os componentes.
+     - **Sempre:** autorização explícita do usuário naquele incidente (5.4); nunca restaurado em produção; apagado ao fechar o incidente ou em até 90 dias; custo de US$ 0,05 por GB por mês enquanto existir (Doc).
+     - **Acesso exclusivo, em termos de IAM:** só a identidade administrativa do usuário, com MFA exigido por política, tem as permissões do Lightsail sobre snapshots (criar, listar e ler, criar instância ou disco a partir dele, copiar, exportar e apagar). Nenhum papel de componente (`medteca-*`), nem o papel do CI, nem os papéis do ambiente de teste têm essas permissões. Exportar para o EC2 e copiar para outra região ou conta ficam negados de forma explícita. A conta raiz não pode ser restringida pelo IAM; ela é do usuário, com dois fatores e fora do uso diário (5.D). Se alguma dessas ações não aceitar restrição por recurso ou por etiqueta, a restrição vale para a ação na conta inteira (V53).
+     - O RNF-45 mantém o texto; a exceção está no RNF-89.
 3. **Procedimento de emergência do bloco 1 e terminal pelo navegador.**
    - **Bloco 1** (aprovado e ainda não registrado): o procedimento de emergência do único administrador exige login na AWS com MFA mais a chave SSH.
    - **Bloco 5** (B.1, P5-10): o terminal pelo navegador fica desligado e é ligado só em emergência. Ele entra só com o login da AWS, um portão, com registro e alerta.
    - **Divergência:** numa emergência sem a chave SSH, o caminho do bloco 5 tem um portão só. Pendente: confirmar se esse caminho vale para o procedimento do bloco 1 e ajustar o texto do bloco 1 no registro dele.
+   - **Resolução aprovada (2026-11-25):** o procedimento de emergência fica preservado.
+     - A chave SSH local é o caminho normal. Se ela se perder, o terminal pelo navegador é a alternativa: ligado com alerta (J.4), com registro e revisão depois. Em seguida, o terminal é desligado, uma chave nova é cadastrada e a antiga é revogada.
+     - O prazo de 7 dias para a revisão é uma **proposta ainda não aprovada**.
+     - **O alerta não substitui o registro de auditoria.** Ele depende do EventBridge, que recebe as chamadas de API pelo CloudTrail, e os serviços da AWS entregam eventos ao CloudTrail em regime de melhor esforço (Doc). O registro é a trilha do CloudTrail de 180 dias (J.3) e os registros do servidor; a revisão confere a trilha, não o alerta.
+     - O CloudTrail registra a chamada de API que dá o acesso, não os comandos digitados no terminal. Os comandos com `sudo` ficam no grupo `servidor` (5.D).
+     - A V54 verifica o evento real da abertura da conexão (candidato: `GetInstanceAccessDetails`, que devolve chaves SSH temporárias, Doc), a identidade da AWS usada, o MFA ou a passkey exigidos e o disparo do alerta.
+     - No registro do bloco 1, o texto passa a dizer que a fronteira real é a conta da AWS, protegida por passkey; a chave SSH protege contra erro e contra roubo isolado, mas não é barreira independente contra quem controla a conta da AWS (Inferência).
 4. **Disco do sistema e logs operacionais (menor).**
    - **Bloco 5** (C.2): nada sensível fica no disco do sistema.
    - **Bloco 4** (4.H.3 e 4.G.2): os logs operacionais ficam no disco principal, e os relatos do navegador podem guardar resíduo de dado pessoal mesmo depois do saneamento (Jur-22).
    - **Divergência:** pode haver resíduo de dado pessoal no disco do sistema, cuja cifragem segue sem confirmação (V24). Pendente: aceitar o resíduo ou levar os logs operacionais para o disco cifrado.
+   - **Resolução aprovada (2026-11-25):** os logs operacionais do app ficam no disco adicional cifrado, com limite técnico de tamanho (RNF-91). O registro do sistema operacional continua no disco do sistema, sem dados de estudantes.
+     - O método de implementação fica pendente até a V52.
+     - A V52 precisa provar a proteção dos 2 GB reservados aos eventos críticos por um mecanismo técnico verificável (sistema de arquivos próprio, cota ou equivalente), e não só por monitoramento de espaço livre. A prova é um teste de enchimento: os logs chegam ao limite e o resto do disco é ocupado, e a gravação crítica, o banco e o app continuam funcionando. Um arquivo pré-alocado só protege se não for esparso e se o sistema de arquivos não fizer cópia na escrita (Inferência).
+
+**Verificações das resoluções.** Nenhuma foi concluída.
+
+| V | O que verificar | Situação |
+|---|---|---|
+| V52 | Mecanismo técnico que protege os 2 GB reservados (sistema de arquivos próprio, cota ou equivalente); onde os arquivos ficam gravados; rotação e limites de 500 MB e 7 dias; teste de enchimento provando a gravação crítica, o banco e o app; método de implementação e limites definidos a partir dessa prova | Pendente: provar |
+| V53 | Cifragem provada para cada tipo de snapshot (de disco e de instância, incluindo o disco do sistema); permissões do IAM para cada ação sobre snapshots e se elas aceitam restrição por recurso ou por etiqueta; negação de exportar e copiar; consistência do snapshot com a instância ligada; custo; exclusão dentro do prazo | Pendente: provar |
+| V54 | Terminal pelo navegador: evento real do CloudTrail na abertura da conexão; identidade usada; MFA ou passkey exigidos; prova do disparo do alerta, sabendo que a entrega é de melhor esforço. Complementa a V23 e a V31 | Pendente: provar |
+| V55 | Marco do backup: `pg_export_snapshot` com `pg_dump --snapshot`; marco e identificador do cluster no manifesto; ID da transação em cada evento; teste de visibilidade (`pg_visible_in_snapshot`, a confirmar); ordem de gravação entre pedido e evento; teste de restauração com pedidos em andamento durante o dump e com uma lacuna simulada | Pendente: provar |
 
 ### Q. Efeitos nos documentos
 
@@ -1080,6 +1117,8 @@ Fica para quando o registro dos blocos 1 e 3 for autorizado:
 
 - o ajuste do procedimento de emergência (5.P.3);
 - a fonte das exclusões (5.P.1).
+
+As duas divergências foram resolvidas em 2026-11-25 (5.P); o que muda nos textos dos blocos 1 e 3 entra no registro deles.
 
 ### R. Fontes conferidas em 2026-11-24
 
@@ -1532,7 +1571,7 @@ Pendente de avaliação profissional; acompanha a consulta jurídica de D-002.
 - O bloco completa a D-026 (mutação, carga, ZAP e matriz), a D-027 (pull requests, portões, Dependabot e ações fixadas), a D-033 (registro de versão, atestado, volta de versão, checagem depois do deploy, inventário e retenção no ECR) e a D-017 (fases como pull requests, escopo da autorização e definição de pronto).
 - A regra de trabalho "commits direto na `main`" deixou de valer: a regra da `main` está ativa desde 2026-11-24, inclusive para documentos.
 - **Ponto de atenção:** o RNF-71 (merge barrado por checagem que falha) está aprovado, mas incluir as checagens obrigatórias na regra da `main` é ato do usuário, recomendado para quando o CI existir (6.3, V50). Até lá, não há CI nem checagem a barrar.
-- As quatro inconsistências da seção 5.P continuam pendentes de avaliação do usuário.
+- As quatro inconsistências da seção 5.P foram resolvidas pelo usuário em 2026-11-25 (seção 5.P).
 
 ### P. Efeitos nos documentos
 
@@ -1590,3 +1629,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-24: documento criado no registro do bloco 4 da Etapa 6, com autorização do usuário ("Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."; "Atualize a documentação e os registros de decisão necessários"). Seção 4 registrada. Os blocos 1 a 3 foram aprovados no mesmo dia e aguardam registro.
 - 2026-11-24: bloco 5 aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). Seção 5 registrada, com as ressalvas, a triagem das verificações (nenhuma concluída), a Jur-24 e quatro inconsistências para avaliação do usuário. Notas nas seções 4.E.2, 4.E.3, 4.H.3 e 4.L. Nenhum recurso foi criado na AWS e nenhum código foi implementado.
 - 2026-11-24: bloco 6 aprovado ("Aprovar bloco 6"), depois das correções do usuário. Seção 6 registrada (P6-01 a P6-28, V35 a V51, Jur-25) e seção 5.4 (autorizações recorrentes e operações sensíveis). Notas em 5.I.1, 5.I.2, 5.L e na V33. As recomendações sobre a regra da `main` ficam pendentes de decisão. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho."). Nada foi alterado no GitHub ou na AWS e nenhum código foi implementado.
+- 2026-11-25: as quatro inconsistências da seção 5.P foram resolvidas pelo usuário ("Aprovar"), depois de duas revisões pedidas por ele. Resoluções registradas na própria 5.P, com as verificações V52 a V55; notas em 4.H.3 (inclusive a correção do item que ainda punha o banco no disco principal), 4.H.7, 5.B.1, 5.C.2, 5.G.4, 5.K.1, 5.Q, 5.4.4 e 6.O. O prazo de 7 dias para a revisão depois de uma emergência segue como proposta não aprovada. Os ajustes nos textos dos blocos 1 e 3 entram no registro deles. Registro autorizado pelo usuário ("Sim, registrar").
