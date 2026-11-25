@@ -94,6 +94,7 @@ Escolhas aprovadas na Etapa 3. O raciocínio de cada uma está no [registro de d
 | Deploy | Imagem testada no CI e publicada no ECR em São Paulo; troca por comando, sem queda para o estudante | D-027, D-033 |
 | Testes | pytest, Vitest, Playwright e axe-core, com verificação rastreável por requisito | D-026 |
 | Integração contínua | GitHub Actions | D-027 |
+| Qualidade e cadeia de suprimentos | Toda mudança por pull request, com revisão do código e merge manual pelo usuário; dependências com lockfile e espera de 7 dias; inventário (SBOM) de cada imagem; CodeQL, varredura de segredos e OWASP ZAP | D-034 |
 | Idioma | Interface em português do Brasil | D-016 |
 
 As versões exatas das bibliotecas são fixadas no início da implementação.
@@ -166,7 +167,7 @@ O uso de IA para gerar ou revisar conteúdo ainda não foi decidido (D-012) e n�
 - **Backups:** diários, cifrados e travados contra exclusão por 30 dias num bucket em São Paulo, com teste mensal que restaura de fato uma cópia (D-033).
 - **Servidor fechado:** banco sem porta de rede, SSH aberto só sob demanda e segredos no cofre da AWS, fora do disco (D-033).
 
-O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança estão sendo definidos na Etapa 6. Os registros e o monitoramento (D-032) e a infraestrutura e a operação (D-033) já foram aprovados e estão em [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md).
+O tratamento de dados pessoais pela LGPD (D-009) e o detalhamento de segurança estão sendo definidos na Etapa 6. Os registros e o monitoramento (D-032), a infraestrutura e a operação (D-033) e a qualidade e a cadeia de suprimentos (D-034) já foram aprovados e estão em [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md).
 
 ### Acessibilidade
 
@@ -189,7 +190,7 @@ Situação em 24/11/2026:
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
 | 5. Identidade visual, UX e fluxos de navegação | Aprovada |
-| 6. Segurança, qualidade e infraestrutura | Em andamento: blocos 1 a 5 aprovados; blocos 4 (registros e monitoramento) e 5 (infraestrutura e operação) registrados |
+| 6. Segurança, qualidade e infraestrutura | Em andamento: blocos 1 a 6 aprovados; blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) registrados |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
 **Decisões ainda pendentes:**
@@ -230,7 +231,7 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 | [docs/modelo-conceitual.md](docs/modelo-conceitual.md) | Modelo conceitual dos dados: entidades, relações, regras de integridade e rastreabilidade até os requisitos |
 | [docs/design-e-ux.md](docs/design-e-ux.md) | Identidade visual, sistema de design, tom de voz, navegação, fluxos e tamanhos de tela, com os requisitos atendidos por tela |
 | [docs/design/](docs/design/) | Referência visual da Etapa 5: identidade, sistema de design e navegação, em páginas HTML para abrir no navegador. Não é código do app |
-| [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md) | Segurança e privacidade da Etapa 6, por bloco. Por enquanto, registros e monitoramento (bloco 4) e infraestrutura e operação (bloco 5), com as verificações, as questões jurídicas e as inconsistências pendentes |
+| [docs/seguranca-e-privacidade.md](docs/seguranca-e-privacidade.md) | Segurança e privacidade da Etapa 6, por bloco. Por enquanto, registros e monitoramento (bloco 4), infraestrutura e operação (bloco 5) e qualidade e cadeia de suprimentos (bloco 6), com as autorizações recorrentes, as verificações, as questões jurídicas e as inconsistências pendentes |
 | [docs/adr/](docs/adr/) | Registros de decisões de arquitetura (ADRs) com o raciocínio completo das decisões mais importantes. Cada ADR tem link no registro de decisões |
 
 As decisões passam por estes estados: **Pendente → Proposta → Aprovada → Substituída**, e as propostas recusadas ficam como **Descartada**. Cada requisito tem um ID; a especificação de cada funcionalidade e os seus testes citam esse ID, ligando o que foi pedido ao que foi verificado (D-026).

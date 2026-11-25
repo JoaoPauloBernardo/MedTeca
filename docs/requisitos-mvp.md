@@ -40,7 +40,7 @@ Situação do mapa: **Aprovado** na aprovação formal da Etapa 2 ("Aprovar Etap
 | REP | Reportar erro na questão | D-001 |
 | EDIT | Painel do editor: questão, origem, autorização de uso, referências, versões, imagens | D-001 |
 | FLUXO | Status editorial e revisão antes de publicar | D-001, D-003 |
-| RNF | Requisitos não funcionais: segurança, LGPD, acessibilidade, desempenho, responsividade, backup, registros e monitoramento, infraestrutura e operação | D-001, D-009, D-032, D-033 |
+| RNF | Requisitos não funcionais: segurança, LGPD, acessibilidade, desempenho, responsividade, backup, registros e monitoramento, infraestrutura e operação, qualidade e cadeia de suprimentos | D-001, D-009, D-032, D-033, D-034 |
 
 ## CONT: integridade do conteúdo
 
@@ -508,6 +508,25 @@ Os logs servem a diagnóstico e auditoria, sem expor credenciais e com o mínimo
 | RNF-67 | The system SHALL ser vigiado por verificação externa de disponibilidade em HTTPS a cada 30 segundos e por verificação diária da validade do certificado público. | Confirmado | D-033, P5-19; monitor externo herdado de D-025; bloco 5 da Etapa 6 aprovado com ressalvas (2026-11-24) |
 | RNF-68 | The system SHALL manter uma trilha do CloudTrail com os eventos de gerenciamento da conta, guardados por 180 dias. | Confirmado | D-033, P5-20; bloco 5 da Etapa 6 aprovado com ressalvas (2026-11-24) |
 | RNF-69 | WHEN uma condição de alerta do bloco 5 é atingida THEN the system SHALL avisar o administrador por e-mail, sem dados pessoais. | Confirmado | D-033, P5-21; lista em `docs/seguranca-e-privacidade.md`, seção 5.J.4; bloco 5 da Etapa 6 aprovado com ressalvas (2026-11-24) |
+| RNF-70 | The system SHALL entrar em produção somente a partir de imagens montadas pelo CI no ramo principal, depois de todas as checagens obrigatórias aprovadas. | Confirmado | D-034, P6-02; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-71 | IF alguma checagem obrigatória de um pull request falha THEN the system SHALL impedir o merge no ramo principal, sem exceção para nenhuma conta. | Confirmado | D-034, P6-01 e P6-06; incluir as checagens obrigatórias na regra da `main` é ato do usuário, recomendado para quando o CI existir (V50); bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-72 | The system SHALL instalar dependências somente a partir de lockfiles com hash e dos repositórios definidos (PyPI, registro do npm e registros oficiais de imagens). | Confirmado | D-034, P6-07; OWASP ASVS 5.0, requisito 15.1.2; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-73 | IF uma versão de dependência foi publicada há menos de 7 dias THEN the system SHALL recusar a instalação dela, salvo correção de segurança registrada como exceção. | Confirmado | D-034, P6-08; verificações V37 e V38; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-74 | The system SHALL executar ações do GitHub somente quando fixadas pelo commit completo. | Confirmado | D-034, P6-10; verificação V36; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-75 | IF um componente da imagem tem falha conhecida com o prazo de correção vencido e sem exceção registrada THEN the system SHALL barrar a publicação da imagem. | Confirmado | D-034, P6-12; prazos em `docs/seguranca-e-privacidade.md`, seção 6.E.6; OWASP ASVS 5.0, requisitos 15.1.1 e 15.2.1; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-76 | WHEN uma imagem é publicada THEN the system SHALL gerar o inventário de componentes dela (SBOM CycloneDX) e guardá-lo junto da imagem. | Confirmado | D-034, P6-14; OWASP ASVS 5.0, requisito 15.1.2; verificação V40; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-77 | WHEN é publicada uma falha que afeta um componente da versão em produção THEN the system SHALL avisar o administrador por e-mail em até 24 horas. | Confirmado | D-034, P6-14; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-78 | IF um pull request acrescenta dependência com licença fora da lista permitida THEN the system SHALL impedir o merge até a aprovação registrada do responsável. | Confirmado | D-034, P6-13; questão jurídica Jur-25; verificação V39; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-79 | WHEN uma versão entra no ar THEN the system SHALL conferir automaticamente a saúde do serviço, os cabeçalhos de segurança, o certificado e a versão servida. | Confirmado | D-034, P6-22; checagem só de leitura; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-80 | WHEN uma versão é preparada THEN the system SHALL rodar testes de mutação nas regras críticas e exigir tratamento registrado de cada mutação sobrevivente. | Confirmado | D-034, P6-21; D-026; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-81 | The system SHALL ter teste de carga documentado antes do beta e antes da abertura ao público, com consumo de memória, tempo até a próxima questão e limites das funções pesadas. | Confirmado | D-034, P6-20; OWASP ASVS 5.0, requisitos 15.1.3 e 15.2.2; V28; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-82 | The system SHALL manter, para cada requisito de nível 1 e 2 do ASVS 5.0, a prova, a exceção aprovada ou o motivo de não se aplicar. | Confirmado | D-034, P6-17; verificação V47; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-83 | IF a varredura dinâmica encontra alerta de risco alto THEN the system SHALL barrar a publicação da versão. | Confirmado | D-034, P6-18; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-84 | The system SHALL manter logs, artefatos e gravações do CI sem dados pessoais reais, segredos ou conteúdo real de questões. | Confirmado | D-034, P6-25; repositório público; verificação V48; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-85 | The system SHALL executar código de terceiros no computador de desenvolvimento somente dentro de contêineres sem acesso às credenciais do GitHub e da AWS. | Confirmado | D-034, P6-24; verificações V43 e V49; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-86 | The system SHALL oferecer um canal privado para o relato de vulnerabilidades. | Confirmado | D-034, P6-26; bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-87 | IF um pull request tem conversa de revisão não resolvida THEN the system SHALL impedir o merge no ramo principal. | Confirmado | D-034, P6-01; atendido pela regra da `main` configurada pelo usuário (2026-11-24); bloco 6 da Etapa 6 aprovado (2026-11-24) |
+| RNF-88 | The system SHALL aceitar mudanças no ramo principal somente por pull request, sem push direto nem push forçado. | Confirmado | D-034, P6-01; atendido pela regra da `main` configurada pelo usuário (2026-11-24); bloco 6 da Etapa 6 aprovado (2026-11-24) |
 
 **Bloco 4 da Etapa 6 (D-032, 2026-11-24).** As categorias do RNF-18 continuam três:
 
@@ -520,6 +539,8 @@ O RNF-20 é atendido por três meios: a entrada individual no papel de leitor do
 Detalhes, verificações V1 a V21 e questões jurídicas Jur-17 a Jur-23 estão em `docs/seguranca-e-privacidade.md`.
 
 **Bloco 5 da Etapa 6 (D-033, 2026-11-24).** Os critérios RNF-46 a RNF-69 vêm do bloco 5, aprovado com ressalvas. Detalhes, ressalvas, verificações (V1 a V34, nenhuma concluída), a questão jurídica Jur-24 e quatro inconsistências com blocos anteriores, registradas para avaliação do usuário, estão em `docs/seguranca-e-privacidade.md`, seção 5. Aprovar estes critérios não declara conformidade com o OWASP ASVS.
+
+**Bloco 6 da Etapa 6 (D-034, 2026-11-24).** Os critérios RNF-70 a RNF-88 vêm do bloco 6 (qualidade e cadeia de suprimentos). Detalhes, verificações (V35 a V51, nenhuma concluída), a questão jurídica Jur-25 e as recomendações sobre a regra da `main` ainda pendentes de decisão estão em `docs/seguranca-e-privacidade.md`, seção 6. As autorizações recorrentes e as operações sensíveis estão na seção 5.4. Aprovar estes critérios não declara conformidade com o OWASP ASVS.
 
 ### Desempenho
 
@@ -554,6 +575,8 @@ Detalhes, verificações V1 a V21 e questões jurídicas Jur-17 a Jur-23 estão 
 | Consumo real de memória no plano de 2 GB, inclusive durante o deploy sem queda (V28). Um plano maior pode ultrapassar o orçamento. | Medição na operação; decisão do usuário com os resultados, o impacto financeiro e as alternativas (D-033, ressalva 1) |
 | Dados de contas excluídas nos backups travados por até 30 dias e uso de dados reais no teste mensal de restauração (Jur-24). | Consulta jurídica (D-002); não se resolve só pela política de privacidade |
 | Fonte das exclusões reaplicadas depois de restaurar um backup: a lista de exclusões do bloco 3 (B.8) ou os eventos de `seguranca` do bloco 5. | Decisão do usuário (inconsistência registrada em `docs/seguranca-e-privacidade.md`, seção 5.P) |
+| Configurações recomendadas para a regra da `main`: aceitar só merge por rebase, com histórico linear; ativar a restrição de exclusão; incluir as checagens obrigatórias quando o CI existir (RNF-71). | Decisão do usuário (D-034; `docs/seguranca-e-privacidade.md`, seção 6.3; V50) |
+| Política de licenças de terceiros diante de um produto pago (Jur-25). | Consulta jurídica (D-002) |
 
 ## Propostas separadas
 
@@ -587,3 +610,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-24: Etapa 5 aprovada ("Aprovar Etapa 5"). Doze critérios novos, confirmados: CONT-25 a CONT-29 (rótulos do gabarito e nível de revisão, D-029) e RISC-01 a RISC-07 (riscar alternativas, D-031), com a funcionalidade RISC no mapa. Pendências resolvidas: rótulos do gabarito e breakpoints; a do fim do treino passou a citar M-10, que já resolveu a retomada. Nenhum critério existente foi alterado.
 - 2026-11-24: Etapa 6, bloco 4 (registros e monitoramento) aprovado ("Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."). 25 critérios novos, confirmados: RNF-21 a RNF-45 (D-032). Nota sobre a classificação do RNF-18 e o atendimento do RNF-20, e três pendências de registros resolvidas; a pendência do RNF-20 ganhou uma atualização. A funcionalidade RNF no mapa passou a citar D-032. Nenhum critério existente foi alterado.
 - 2026-11-24: Etapa 6, bloco 5 (infraestrutura e operação) aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). 24 critérios novos, confirmados: RNF-46 a RNF-69 (D-033). Três pendências novas: memória (V28), backups e teste de restauração (Jur-24) e fonte das exclusões reaplicadas. A funcionalidade RNF no mapa passou a citar D-033. Nenhum critério existente foi alterado.
+- 2026-11-24: Etapa 6, bloco 6 (qualidade e cadeia de suprimentos) aprovado ("Aprovar bloco 6"). 19 critérios novos, confirmados: RNF-70 a RNF-88 (D-034), totalizando 220 critérios confirmados. Duas pendências novas: as configurações recomendadas para a regra da `main` e a política de licenças (Jur-25). A funcionalidade RNF no mapa passou a citar D-034. Nenhum critério existente foi alterado. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho.").

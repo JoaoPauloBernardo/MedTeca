@@ -1,10 +1,12 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento) e 5 (infraestrutura e operação) aprovados e registrados; o bloco 5, com ressalvas.
+**Situação**: Etapa 6 em andamento. Blocos 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas.
 
 **Aprovado (bloco 4)**: 2026-11-24 - usuário: "Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."
 
 **Aprovado (bloco 5)**: 2026-11-24 - usuário: "Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."
+
+**Aprovado (bloco 6)**: 2026-11-24 - usuário: "Aprovar bloco 6"
 
 Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por bloco, as decisões de segurança e privacidade, ligadas aos requisitos de `docs/requisitos-mvp.md` e às decisões de `docs/decisions.md`. Aprovar o que está aqui não autoriza implementação (D-017).
 
@@ -17,17 +19,17 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 | 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3"); registro pendente |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
 | 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
-| 6 | Qualidade | Não iniciado |
+| 6 | Qualidade e cadeia de suprimentos | Aprovado e registrado em 2026-11-24 (D-034); seção 6 e seção 5.4 |
 
 O bloco 4 cita decisões dos blocos 1 a 3 que já foram aprovadas mas ainda não estão registradas: o cookie de aparelho confiável, os limites de tentativas, a tabela de tokens, a tabela B.12 (destino de cada registro na exclusão da conta), a revisão semestral de privilégios e o procedimento de emergência do único administrador. Elas entram neste documento quando o registro desses blocos for autorizado.
 
 ## Convenções
 
-- **Doc**: confirmado em documentação oficial, conferida em 2026-11-24 (fontes na seção 4.N).
+- **Doc**: confirmado em documentação oficial, conferida em 2026-11-24 (fontes nas seções 4.N, 5.R e 6.Q).
 - **Inferência**: conclusão técnica do consultor, sem confirmação em documentação.
 - **Testar**: só uma prova na implementação confirma.
-- **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5. A situação de todas está na seção 5.M, e nenhuma foi concluída.
-- **Jur-n**: questão para o advogado (seções 4.M e 5.N). A análise jurídica deste documento é preliminar.
+- **V-n**: verificação técnica. A V1 a V21 vêm do bloco 4 (seção 4.L), e a V22 a V34, do bloco 5; a situação dessas está na seção 5.M. A V35 a V51 vêm do bloco 6 (seção 6.L). Nenhuma foi concluída.
+- **Jur-n**: questão para o advogado (seções 4.M, 5.N e 6.M). A análise jurídica deste documento é preliminar.
 - **Inconsistência**: divergência entre blocos aprovados, registrada para avaliação do usuário sem resolução unilateral (seção 5.P).
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
@@ -660,6 +662,68 @@ Todas aprovadas, respeitando as ressalvas de 5.3.
    - A triagem das verificações está aprovada, mas nenhuma verificação foi concluída. A V22 a V34 seguem sujeitas às verificações indicadas, e a V24, em especial, segue pendente de confirmação.
    - A aprovação não é declaração de conformidade com o OWASP ASVS.
 
+### 5.4 Autorizações recorrentes e operações sensíveis (bloco 6, 2026-11-24)
+
+Registrado no bloco 6 (D-034), a pedido do usuário. Não aprova rotina nova nem mudança de infraestrutura.
+
+**5.4.1 Regras do usuário** (2026-11-24):
+
+1. **Autorizações recorrentes:** uma rotina automática aprovada pode continuar executando dentro dos parâmetros, horários, escopo e limites originalmente aprovados.
+2. **Alterações nas políticas:** qualquer alteração relevante na frequência, horário, escopo, permissões, retenção ou comportamento dessas rotinas exige aprovação prévia do usuário.
+3. **Novas operações:** uma operação automatizada que não esteja contemplada nas políticas aprovadas exige autorização específica.
+4. **Operações manuais sensíveis:** deploy, volta da versão em produção, restauração de dados, alterações de infraestrutura, segredos, IAM e as demais operações sensíveis dependem de autorização explícita a cada operação.
+5. **Revogação:** o usuário pode suspender ou revogar uma autorização recorrente a qualquer momento. A suspensão é registrada com a data e as palavras dele. Se a rotina proteger um requisito, o consultor aponta o risco, e a decisão continua do usuário.
+
+**5.4.2 Rotinas automáticas aprovadas** (continuam autorizadas como estão):
+
+| Rotina | Parâmetros aprovados | Origem |
+|---|---|---|
+| Atualizações de segurança do sistema | Instaladas todo dia; reinício às 04:00 de Brasília, só quando necessário | D-033, C.4 |
+| Backup do banco | `pg_dump` às 03:00, cifrado com age, num bucket S3 em São Paulo travado por 30 dias; o ciclo de vida apaga depois do prazo | D-033, G.2 |
+| Imagens das questões | Versionamento ligado e cópia completa semanal num bucket travado por 30 dias | D-033, G.3; D-022 |
+| Certificado TLS | Renovação automática pelo Caddy | D-033, H.2 |
+| Verificação do certificado | Diária, com aviso a 21 dias do vencimento | D-033, J.2 |
+| Monitor externo | Route 53 chamando `/saude` por HTTPS a cada 30 segundos | D-033, J.1; D-032 |
+| Trilha do CloudTrail | Eventos de gerenciamento guardados por 180 dias | D-033, J.3 |
+| Alertas por e-mail | A lista da J.4 e os alertas do bloco 4, sem dado pessoal | D-033, J.4; D-032 |
+| Credenciais temporárias da AWS | Obtidas por certificado, válidas por 1 hora | D-033, E |
+| Retenção no ECR | Versão em produção e as duas anteriores que estiveram em produção, mais as 10 imagens mais recentes da `main` (ajuste do bloco 6, seção 6.F.3) | D-033, P5-16; D-034 |
+| Publicação da imagem | Pelo CI, via OIDC, depois do merge na `main` | D-033, I.1; D-027; D-034 |
+| Envio de registros | Contínuo, com confirmação por evento | D-032 |
+| Retenção dos registros | 180 dias para `acesso`, `seguranca` e `servidor`; 30 dias para `aplicacao`; 180 dias para a auditoria no banco | D-032 |
+| Cópia local dos registros | No máximo 7 dias e 500 MB; limpeza do espaço reservado a partir de 70%; eventos não enviados apagados aos 180 dias | D-032, 4.H.3 e 4.H.5 |
+| Batimentos | A cada 5 minutos | D-032 |
+
+As rotinas automáticas aprovadas nos blocos 2 e 3 (recálculo dos agregados, exclusão de contas paradas, limpeza de convites e exportações, expiração de concessões e papéis, limpeza da lista de exclusões) entram nesta tabela, com os parâmetros conferidos, quando esses blocos forem registrados.
+
+**5.4.3 Operações periódicas manuais.** A frequência é política aprovada, mas cada execução depende de autorização explícita do usuário (regra 4):
+
+| Operação | Frequência aprovada | Por que cada execução pede autorização |
+|---|---|---|
+| Teste de restauração | Mensal (RNF-10; G.4) | Cria infraestrutura e restaura dados reais (Jur-24 pendente) |
+| Troca da chave do Django e das chaves do HMAC | Anual (F) | Mexe em segredos |
+| Renovação dos certificados dos componentes | Anual, com aviso 30 dias antes (E) | Mexe em IAM e em certificados |
+
+Se o teste de restauração não for autorizado num mês, o consultor avisa que o RNF-10 fica em risco.
+
+**5.4.4 Operações sensíveis sob demanda** (autorização explícita a cada operação):
+
+- deploy;
+- volta da versão em produção;
+- restauração de dados;
+- migração;
+- abertura da porta SSH e ligação do terminal pelo navegador;
+- mudança de segredos;
+- OpenTofu e qualquer recurso na AWS, inclusive o ambiente de teste e o teste de carga;
+- IAM;
+- DNS e domínio;
+- configuração do proxy;
+- reinício manual;
+- mudança de plano da instância (vale a ressalva 1: sem aumento automático para 4 GB);
+- o procedimento de emergência do bloco 1.
+
+O Claude pode preparar e explicar essas operações, mas só as executa com a autorização explícita do usuário.
+
 ### A. Escolhas
 
 | Tema | Escolha do usuário |
@@ -848,8 +912,8 @@ O app só se conecta a destinos dessa lista.
 - **I.1 CI (D-027).**
   - Testes e imagem montada sem segredos.
   - A imagem é publicada no ECR em São Paulo via OIDC, com a condição de que o pedido venha do repositório do projeto e do ramo principal (Doc).
-  - O ECR usa tags imutáveis e guarda as 10 imagens mais recentes.
-- **I.2 Deploy por comando.**
+  - O ECR usa tags imutáveis e guarda as 10 imagens mais recentes. Bloco 6: a retenção foi ajustada (6.F.3).
+- **I.2 Deploy por comando.** Bloco 6: o administrador é o usuário, e cada deploy ou volta de versão só acontece com a autorização explícita dele (5.4).
   1. O administrador abre a porta e roda `deploy <digest>`.
   2. O servidor baixa a imagem pelo digest e roda a fase "expandir" das migrações.
   3. A versão nova sobe ao lado da antiga, e o proxy troca para ela quando `/saude` responde bem.
@@ -906,7 +970,7 @@ Os roteiros completos são escritos na implementação.
 | S3 em São Paulo: backups, cópia das imagens e trilha | 0,30 a 1,00 | estimativa (V12) |
 | CloudWatch | 1,00 a 3,00 | estimativa do bloco 4 (4.J) |
 | Route 53 por HTTPS sem busca de texto | 1,00 a 2,75 | Doc; depende de o Lightsail contar como endpoint da AWS (V19) |
-| ECR | 0 a 0,30 | Doc: 500 MB grátis no primeiro ano |
+| ECR | 0 a 0,30 | Doc: US$ 0,10 por GB-mês (preço de São Paulo a confirmar, V51). Correção do bloco 6: a franquia de 500 MB por 12 meses só vale para contas criadas antes de 15/07/2025 |
 | SES e ambiente de teste | 0,20 a 0,60 | estimativa |
 | Parameter Store, KMS, IAM Roles Anywhere, SNS | 0 | Doc (SNS a conferir) |
 | **Total** | **17 a 22** | |
@@ -951,7 +1015,7 @@ Triagem aprovada no bloco 5. **Nenhuma verificação foi concluída.** "Desenho 
 | V30 | Parameter Store: histórico de versões e registro das leituras | Pendente: conferir |
 | V31 | Regras do EventBridge para as chamadas do Lightsail | Pendente: conferir |
 | V32 | Alarme de estado da instância do Lightsail: custo e limites | Pendente: conferir |
-| V33 | ECR: transferência para o Lightsail e varredura de imagens | Pendente: conferir |
+| V33 | ECR: transferência para o Lightsail e varredura de imagens | Pendente: conferir. Bloco 6: a varredura ganhou desenho (6.F.2); a transferência segue sem documentação, com estimativa de pior caso em 6.K |
 | V34 | Autenticação peer entre contêineres, com IDs de usuário iguais | Pendente: provar |
 
 ### N. Questões jurídicas
@@ -1043,7 +1107,486 @@ Fica para quando o registro dos blocos 1 e 3 for autorizado:
 - **UptimeRobot:** [termos](https://uptimerobot.com/terms).
 - **Cifragem do disco do Lightsail:** [discussão](https://repost.aws/questions/QUdJ1KRZVbSla6QjzytIQ6DA/are-lightsail-system-discs-encrypted), uma fonte não oficial e inconclusiva (V24).
 
+## 6. Qualidade e cadeia de suprimentos (bloco 6, D-034)
+
+### 6.1 Como o bloco foi decidido
+
+- **Fato que moldou o bloco:** o repositório no GitHub é público, conferido em 2026-11-24 com um `git ls-remote` sem credencial. Isso torna gratuitos CodeQL, varredura de segredos com bloqueio no envio, revisão de dependências, atestados de origem e regras de proteção de branch (Doc). Em troca, logs e artefatos do CI ficam visíveis para qualquer conta do GitHub (Doc, na documentação do GitHub Enterprise Server; V48).
+- **Três rodadas de perguntas** em 2026-11-24. As escolhas estão na seção A.
+- **Correções do usuário antes da aprovação**, em 2026-11-24, na seção B.
+- **Aprovação:** "Aprovar bloco 6" (2026-11-24).
+- **Registro autorizado:** "Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho." (2026-11-24).
+
+### 6.2 Decisões aprovadas
+
+| ID | Decisão | Seção |
+|---|---|---|
+| P6-01 | Toda mudança entra por pull request, com a regra da `main` configurada pelo usuário; cada fase do `tasks.md` vira um pull request previsto, com no máximo cerca de 400 linhas escritas à mão | C.1, C.7 |
+| P6-02 | Publicação só a partir da `main`, depois dos portões; registro de cada versão; atestado de origem conferido no computador do usuário antes do deploy | F |
+| P6-03 | O usuário revisa o código de todo pull request; a revisão por outra sessão do Claude e a revisão de segurança são camadas adicionais | C.5 |
+| P6-04 | Prévia e ambiente de desenvolvimento no computador do usuário, em contêineres, com dados fictícios | C.8 |
+| P6-05 | Definição de pronto em quatro níveis | C.9 |
+| P6-06 | Portões do CI | D |
+| P6-07 | uv e pnpm, instalação só pelo lockfile, fontes de pacotes fixas | E.1 |
+| P6-08 | Espera de 7 dias para versões novas; correção de segurança na hora, com exceção registrada | E.2 |
+| P6-09 | Scripts de instalação das dependências bloqueados e travas do pnpm | E.3 |
+| P6-10 | Ações do GitHub fixadas pelo commit completo, com política do repositório, zizmor e permissões mínimas | E.4 |
+| P6-11 | Dependabot semanal e agrupado, com revisão do usuário | E.5 |
+| P6-12 | Prazos de correção, exceções com validade e barreira na publicação | E.6 |
+| P6-13 | Política de licenças | E.7 |
+| P6-14 | Inventário CycloneDX de cada imagem, varredura e reconferência diária | F.2 |
+| P6-15 | CodeQL e regras de segurança no lint | G.1 |
+| P6-16 | Segredos: bloqueio no envio, gitleaks e roteiro para vazamento | G.2 |
+| P6-17 | Matriz do ASVS L2 com a prova de cada requisito | H.1 |
+| P6-18 | Varredura dinâmica com o OWASP ZAP no CI | H.2 |
+| P6-19 | Revisão de segurança completa antes do beta; teste de invasão decidido antes da abertura | H.3 |
+| P6-20 | Teste de carga antes do beta e antes da abertura | H.4 |
+| P6-21 | Testes de mutação nas regras críticas, antes de cada versão | H.5 |
+| P6-22 | Volta de código, volta da versão em produção e restauração de dados como operações distintas; checagem automática depois do deploy | I.1 |
+| P6-23 | Manutenção mensal | I.2 |
+| P6-24 | Código de terceiros só em contêineres no computador de desenvolvimento | J.1 |
+| P6-25 | Regras para o repositório público | J.2 |
+| P6-26 | `SECURITY.md` e relato privado de vulnerabilidades | J.3 |
+| P6-27 | Explicação técnica de cada pull request | C.6 |
+| P6-28 | Identidade única no GitHub; merge exclusivamente manual pelo usuário; escopo da autorização dado pela aprovação da spec e do `tasks.md` | C.2 a C.4 |
+
+### 6.3 O que não foi decidido
+
+- **Recomendações pendentes de decisão do usuário**, não aprovadas como decisão:
+  - aceitar só o merge por rebase, com histórico linear;
+  - ativar a restrição de exclusão da `main`, que não estava ativa em 2026-11-24 (V50);
+  - incluir as checagens obrigatórias na regra da `main` quando o CI existir.
+- **Sem declaração de conformidade com o ASVS.** Nenhuma declaração é feita antes das verificações e das provas (P4-19, P5-25).
+- **A aprovação não autoriza** implementação, mudança no GitHub, recurso na AWS nem deploy (D-017; seção 5.4).
+- **Nenhuma verificação da V35 a V51 foi concluída.**
+
+### A. Escolhas
+
+| Tema | Escolha do usuário |
+|---|---|
+| Fluxo | "Pull request com checagens" |
+| Revisão | "Revisor independente + você", corrigida pelo usuário: "EU QUERO LER E REVISAR O CÓDIGO." (B.1) |
+| Dependências | "Espera de 7 dias e travas" |
+| Prazos de correção | "Crítica 3 dias, alta 14, média 30" |
+| Inventário | "Junto da imagem, reconferido todo dia" |
+| Segurança | "Matriz ASVS + varredura; teste externo na abertura" |
+| Prévia | "No seu computador" |
+| Licenças | "Permissivas livres, copyleft com aval" |
+| Desenvolvimento local | "Dentro de contêineres" |
+| Mutação | "Nas regras críticas" |
+| Reversão | "Voltar primeiro" |
+| Carga | "Antes do beta e da abertura" |
+| Garantia da aprovação | Identidade única, com merge exclusivamente manual pelo usuário (B.2) |
+| Escopo da autorização | "Sim": a aprovação da spec e do `tasks.md` autoriza commits, push e pull requests (B.3) |
+
+### B. Correções do usuário antes da aprovação
+
+1. **Revisão do código.** A proposta partiu de uma premissa errada do consultor: que o usuário só conferiria telas. Correção do usuário: "EU QUERO LER E REVISAR O CÓDIGO." Ele é estudante de Engenharia de Software e desenvolvedor júnior e quer aprender com o projeto. A revisão dele passou a ser a principal (C.5), e cada pull request traz explicação técnica (C.6).
+2. **Merge.** O usuário escolheu identidade única no GitHub, com merge exclusivamente manual por ele, sem conta separada para o Claude (C.2 a C.4).
+3. **Escopo da autorização.** A aprovação explícita da spec e do `tasks.md` autoriza implementar, fazer commits e push na branch de trabalho e criar ou atualizar os pull requests das fases previstas (C.3).
+4. **ECR e custos.** Repositório privado, custo revisto e política de retenção (F, K).
+5. **Volta de versão.** Volta de código, volta da versão em produção e restauração de dados ficaram separadas; nenhuma operação que altere a produção acontece sem autorização explícita (I.1; seção 5.4).
+6. **Regra da `main`.** Registrado o que está ativo; o resto ficou como recomendação pendente (C.1; 6.3).
+7. **Autorizações recorrentes.** As rotinas automáticas já aprovadas continuam valendo, com as cinco regras do usuário (seção 5.4).
+
+### C. Fluxo, revisão e definição de pronto
+
+**C.1 Regra da `main`** (P6-01). Configurada pelo usuário e conferida pela API pública em 2026-11-24:
+
+- push forçado bloqueado (`non_fast_forward`);
+- pull request obrigatório, com zero aprovações e conversas resolvidas antes do merge;
+- métodos de merge permitidos: merge, squash e rebase;
+- lista de bypass vazia, informada pelo usuário (não aparece na consulta pública);
+- não ativos: restrição de exclusão, histórico linear e checagens obrigatórias (6.3).
+
+| Regra | Garantia |
+|---|---|
+| Nada de push direto na `main` | Técnica: pull request obrigatório e bypass vazio |
+| Nada de push forçado na `main` | Técnica (`non_fast_forward`) |
+| Merge só com as conversas resolvidas | Técnica |
+| Nada de auto-merge | Técnica, se "Allow auto-merge" ficar desligado nas configurações do repositório (V50) |
+| Merge só pelo usuário | Operacional |
+| Merge só depois da revisão do usuário e de nova revisão após commits novos | Operacional |
+| Checagens do CI antes do merge | Ainda não existe; vira técnica quando o usuário incluir as checagens obrigatórias na regra |
+
+**Limitação técnica.** O usuário e o Claude usam a mesma identidade autenticada no GitHub. Com essas permissões, o Claude conseguiria tecnicamente fazer merge pela API ou pela interface, e a regra da `main` não impede isso, porque não exige aprovação; uma aprovação vinda da mesma conta nem seria possível. A proibição de merge é uma regra operacional explícita, não uma garantia técnica do GitHub. O registro do GitHub também não distingue quem fez o merge.
+
+**C.2 Fluxo de um pull request** (P6-28):
+
+1. O Claude cria uma branch de trabalho e nunca implementa direto na `main`.
+2. O Claude implementa, testa, documenta, faz commits e envia as alterações para a branch.
+3. O Claude abre ou atualiza o pull request.
+4. O Claude apresenta a explicação técnica completa, os arquivos modificados, os testes e os resultados.
+5. O usuário lê e revisa o código, pergunta e pede alterações quando necessário.
+6. Quando estiver satisfeito, o usuário faz o merge pela interface do GitHub.
+
+**C.3 Escopo da autorização** (P6-28):
+
+| Autorizado pela aprovação explícita da spec e do `tasks.md` | Não autorizado |
+|---|---|
+| Implementar as tarefas aprovadas | Push direto na `main` |
+| Fazer commits na branch de trabalho | Alteração relevante fora do escopo aprovado |
+| Enviar os commits para essa branch no repositório remoto | Merge de qualquer pull request |
+| Criar e atualizar os pull requests das fases previstas | Ativar auto-merge |
+| Fazer, na mesma branch, as alterações pedidas pelo usuário na revisão, e reapresentá-las | Deploy ou publicação sem autorização específica |
+
+- **Alteração relevante fora do escopo:** qualquer mudança que não esteja no `tasks.md` e que mexa em comportamento para o usuário, arquitetura, dependência nova, modelo de dados ou migração, segurança ou permissões, CI, workflows ou infraestrutura. Ajustes triviais nos arquivos já tocados podem entrar e são citados na explicação técnica.
+- **Correções sem spec** (falhas de dependências, ajustes em pull requests do Dependabot, manutenção mensal): um pedido explícito do usuário para aquela correção vale como autorização daquele escopo, com as mesmas proibições.
+- **Documentos do planejamento:** sem spec, commit e push continuam só a pedido do usuário; o push vira o envio da branch e a abertura do pull request, com merge do usuário.
+
+**C.4 Regras obrigatórias de trabalho** (P6-28; valem também quando o usuário escrever código):
+
+- o Claude nunca faz merge de pull request, nem por comando, nem por chamada de API, nem pela interface;
+- o Claude não habilita auto-merge nem "merge when ready";
+- o Claude não envia nada direto para a `main`;
+- uma revisão não está concluída enquanto o usuário não tiver tido oportunidade de analisar o diff;
+- depois de commits novos, o Claude apresenta de novo as alterações para revisão;
+- quando um pull request está pronto, o Claude para e espera a decisão do usuário;
+- o recurso de correção automática do app (Auto-fix) fica desligado, a menos que o usuário o ligue num pull request específico; mesmo assim, cada envio é reapresentado.
+
+**C.5 Revisão** (P6-03):
+
+- **A revisão do usuário é a principal e não tem substituto.** Ele lê o código de todos os pull requests, analisa as alterações, questiona decisões, sugere mudanças, entende o impacto na arquitetura e nas funcionalidades existentes e pede explicações antes do merge.
+- **Camadas adicionais, antes da apresentação ao usuário:**
+  - outra sessão do Claude, sem o contexto de quem escreveu, confere a mudança contra a spec e procura testes frouxos;
+  - quando a mudança toca autenticação e sessão, permissões (bloco 2), dados pessoais, exportação, exclusão e retenção (bloco 3), registros e auditoria (bloco 4), infraestrutura, segredos e workflows (blocos 5 e 6) ou imagens e arquivos (D-022), há também uma revisão de segurança guiada pelo ASVS;
+  - os achados vão para o pull request já respondidos, para o usuário ler e aprender.
+- **Quando o usuário escrever código,** o fluxo é o mesmo: o Claude revisa e explica os achados, nunca faz merge, e a decisão continua do usuário.
+
+**C.6 Explicação técnica de cada pull request** (P6-27). Fica na descrição do pull request e sempre traz:
+
+1. o que foi implementado e por quê, com o link da spec e dos requisitos;
+2. os arquivos modificados, o papel de cada um e uma ordem sugerida de leitura;
+3. como a implementação funciona, com os trechos principais;
+4. as decisões técnicas, as alternativas que existiam e o motivo da escolha;
+5. os testes executados e os resultados, dizendo qual critério cada teste prova;
+6. os riscos, as limitações e os pontos de atenção, inclusive o impacto no que já existe;
+7. os conceitos e as tecnologias novos para estudar, com links para a documentação oficial.
+
+A profundidade acompanha o nível do usuário, sem esconder complexidade. O modelo do pull request só é criado na implementação, com autorização do usuário.
+
+**C.7 Tamanho dos pull requests** (P6-01). Uma fase do `tasks.md` por pull request, com no máximo cerca de 400 linhas escritas à mão; código gerado, lockfiles e migrações automáticas ficam em commits separados e marcados. Uma funcionalidade só aparece para o estudante no último pull request; antes disso, o código entra sem rota nem tela ligada. Base: o estudo divulgado pela SmartBear com dados da Cisco indica que a revisão perde eficácia acima de 200 a 400 linhas e de 60 a 90 minutos (fonte do fornecedor).
+
+**C.8 Prévia e ambiente local** (P6-04). O app sobe em contêineres no computador do usuário, com dados fictícios e marcados, e abre no navegador do app do Claude ou no navegador dele. O mesmo ambiente serve para o usuário rodar testes, depurar, experimentar e escrever código. Aparelhos reais, com VoiceOver e TalkBack, ficam na checagem de cada versão (D-026).
+
+**C.9 Definição de pronto** (P6-05):
+
+- **Pull request:**
+  - feito numa branch de trabalho, nunca na `main`, dentro do escopo da spec e do `tasks.md` aprovados, numa fase prevista;
+  - spec aprovada pelo usuário, se for funcionalidade (D-017);
+  - explicação técnica completa (C.6);
+  - cada critério com teste que cita o ID (D-026) e CI verde; enquanto o CI não existir, os testes rodam localmente e o resultado vai na explicação;
+  - achados da revisão independente e da revisão de segurança respondidos;
+  - o usuário teve acesso ao código e condições de revisá-lo antes do merge. Isso não exige domínio prévio das tecnologias; exige ter conseguido estudar a implementação, perguntar e entender o suficiente para decidir com consciência;
+  - perguntas respondidas e todas as conversas resolvidas;
+  - o que o usuário pediu foi feito, ou discutido até uma decisão dele;
+  - cada commit novo depois da revisão foi reapresentado e revisado;
+  - telas conferidas na prévia, se a mudança tem tela;
+  - documentos, matriz do ASVS e registro de exceções atualizados; migração em duas fases, quando é o caso;
+  - o Claude parou e esperou; o merge foi feito manualmente pelo usuário, pela interface do GitHub.
+- **Versão:**
+  - todos os pull requests da versão revisados pelo usuário;
+  - imagem da `main`, com inventário e atestado;
+  - nenhum componente com prazo de correção vencido sem exceção;
+  - mutações sobreviventes nas regras críticas tratadas;
+  - checagem manual e medição do RNF-13, como na D-026;
+  - notas da versão, com o que muda e como voltar;
+  - deploy autorizado pelo usuário e checagem automática depois dele.
+- **Beta:**
+  - matriz do ASVS completa;
+  - revisão de segurança completa, acompanhada pelo usuário, com os achados fechados;
+  - OWASP ZAP sem alerta alto aberto;
+  - teste de carga documentado e V28 medida;
+  - restauração testada (RNF-10);
+  - verificações dos blocos 4 a 6 concluídas ou com plano aceito pelo usuário.
+- **Abertura ao público:**
+  - tudo o que vale para o beta, refeito na versão da abertura;
+  - teste de carga com a meta da abertura;
+  - decisão do usuário sobre o teste de invasão profissional;
+  - D-002 e D-003 resolvidas, como a D-001 já exige.
+
+### D. Portões do CI (P6-06)
+
+| Portão | Ferramenta | Quando |
+|---|---|---|
+| Lint e regras de segurança do Python | Ruff, com as regras do Bandit | Todo pull request |
+| Tipos do Python | mypy com django-stubs | Todo pull request |
+| Lint e tipos do TypeScript | ESLint (typescript-eslint, react-hooks e jsx-a11y), Prettier e `tsc` estrito | Todo pull request |
+| Testes do backend | pytest e pytest-django em PostgreSQL 18 real (D-026) | Todo pull request |
+| Contrato da API | OpenAPI do Django Ninja comparado com o cliente TypeScript (D-026) | Todo pull request |
+| Componentes | Vitest e Testing Library (D-026) | Todo pull request |
+| Ponta a ponta e acessibilidade | Playwright em Chromium e WebKit, com perfis de iPhone e iPad; axe-core sem violação séria ou crítica (D-026) | Todo pull request |
+| Migrações | Nada pendente (`makemigrations --check`), Squawk sobre o SQL gerado e regra das duas fases (V44) | Todo pull request |
+| Configuração de produção | `check --deploy`; documentação da API fora do ar em produção (ASVS 13.4.5); imagem sem `.git`, sem testes e sem dependências de desenvolvimento (13.4.1 e 15.2.3) | Todo pull request |
+| Workflows | zizmor e CodeQL para Actions | Todo pull request |
+| Dependências novas | Revisão de dependências do GitHub: falha alta ou crítica, ou licença fora da lista, barra o pull request | Todo pull request |
+| Segredos | gitleaks, além do bloqueio no envio do GitHub | Todo pull request |
+| Código | CodeQL para Python e JavaScript/TypeScript: alerta alto ou crítico barra o merge (V42) | Todo pull request |
+| Imagem | Base fixada por digest; inventário com o Syft; o Grype barra componente com prazo vencido | Todo pull request e cada publicação |
+| Varredura dinâmica | OWASP ZAP: varredura de base e da API pelo OpenAPI, contra o app montado como na produção | Pull request que muda o app e cada publicação |
+| Mutação | mutmut e Stryker nas regras críticas | Antes de cada versão |
+
+Tudo roda em contêineres. Enquanto as checagens obrigatórias não estiverem na regra da `main` (6.3), o bloqueio do merge depende da regra operacional de C.4.
+
+### E. Dependências e cadeia de suprimentos
+
+**E.1 Gerenciadores e fontes** (P6-07). uv no Python (`uv.lock`, com hash) e pnpm no frontend (`pnpm-lock.yaml`). A instalação usa só o lockfile (`uv sync --locked`, `pnpm install --frozen-lockfile`). As fontes de pacotes são só o PyPI, o registro do npm e as imagens oficiais; nenhuma dependência vem direto de Git ou de arquivo baixado (`blockExoticSubdeps`, padrão no pnpm 11, Doc). As versões das ferramentas ficam fixadas.
+
+**E.2 Espera de 7 dias** (P6-08):
+
+- uv: `exclude-newer = "7 days"` (fonte secundária; V37);
+- pnpm: `minimumReleaseAge` de 10.080 minutos; o padrão do pnpm 11 é 1 dia (Doc);
+- Dependabot: `cooldown` de 7 dias; o padrão é 3 dias desde 14/07/2026 e não vale para atualizações de segurança (Doc).
+
+Uma correção de segurança dentro da espera entra por exceção: só aquele pacote e aquela versão, com o motivo, removida na manutenção seguinte.
+
+**E.3 Scripts de instalação** (P6-09). Os scripts de instalação das dependências não rodam: no pnpm 11, `allowBuilds` vazio e `strictDepBuilds` ligado (Doc). Cada liberação é aprovada pelo usuário e registrada. O `trustPolicy: no-downgrade` falha a instalação quando um pacote perde o nível de confiança com que era publicado (Doc), sinal comum de conta invadida (Inferência).
+
+**E.4 Ações do GitHub** (P6-10):
+
+- cada ação é fixada pelo SHA completo do commit, com a versão num comentário;
+- a política do repositório que recusa ações não fixadas existe desde agosto de 2025 (Doc; V36);
+- o zizmor analisa os workflows;
+- `permissions: {}` no topo de cada workflow e só o mínimo em cada job;
+- `persist-credentials: false` no checkout e nenhum `pull_request_target`;
+- quando a tarefa é simples, um comando próprio no lugar de uma ação de terceiros.
+
+Motivo: em março de 2025 (tj-actions) e em março de 2026 (trivy-action), versões de ações populares foram redirecionadas para código que roubava segredos do CI (Doc).
+
+**E.5 Dependabot** (P6-11). Semanal, com as atualizações agrupadas por ecossistema: Python, pnpm, imagens Docker e ações. As atualizações de segurança chegam na hora. Os pull requests do Dependabot passam pelos mesmos portões, pela revisão independente e pela revisão do usuário, e trazem o resumo do que mudou em cada biblioteca, as mudanças incompatíveis e os resultados dos testes. Não há merge automático de atualizações.
+
+**E.6 Prazos de correção** (P6-12; ASVS 15.1.1 e 15.2.1):
+
+| Gravidade | Prazo, contado da publicação do alerta (V45) |
+|---|---|
+| Crítica, ou já explorada (lista KEV da CISA) | 3 dias |
+| Alta | 14 dias |
+| Média | 30 dias |
+| Baixa | Na manutenção mensal |
+
+- Falha que não alcança o MedTeca, por estar numa função que ele não usa: o motivo fica registrado e vale o prazo da categoria seguinte.
+- As exceções têm data de validade, ficam num registro único e são revisadas na manutenção mensal.
+- O CI barra a publicação se algum componente passar do prazo sem exceção.
+- Os prazos valem também para a imagem base e para os pacotes do sistema dentro dela. O sistema do servidor segue as atualizações automáticas da D-033.
+- Os prazos dependem da disponibilidade do usuário para revisar e fazer o merge: uma falha crítica pede a revisão dele em até 3 dias.
+
+**E.7 Licenças** (P6-13):
+
+- entram direto: MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0, ISC, 0BSD, PSF-2.0, Zlib, CC0-1.0 e, para fontes, OFL-1.1;
+- MPL-2.0 e LGPL entram com o motivo registrado, pacote a pacote;
+- qualquer outra, inclusive GPL, AGPL e licença não identificada, barra o pull request até o usuário aprovar com análise; a AGPL alcança até o uso pela rede;
+- a revisão de dependências do GitHub faz isso de graça em repositório público (Doc); no Python, isso depende de o GitHub ler o `uv.lock` (V39), e, se não ler, a checagem sai do inventário;
+- pergunta para o advogado: Jur-25.
+
+### F. Publicação, inventário e retenção no ECR
+
+**F.1 O que acontece depois do merge** (P6-02). O repositório do ECR é **privado**, em São Paulo; o ECR Public não é usado. Depois do merge do usuário:
+
+1. o GitHub Actions roda de novo as checagens sobre o commit da `main`;
+2. se tudo passar, faz o build da imagem, gera o inventário, aplica a varredura com a barreira de prazos e gera o atestado de origem;
+3. envia a imagem e o inventário ao ECR, por OIDC, com um papel que só pode enviar imagens para aquele repositório;
+4. cria o registro da versão no GitHub.
+
+Nada além disso acontece: não há OpenTofu, mudança de infraestrutura, contato com o servidor, deploy nem migração (a V6 prova que o papel do CI não tem essas permissões). Publicar no ECR não muda a produção; o deploy é operação separada, que depende de autorização do usuário (5.4).
+
+**F.2 Inventário e varredura** (P6-14; ASVS 15.1.2):
+
+- o Syft gera o inventário de cada imagem no formato CycloneDX, o padrão da OWASP;
+- o inventário vai para o ECR junto da imagem, como referência do OCI 1.1, que o ECR aceita (Doc; há relato de recusa num caso, V40), e uma cópia vai para o registro da versão;
+- no CI, o Grype varre o inventário e aplica a barreira de E.6;
+- uma tarefa diária no GitHub Actions reconfere o inventário da versão em produção, lido do registro da versão, sem acesso de leitura na AWS; uma falha nova abre um aviso no GitHub, que chega por e-mail ao usuário, e o prazo de correção começa a contar;
+- a varredura básica do ECR, gratuita, com uma varredura por imagem a cada 24 horas (Doc), dá uma segunda opinião;
+- o Amazon Inspector não foi adotado.
+
+**F.3 Retenção no ECR** (ajusta a P5-16):
+
+- manter sempre a versão em produção e as duas anteriores que já estiveram em produção, marcadas com uma etiqueta própria no deploy;
+- manter também as 10 imagens mais recentes da `main` e apagar as mais antigas;
+- não criar regra genérica para apagar imagens sem etiqueta: inventários e atestados são artefatos sem etiqueta e seriam apagados; quando a regra apaga uma imagem, o ECR já remove as referências dela (Doc), e há relato de que regras por contagem contam essas referências;
+- testar a regra com a prévia do ECR antes de aplicar e aplicar só pelo OpenTofu, com autorização do usuário (V40).
+
+**F.4 Registro de versão e atestado.** Cada versão publicada ganha um registro no GitHub (Release) com o commit, o digest, o inventário e as notas. O atestado de origem é gratuito em repositório público (Doc) e é conferido no computador do usuário antes de o comando de deploy mandar o digest ao servidor; o servidor continua sem falar com o GitHub (V41).
+
+### G. Código e segredos
+
+**G.1 Análise de código** (P6-15). O CodeQL roda em todo pull request e uma vez por semana, para Python, JavaScript e TypeScript e os workflows do Actions. Ele é gratuito em repositório público, e a análise de workflows está disponível desde abril de 2025 (Doc). O Ruff roda com as regras do Bandit, e o ESLint barra padrões perigosos, como `eval` e HTML injetado no React.
+
+**G.2 Segredos** (P6-16):
+
+- a varredura de segredos e o bloqueio no envio ficam ligados no repositório (V35);
+- o gitleaks roda antes de cada commit, dentro do contêiner, e no CI, para padrões genéricos que o GitHub não reconhece (Inferência);
+- se um segredo chegar ao GitHub, ele é tratado como exposto, mesmo depois de apagado: revogar e trocar na hora, registrar como incidente de segurança (bloco 4) e avaliar a comunicação conforme o bloco 3. Reescrever o histórico do Git não desfaz a exposição.
+
+### H. Verificação de segurança e capacidade
+
+**H.1 Matriz do ASVS** (P6-17). Cobre os níveis 1 e 2 do ASVS 5.0; a referência usada lista 217 requisitos, e a contagem oficial fica na V47. Cada linha aponta a prova: um teste com nome, uma verificação manual com data, uma exceção aprovada, ou "não se aplica" com o motivo. A matriz é criada no início da implementação e atualizada em todo pull request.
+
+**H.2 Varredura dinâmica** (P6-18). O OWASP ZAP faz a varredura de base e a varredura da API a partir do OpenAPI, contra o app montado como na produção (Caddy, app e PostgreSQL em contêineres no CI). Um alerta alto barra a publicação; um médio precisa ser tratado antes da versão.
+
+**H.3 Revisão completa e teste de invasão** (P6-19). Antes do beta, uma sessão independente faz uma revisão de segurança completa, guiada pela matriz, acompanhada pelo usuário; os achados são fechados ou viram exceção aprovada. Antes da abertura ao público, o usuário decide, com a cotação em mãos, se contrata um teste de invasão profissional.
+
+**H.4 Teste de carga** (P6-20). O Locust (licença MIT) roda no ambiente de teste sob demanda, com dados fictícios em volume realista. Mede a memória, inclusive durante um deploy sem queda (V28); o tempo até a próxima questão (RNF-13); e o limite das funções pesadas: início e fim do simulado, exportação, filtros e desempenho. O resultado documenta as funções pesadas e as defesas contra sobrecarga (ASVS 15.1.3 e 15.2.2). Antes de cada teste, o usuário define o número de estudantes simultâneos. Criar o ambiente exige autorização (5.4).
+
+**H.5 Testes de mutação** (P6-21). Rodam antes de cada versão, com o mutmut no Python e o Stryker no TypeScript, nas regras críticas:
+
+- correção e pontuação das respostas;
+- permissões;
+- agregados só com 10 pessoas ou mais e supressão de alternativas com menos de 3 (bloco 2, aprovado e ainda não registrado);
+- números que não mudam na exclusão de conta (bloco 3, aprovado e ainda não registrado);
+- prazos de retenção e de exclusão;
+- no frontend, o cronômetro do simulado e a fila de respostas sem conexão (RNF-07).
+
+Cada mutação que sobrevive vira um teste novo ou o registro de que ela não muda o comportamento. Sem meta de percentual (D-026). O mutmut não roda direto no Windows (Doc), o que não pesa, porque tudo roda em contêiner.
+
+### I. Operação das versões
+
+**I.1 Volta de versão** (P6-22):
+
+| Operação | O que é | Quem executa |
+|---|---|---|
+| Volta de código | Pull request de reversão numa branch, nunca reset ou push forçado na `main`; o merge publica uma imagem nova no ECR, mas não muda a produção | O Claude prepara quando o usuário pede; o merge é do usuário |
+| Volta da versão em produção | O comando de deploy com o digest anterior | Só com autorização explícita do usuário para aquela operação; o Claude pode preparar e explicar, sem executar |
+| Restauração de dados | Restaurar um backup em produção; perde o que foi gravado depois do backup e exige reaplicar as exclusões de conta (RNF-51) | Só com autorização explícita do usuário, pelo plano de recuperação da seção 5.K |
+
+- Depois de cada deploy, uma checagem automática só de leitura confere a saúde do sistema, os cabeçalhos de segurança, o certificado e a versão servida.
+- Se aparecer erro novo num fluxo crítico (entrar, responder questão, simulado, exportar ou excluir a conta), a recomendação é voltar primeiro, mas a decisão e a autorização são do usuário, a cada vez. A correção vem depois, por pull request.
+- Voltar uma versão é sempre possível; voltar duas ou mais só se nenhuma migração passou pela fase "contrair" no meio (5.I.3).
+
+**I.2 Manutenção mensal** (P6-23). Junto do teste de restauração (5.G.4): merge das atualizações agrupadas, imagem base reconstruída, correção das falhas baixas, revisão das exceções que vão vencer e alertas do CodeQL e do Dependabot zerados ou com exceção. Tudo passa pela revisão e pelo merge do usuário.
+
+### J. Desenvolvimento e repositório público
+
+**J.1 Desenvolvimento em contêineres** (P6-24). Instalação de dependências, testes, mutação, Playwright e o próprio app rodam sempre em contêineres. As credenciais do GitHub e da AWS, as chaves SSH e os outros arquivos do usuário nunca entram nos contêineres; o `node_modules` e o ambiente Python ficam em volumes do Docker. Deploy, OpenTofu e Git rodam fora dos contêineres. Os contêineres funcionam com o editor do usuário, com autocompletar, depuração e testes (V49). A Docker recomenda manter o código dentro do WSL 2, por desempenho (Doc); mover a pasta, se a medição pedir (V43), é decisão do usuário na implementação. Motivo: ataques como o Shai-Hulud (npm, 2025) rodavam na instalação de pacotes e roubavam tokens do GitHub e chaves de nuvem de quem desenvolvia (Doc).
+
+**J.2 Regras para o repositório público** (P6-25):
+
+- logs, artefatos e gravações do CI só têm dados fictícios, sem segredo e sem dado pessoal real;
+- nenhum conteúdo real de questão entra no repositório, nem em testes, capturas ou gravações (D-019 e bloco 2);
+- os artefatos do CI ficam guardados por 14 dias;
+- workflows de pull requests de fora rodam sem segredo e sem OIDC, e só depois da aprovação do usuário (V46);
+- a conta do GitHub do usuário usa passkey ou segundo fator (V46).
+
+**J.3 Relato de vulnerabilidades** (P6-26). Um `SECURITY.md` explica como relatar uma falha, e o relato privado de vulnerabilidades do GitHub fica ligado, gratuito em repositório público (Doc). Um relato que envolva dado pessoal segue o fluxo de incidentes do bloco 3. O arquivo e a configuração só são criados na implementação, com autorização do usuário.
+
+### K. Custo
+
+O bloco 6 não acrescenta nenhum serviço pago. Estimativa do acréscimo mensal: abaixo de US$ 1, a confirmar.
+
+| Item | Estimativa | Base |
+|---|---|---|
+| GitHub (Actions, CodeQL, varredura de segredos, revisão de dependências, atestados) | Zero | Doc: gratuito em repositório público |
+| Armazenamento no ECR | Cerca de US$ 0,26 por mês no pior caso (13 imagens de cerca de 0,2 GB, sem reaproveitar camadas) | Doc: US$ 0,10 por GB-mês, preço de us-east-1 (São Paulo a confirmar, V51); tamanho da imagem é inferência; já coberto pela linha do ECR em 5.L |
+| Inventários no ECR | Menos de US$ 0,01 por mês | Inferência: alguns MB |
+| Transferência do ECR para o Lightsail | Abaixo de US$ 0,50 por mês, na pior hipótese | A documentação cita transferência gratuita na mesma região para EC2, Lambda e Fargate, não para o Lightsail (V33); o Lightsail conta entrada e saída na franquia do plano (Doc) |
+| Varredura básica do ECR | Zero | Doc |
+| Teste de carga | Cerca de US$ 0,02 por hora do ambiente, por teste | Pontual; 5.I.4 |
+
+### L. Verificações
+
+**Nenhuma foi concluída.**
+
+| V | O que verificar | Situação |
+|---|---|---|
+| V35 | Varredura de segredos e bloqueio no envio ligados no repositório (o anúncio de 2024 e a documentação atual divergem sobre o padrão) | Pendente: conferir |
+| V36 | Política de SHA obrigatório em repositório pessoal, com ações locais e reutilizáveis | Pendente: conferir |
+| V37 | `exclude-newer` relativo do uv com `uv sync --locked` (há relato de falha) e com o Dependabot | Pendente: provar |
+| V38 | Dependabot com a versão do pnpm adotada e respeito ao `minimumReleaseAge` | Pendente: provar |
+| V39 | Se o grafo de dependências do GitHub lê o `uv.lock`; se não, licenças e falhas do Python saem do inventário | Pendente: conferir |
+| V40 | ECR: inventário aceito como referência da imagem (há relato de recusa); regra de retenção sem apagar inventários de imagens mantidas; regras por contagem que contam referências (relato); teste com a prévia da regra | Pendente: provar |
+| V41 | Atestado de origem com a imagem no ECR e conferência pelo digest no computador do usuário (exige o `gh`, a instalar com autorização) | Pendente: provar |
+| V42 | Barrar no merge alerta alto do CodeQL, num repositório pessoal público | Pendente: conferir |
+| V43 | Desempenho do Docker com a pasta no Windows e no WSL 2 | Pendente: medir |
+| V44 | Squawk sobre o SQL do `sqlmigrate`; se o django-migration-linter funciona com a versão do Django usada | Pendente: provar |
+| V45 | Data de publicação de cada falha na ferramenta de varredura, para contar o prazo | Pendente: conferir |
+| V46 | Passkey ou segundo fator na conta do GitHub, tokens ativos e aprovação de workflows de contribuidores de fora | Pendente: conferir |
+| V47 | Contagem oficial dos requisitos de nível 1 e 2 do ASVS 5.0.0 (a referência usada lista 217) | Pendente: conferir |
+| V48 | Quem vê logs e artefatos do CI sem login; retenção configurada | Pendente: conferir |
+| V49 | Editor do usuário funcionando dentro do contêiner, com autocompletar, depuração e testes | Pendente: provar |
+| V50 | Configuração do repositório: auto-merge desligado; métodos de merge; restrição de exclusão, não ativa em 2026-11-24 pela API pública; checagens obrigatórias quando houver CI; bypass vazio | Pendente: conferir; decisões do usuário pendentes (6.3) |
+| V51 | Preço do ECR em São Paulo e franquia aplicável à conta da AWS (ligada à V12 e à V29) | Pendente: conferir |
+
+### M. Questão jurídica
+
+Pendente de avaliação profissional; acompanha a consulta jurídica de D-002.
+
+- **Jur-25.** A política de licenças de terceiros atende a um produto pago (D-011)? A política: licenças permissivas entram direto; copyleft fraca (MPL, LGPL) entra com registro; GPL, AGPL e licenças não identificadas ficam barradas até análise; as fontes usam OFL.
+
+### N. ASVS
+
+| Requisito | Como o bloco 6 responde |
+|---|---|
+| 15.1.1 (L1): prazos de correção documentados | E.6 |
+| 15.2.1 (L1): nenhum componente fora do prazo | Barreira de E.6 e reconferência de F.2 |
+| 15.1.2 (L2): inventário e repositórios confiáveis | F.2 e E.1 |
+| 15.1.3 e 15.2.2 (L2): funções pesadas | H.4 |
+| 15.2.3 (L2): nada de teste em produção | Portão de configuração (D) |
+| 13.4.1 (L1); 13.4.2 e 13.4.5 (L2) | Portão de configuração (D) |
+| 15.2.4 (L3): confusão de dependências | Em parte, por E.1 |
+| 15.3.x | Tipos, lint e revisão, provados requisito a requisito na matriz (H.1) |
+
+**A aprovação deste bloco não é declaração de conformidade com o OWASP ASVS.**
+
+### O. Coerência com as decisões anteriores
+
+- Nenhuma contradição encontrada com D-017, D-026, D-027, D-033 ou com os blocos 1 a 5.
+- O bloco completa a D-026 (mutação, carga, ZAP e matriz), a D-027 (pull requests, portões, Dependabot e ações fixadas), a D-033 (registro de versão, atestado, volta de versão, checagem depois do deploy, inventário e retenção no ECR) e a D-017 (fases como pull requests, escopo da autorização e definição de pronto).
+- A regra de trabalho "commits direto na `main`" deixou de valer: a regra da `main` está ativa desde 2026-11-24, inclusive para documentos.
+- **Ponto de atenção:** o RNF-71 (merge barrado por checagem que falha) está aprovado, mas incluir as checagens obrigatórias na regra da `main` é ato do usuário, recomendado para quando o CI existir (6.3, V50). Até lá, não há CI nem checagem a barrar.
+- As quatro inconsistências da seção 5.P continuam pendentes de avaliação do usuário.
+
+### P. Efeitos nos documentos
+
+Registrado em 2026-11-24, numa branch de trabalho, para revisão e merge do usuário:
+
+- `docs/decisions.md`: D-034 aprovada, com ADR; notas em D-006, D-017, D-022, D-026, D-027, D-032 e D-033.
+- ADRs: novo `docs/adr/D-034-qualidade-e-cadeia-de-suprimentos.md`; notas de atualização nos ADRs de D-006, D-020, D-028, D-032 e D-033.
+- `docs/requisitos-mvp.md`: critérios RNF-70 a RNF-88 e duas pendências novas.
+- Este documento: seções 5.4 e 6; notas em 5.I.1, 5.I.2, 5.L e na V33.
+- `README.md`.
+
+Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, as configurações, os workflows e a matriz do ASVS nascem na implementação, com autorização do usuário.
+
+### Q. Fontes conferidas em 2026-11-24
+
+- **GitHub:**
+  - [recursos de segurança](https://docs.github.com/en/code-security/getting-started/github-security-features);
+  - [regras disponíveis nos rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets);
+  - [política de SHA obrigatório](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/);
+  - [espera padrão do Dependabot](https://github.blog/changelog/2026-07-14-dependabot-version-updates-introduce-default-package-cooldown/);
+  - [Dependabot com pnpm 11 e 12](https://github.blog/changelog/2025-01-09-dependabot-now-supports-npm-12-pnpm-11-and-12-and-bun-1-4/);
+  - [CodeQL para Actions](https://github.blog/changelog/2025-04-22-github-actions-workflow-security-analysis-with-codeql-is-now-generally-available);
+  - [bloqueio no envio](https://docs.github.com/en/code-security/concepts/secret-security/push-protection) e o [anúncio de 2024](https://github.blog/changelog/2024-03-11-secret-scanning-and-push-protection-are-enabled-by-default-on-new-public-repositories/);
+  - [revisão de dependências](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/manage-your-dependency-security/configure-dependency-review-action);
+  - [relato privado de vulnerabilidades](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/report-privately);
+  - [logs do Actions](https://docs.github.com/en/enterprise-server@3.19/actions/how-tos/monitor-workflows/use-workflow-run-logs) (documentação do GitHub Enterprise Server).
+- **pnpm:** [segurança da cadeia de suprimentos](https://pnpm.io/supply-chain-security) e [versão 11.0](https://pnpm.io/blog/releases/11.0).
+- **uv:** [espera relativa](https://pydevtools.com/handbook/how-to/how-to-protect-against-python-supply-chain-attacks-with-uv/) (fonte secundária).
+- **Incidentes:**
+  - [tj-actions (CISA)](https://cisa.gov/news-events/alerts/2025/03/18/supply-chain-compromise-third-party-github-action-cve-2025-30066);
+  - [trivy-action (GHSA-69fq-xp46-6x23)](https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23);
+  - [Shai-Hulud 2.0](https://blog.checkpoint.com/research/shai-hulud-2-0-inside-the-second-coming-the-most-aggressive-npm-supply-chain-attack-of-2025/).
+- **AWS:**
+  - [preços do ECR](https://aws.amazon.com/ecr/pricing);
+  - [mudança no nível gratuito (julho de 2025)](https://aws.amazon.com/about-aws/whats-new/2025/07/aws-free-tier-credits-month-free-plan);
+  - [transferência de dados no Lightsail](https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-faq-data-transfer-allowance.html);
+  - [ECR com OCI 1.1](https://aws.amazon.com/about-aws/whats-new/2024/06/amazon-ecr-oci-image-distribution-version-1-1), o [relato de recusa de referência](https://github.com/aws/containers-roadmap/issues/2783) e o [relato sobre contagem de referências](https://github.com/aws/containers-roadmap/issues/2613);
+  - [exemplos de regras de retenção](https://docs.aws.amazon.com/AmazonECR/latest/userguide/lifecycle_policy_examples.html);
+  - [varredura de imagens](https://docs.aws.amazon.com/inspector/latest/user/scanning-ecr.html) e [preços do Inspector](https://aws.amazon.com/inspector/pricing/).
+- **Ferramentas:**
+  - [Syft (sbom-action)](https://github.com/anchore/sbom-action);
+  - [Grype (scan-action)](https://github.com/marketplace/actions/anchore-container-scan);
+  - [OWASP ZAP no GitHub Actions](https://www.zaproxy.org/blog/2020-04-09-automate-security-testing-with-zap-and-github-actions/);
+  - [Squawk](https://github.com/sbdchd/squawk);
+  - [zizmor](https://pypi.org/p/zizmor);
+  - [mutmut](https://mutmut.readthedocs.io);
+  - [Stryker com Vitest](https://stryker-mutator.io/docs/stryker-js/vitest-runner/);
+  - [Locust](https://pypi.org/project/locust/).
+- **Docker:** [licença do Docker Desktop](https://docs.docker.com/subscription/desktop-license/) e [boas práticas com WSL 2](https://docs.docker.com/desktop/features/wsl/best-practices/).
+- **Revisão de código:** [boas práticas da SmartBear](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/) (dados da Cisco divulgados pelo próprio fornecedor).
+- **Termos do GitHub:** [contas de máquina](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service).
+
 ## Histórico
 
 - 2026-11-24: documento criado no registro do bloco 4 da Etapa 6, com autorização do usuário ("Aprovo integralmente o Bloco 4 — Registros e Monitoramento, na versão revisada apresentada."; "Atualize a documentação e os registros de decisão necessários"). Seção 4 registrada. Os blocos 1 a 3 foram aprovados no mesmo dia e aguardam registro.
 - 2026-11-24: bloco 5 aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). Seção 5 registrada, com as ressalvas, a triagem das verificações (nenhuma concluída), a Jur-24 e quatro inconsistências para avaliação do usuário. Notas nas seções 4.E.2, 4.E.3, 4.H.3 e 4.L. Nenhum recurso foi criado na AWS e nenhum código foi implementado.
+- 2026-11-24: bloco 6 aprovado ("Aprovar bloco 6"), depois das correções do usuário. Seção 6 registrada (P6-01 a P6-28, V35 a V51, Jur-25) e seção 5.4 (autorizações recorrentes e operações sensíveis). Notas em 5.I.1, 5.I.2, 5.L e na V33. As recomendações sobre a regra da `main` ficam pendentes de decisão. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho."). Nada foi alterado no GitHub ou na AWS e nenhum código foi implementado.
