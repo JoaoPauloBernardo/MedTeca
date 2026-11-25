@@ -336,6 +336,8 @@ button, input { font: inherit; color: inherit; }
 .shelf-name small { display: block; font-size: var(--text-sm); font-weight: 400; color: var(--color-muted); }
 .shelf-count { font-size: var(--text-sm); color: var(--color-muted); }
 .demo-note { margin-top: var(--space-md); font-size: var(--text-xs); color: var(--color-muted); }
+.made-with-love { margin-top: var(--space-lg); display: flex; align-items: center; justify-content: center; gap: var(--space-2xs); font-size: var(--text-xs); color: var(--color-muted); }
+.made-with-love .ico { width: 14px; height: 14px; fill: var(--color-accent); stroke: var(--color-accent); }
 
 .tabbar {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: var(--space-lg) calc(-1 * var(--pad)) 0;
@@ -567,6 +569,7 @@ h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
   <symbol id="i-open" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></symbol>
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
   <symbol id="i-rev" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c1-3.4 3.4-5.3 6.5-5.3 1.3 0 2.5.3 3.5.9"/><path d="M15 18l2 2 4-4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.2-4.4-8.9-8.9C2 8 3.9 5 7.1 5c2 0 3.6 1.1 4.9 2.8C13.3 6.1 14.9 5 16.9 5c3.2 0 5.1 3 4 6.1C19.2 15.6 12 20 12 20z"/></symbol>
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/></symbol>
 </svg>
 
@@ -824,7 +827,7 @@ h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
           <div class="frame has-tabs">
             <div class="cover on-cover">
               <p class="wm"><span class="wm-med">Med</span><span class="wm-teca">Teca</span></p>
-              <p class="cover-line">Olá, Ana. [FICTÍCIO]</p>
+              <p class="cover-line">Olá, Carol. [FICTÍCIO]</p>
               <button class="cover-account" type="button" aria-label="Conta"><svg class="ico" aria-hidden="true"><use href="#i-person"/></svg></button>
             </div>
             <div class="block">
@@ -841,6 +844,7 @@ h3[tabindex="-1"]:focus, h4[tabindex="-1"]:focus { outline: none; }
                 <li><a href="#m-estante"><svg class="ico" aria-hidden="true"><use href="#i-redo"/></svg><span class="shelf-name">Erros para revisar</span><span class="shelf-count num">23</span></a></li>
               </ul>
             </div>
+            <p class="made-with-love">Feito com amor <svg class="ico" aria-hidden="true"><use href="#i-heart"/></svg></p>
             <p class="demo-note">Nomes e números de exemplo [FICTÍCIO].</p>
             <nav class="tabbar" aria-label="Principal">
               <a href="#m-inicio" aria-current="page"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg></span>Início</a>

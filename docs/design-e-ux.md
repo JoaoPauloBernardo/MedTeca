@@ -151,6 +151,7 @@ Direto e acolhedor.
 | Certa que tinha sido riscada | "Resposta certa. Você tinha riscado esta." | RISC-05 |
 | Resposta não reavaliada | "Resultado pelo gabarito da versão respondida; não reavaliado pelo gabarito atual" | CONT-24 |
 | Erro inesperado | "Algo deu errado do nosso lado. Tente de novo em instantes. Se continuar, fale com a gente e informe o código 7F3A91C2.", em que o código é o da requisição | RNF-43 (D-032) |
+| Fim do Início | "Feito com amor", centralizado, em texto pequeno e na cor de apoio, com um coração em esmeralda, decorativo para leitores de tela (o texto já diz "amor") | Pedido do usuário (2026-11-25) |
 
 "MedTeca", e não "equipe", porque hoje a pessoa editorial é uma só (M-38). A revisão editorial não equivale a revisão médica (M-26); quando a D-003 definir a revisão médica, ela entra como um segundo nível ao lado da editorial.
 
@@ -160,7 +161,7 @@ Direto e acolhedor.
 
 | Aba | Conteúdo |
 |---|---|
-| Início | Continuar de onde parou; avisos, como o resultado de um reporte; resumo da estante; botão Conta no canto, sobre a capa roxa |
+| Início | Continuar de onde parou; avisos, como o resultado de um reporte; resumo da estante; botão Conta no canto, sobre a capa roxa; no fim, a assinatura "Feito com amor", com um coração |
 | Praticar | Uma tela em dois passos: o que estudar (área, tema, banca, ano, não resolvidas, erradas, com a contagem de questões) e como praticar (Treino ou Simulado, com quantidade e duração). No simulado, "não resolvidas" e "erradas" ficam desligadas, porque o sorteio usa só área, tema, banca e ano (SIM-09) |
 | Estante | Questões marcadas, erros para revisar (com "Treinar meus erros", que usa o filtro "erradas"), simulados feitos e histórico de respostas |
 | Desempenho | Geral, Treino e Simulados; por área e por tema, com a quantidade e o aviso de poucas respostas; temas mais fracos só na visão geral e só com 5 respostas ou mais; tentativas fora do cálculo |
@@ -249,3 +250,4 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 - 2026-11-24: documento criado no fechamento da Etapa 5, com autorização do usuário ("Aprovar Etapa 5").
 - 2026-11-24: Etapa 6, bloco 4 (D-032). Texto do erro inesperado com código acrescentado aos textos aprovados (RNF-43); rastreabilidade com RNF-36 (tokens dos links de e-mail no fragmento, nas telas fora da conta) e RNF-43.
 - 2026-11-25: Etapa 6, bloco 1 (D-007 e D-030), aprovado em 2026-11-24. A Conta e o Sair no pé do trilho e da barra lateral a partir de 600 px; sessões ativas e fatores de autenticação na Conta; rastreabilidade com CONTA-26 a CONTA-31, CONTA-34 a CONTA-48, CONTA-51 e CONTA-54. A página `docs/design/navegacao.html` foi atualizada no mesmo registro.
+- 2026-11-25: pedidos do usuário. O nome fictício das páginas de referência passa a ser Carol, na saudação do Início e no exemplo do campo de apelido. Entra a assinatura "Feito com amor", com um coração, no fim do Início. O coração é esmeralda, e não roxo, porque o roxo fica restrito a três usos (D-028).
