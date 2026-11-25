@@ -30,7 +30,7 @@ Situação do mapa: **Aprovado** na aprovação formal da Etapa 2 ("Aprovar Etap
 | Prefixo | Funcionalidade | Origem |
 |---|---|---|
 | CONT | Integridade do conteúdo: situação do gabarito, publicação, retirada de circulação | D-014, bloco 1 |
-| CONTA | Cadastro, login, sessão, recuperação de senha, aceite dos termos, exportar e excluir conta | D-001 (a recuperação de senha é proposta, não consta em D-001) |
+| CONTA | Cadastro, login, sessão, recuperação de senha, aceite dos termos, exportar e excluir conta, senhas, segundo fator da equipe e limites de tentativas | D-001 (a recuperação de senha é proposta, não consta em D-001), D-007 |
 | CAT | Classificação grande área → tema e filtros | D-001, D-013 |
 | TREINO | Resolução com correção imediata | D-001 |
 | SIM | Simulado cronometrado com correção no fim | D-001 |
@@ -176,11 +176,48 @@ Quando D-003 definir a revisão médica, ela entra como um segundo nível, ao la
 
 A matriz de permissões (que papel faz o quê, sobre quais dados) será definida nas Etapas 3 e 6. Permissões sensíveis, como acesso a logs (RNF-17) e atestar a autorização de uso de conteúdo (EDIT-06), são concedidas de forma específica, não por acúmulo de papéis.
 
+### Senhas, segundo fator e sessões (Etapa 6, bloco 1)
+
+Critérios que transcrevem as decisões do bloco 1, aprovado em 2026-11-24 ("Aprovar bloco 1"). Detalhes, exceções ao ASVS (E1 a E3) e o que blocos posteriores mudaram estão em `docs/seguranca-e-privacidade.md`, seção 1.
+
+| ID | Critério | Situação | Fonte |
+|---|---|---|---|
+| CONTA-26 | The system SHALL aceitar senhas de 15 a 64 caracteres, sem regras de composição e sem troca periódica obrigatória, permitindo colar a senha e usar gerenciador de senhas. | Confirmado | D-007; seção 1.A.2; OWASP ASVS 5.0, capítulo 6.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-27 | IF a senha escolhida estiver na lista local de senhas proibidas THEN the system SHALL recusá-la. | Confirmado | D-007; seção 1.B.1; ASVS 6.2.4 e 6.2.11; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-28 | IF a senha escolhida constar como vazada no Pwned Passwords ou no subconjunto local de senhas vazadas THEN the system SHALL recusá-la. | Confirmado | D-007; seção 1.B.1; ASVS 6.2.12; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-29 | IF o Pwned Passwords não responder em até 2 segundos THEN the system SHALL conferir a senha contra a lista local e o subconjunto local e registrar a falta do serviço. | Confirmado | D-007; seção 1.B.1; exceção E3; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-30 | WHEN alguém entra com uma senha definida enquanto o Pwned Passwords estava fora THEN the system SHALL refazer a checagem completa e, se a senha estiver vazada, sugerir a troca sem bloquear a entrada. | Confirmado | D-007; seção 1.B.1; exceção E3; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-31 | WHILE uma conta tiver papel de editor, revisor ou administrador the system SHALL exigir segundo fator no login, aceitando passkey ou app autenticador (TOTP). | Confirmado | D-007; seção 1.A.3; ASVS 6.3.3; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-32 | WHEN uma sessão de estudante completa 30 dias desde o login THEN the system SHALL encerrá-la. | Confirmado | D-007; seção 1.A.4; ASVS 7.3.2; complementa CONTA-06; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-33 | WHEN uma sessão de conta da equipe completa 24 horas desde o login ou 1 hora sem uso THEN the system SHALL encerrá-la. | Confirmado | D-007; seção 1.A.4; ASVS 7.3.1 e 7.3.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-34 | The system SHALL mostrar na Conta todas as sessões ativas da pessoa e permitir encerrar uma ou todas. | Confirmado | D-007; seção 1.A.5; ASVS 7.1.2 e 7.5.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-35 | WHEN a senha é trocada ou recuperada THEN the system SHALL encerrar as outras sessões da conta e avisar por e-mail. | Confirmado | D-007; seção 1.A.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-36 | WHEN a pessoa pede para trocar a senha, mexer em fatores, encerrar outras sessões, excluir a conta ou exportar os dados THEN the system SHALL exigir a senha de novo. | Confirmado | D-007; seção 1.B.8; ASVS 7.5.1; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-37 | WHEN alguém da equipe atribui papéis, concede permissão sensível ou atesta uma autorização THEN the system SHALL exigir a passkey de novo. | Confirmado | D-007; seção 1.B.8; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-38 | WHEN um par de conta e aparelho, ou de conta e endereço, acumula 5 falhas seguidas de login THEN the system SHALL impor a esse par uma espera de 30 segundos, que dobra até 15 minutos, sem afetar outros aparelhos da conta. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-39 | WHEN um aparelho confiável acumula 10 falhas seguidas de login THEN the system SHALL impor espera só a esse aparelho. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-40 | WHEN uma conta recebe mais de 100 falhas de login em uma hora THEN the system SHALL impor espera de 15 minutos só aos aparelhos não confiáveis e registrar o evento com alerta. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-41 | WHEN um endereço de rede acumula 50 falhas de login em 15 minutos THEN the system SHALL impor espera a esse endereço. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-42 | The system SHALL nunca bloquear uma conta de forma permanente por falhas de login. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-43 | IF uma conta já recebeu 5 e-mails de recuperação de senha na última hora THEN the system SHALL deixar de enviar novos e-mails de recuperação, respondendo ao pedido da mesma forma. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-44 | WHEN a senha é trocada THEN the system SHALL invalidar os aparelhos confiáveis da conta, exceto o atual. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-45 | The system SHALL responder às tentativas de login e aos pedidos de recuperação de senha com mensagens genéricas e tempo de resposta igual. | Confirmado | D-007; seção 1.B.6; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-46 | The system SHALL guardar das passkeys só a chave pública e permitir que a pessoa, ou o administrador, remova uma passkey. | Confirmado | D-007; seção 1.B.4; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-47 | WHEN um fator de autenticação é removido THEN the system SHALL encerrar as outras sessões da conta. | Confirmado | D-007; seção 1.B.4; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-48 | WHEN alguém da equipe cadastra o segundo fator ou pede códigos novos THEN the system SHALL gerar 10 códigos de recuperação de uso único, guardados com Argon2id, e anular os anteriores. | Confirmado | D-007; seções 1.B.4 e 1.B.7; ASVS 6.5.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-49 | The system SHALL criar o primeiro administrador só por comando no servidor, sem conta padrão. | Confirmado | D-007; seção 1.B.9; ASVS 6.3.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-50 | WHEN uma conta é desativada ou excluída, ou o administrador encerra as sessões dela THEN the system SHALL encerrar todas as sessões dessa conta. | Confirmado | D-007; seção 1.B.9; ASVS 7.4.2 e 7.4.5; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-51 | WHILE a tela tiver 600 px de largura ou mais the system SHALL mostrar a Conta e o Sair no pé do trilho ou da barra lateral. | Confirmado | D-007 e D-030; seção 1.A.7; abaixo de 600 px vale a exceção E2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-52 | WHEN o procedimento de emergência do único administrador é executado THEN the system SHALL exigir motivo escrito, remover os fatores e as sessões da conta, exigir troca de senha, gerar um link de recadastro de uso único válido por 30 minutos mostrado só no terminal e gravar um evento só de inclusão. | Confirmado | D-007; seção 1.B.5; M-34; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-53 | The system SHALL guardar o segredo de CSRF no cookie `__Host-csrftoken`, separado da sessão, e exigir o token no cabeçalho `X-CSRFToken` em toda alteração. | Confirmado | D-007; seção 1.B.2; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-54 | WHEN um link de recuperação de senha completa 30 minutos THEN the system SHALL invalidá-lo. | Confirmado | D-007; seção 1.B.7; detalha CONTA-08; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+| CONTA-55 | WHEN o cookie de aparelho confiável completa 90 dias THEN the system SHALL deixar de considerar o aparelho confiável. | Confirmado | D-007; seção 1.B.7; bloco 1 da Etapa 6 aprovado (2026-11-24) |
+
 ### Em aberto neste tema
 
 | Questão | Para onde vai |
 |---|---|
-| Validade do link de recuperação de senha e proteções contra abuso (limite de tentativas, não revelar se um e-mail existe). | Etapa 6 |
+| Validade do link de recuperação de senha e proteções contra abuso (limite de tentativas, não revelar se um e-mail existe). | Resolvido no bloco 1 da Etapa 6 (aprovado em 2026-11-24, registrado em 2026-11-25): link válido por 30 minutos (CONTA-54); limites e respostas iguais (CONTA-38 a CONTA-45) |
 | Com poucos usuários no beta, respostas "anonimizadas" podem ser reidentificáveis pelo contexto; avaliar se a anonimização é real. | Etapa 6 |
 | Formato específico do arquivo de exportação (por exemplo, JSON ou CSV). | Etapa 6 |
 | Política de supressão de grupos pequenos em números agregados (limiar e método), com análise de risco de reidentificação (CONTA-19). | Etapa 6 |
@@ -620,3 +657,4 @@ Itens 2 a 4 autorizados pelo usuário na resposta "Autorizo como está" (2026-11
 - 2026-11-24: Etapa 6, bloco 5 (infraestrutura e operação) aprovado com ressalvas ("Aprovo o Bloco 5 — Infraestrutura e Operação — conforme a proposta apresentada, incluindo as decisões P5-01 a P5-25, com as ressalvas e condições abaixo."). 24 critérios novos, confirmados: RNF-46 a RNF-69 (D-033). Três pendências novas: memória (V28), backups e teste de restauração (Jur-24) e fonte das exclusões reaplicadas. A funcionalidade RNF no mapa passou a citar D-033. Nenhum critério existente foi alterado.
 - 2026-11-24: Etapa 6, bloco 6 (qualidade e cadeia de suprimentos) aprovado ("Aprovar bloco 6"). 19 critérios novos, confirmados: RNF-70 a RNF-88 (D-034), totalizando 220 critérios confirmados. Duas pendências novas: as configurações recomendadas para a regra da `main` e a política de licenças (Jur-25). A funcionalidade RNF no mapa passou a citar D-034. Nenhum critério existente foi alterado. Registro autorizado pelo usuário ("Sim. Autorizo o registro documental do Bloco 6 agora, em uma branch de trabalho.").
 - 2026-11-25: resoluções das quatro inconsistências da seção 5.P aprovadas pelo usuário ("Aprovar"). Seis critérios novos, confirmados: RNF-89 a RNF-94, totalizando 226 critérios confirmados. Notas na fonte do RNF-45 e do RNF-51, sem mudar o texto deles. A pendência da fonte das exclusões foi resolvida. Registro autorizado pelo usuário ("Sim, registrar").
+- 2026-11-25: Etapa 6, bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado. 30 critérios novos, confirmados: CONTA-26 a CONTA-55 (D-007), transcritos da versão final aprovada, totalizando 256 critérios confirmados. A pendência da validade do link de recuperação e das proteções contra abuso foi resolvida. Nenhum critério existente foi alterado; CONTA-32 complementa CONTA-06, e CONTA-54 detalha CONTA-08.

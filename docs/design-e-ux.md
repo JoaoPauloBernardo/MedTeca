@@ -165,7 +165,7 @@ Direto e acolhedor.
 | Estante | Questões marcadas, erros para revisar (com "Treinar meus erros", que usa o filtro "erradas"), simulados feitos e histórico de respostas |
 | Desempenho | Geral, Treino e Simulados; por área e por tema, com a quantidade e o aviso de poucas respostas; temas mais fracos só na visão geral e só com 5 respostas ou mais; tentativas fora do cálculo |
 
-**Conta**, pelo botão do Início: apelido, aparência, reportes enviados com o resultado, termos e privacidade, exportar meus dados (preparado em segundo plano, D-024), excluir conta e sair.
+**Conta**, pelo botão do Início: apelido, aparência, reportes enviados com o resultado, termos e privacidade, exportar meus dados (preparado em segundo plano, D-024), excluir conta e sair. Etapa 6, bloco 1 (D-007 e D-030): a partir de 600 px, a Conta também fica no pé do trilho e da barra lateral, com o Sair à vista (CONTA-51); abaixo de 600 px, o Sair continua na Conta, a dois toques (exceção E2). A Conta mostra também as sessões ativas, para encerrar uma ou todas (CONTA-34), e, para a equipe, os fatores de autenticação (passkeys e app autenticador).
 
 **Modo foco.** Treino e simulado escondem as abas. Sai pelo botão do topo. No simulado esse botão é Pausar: a pausa é sempre explícita, e a tela pausada oferece Retomar ou Sair. Fechar o app sem pausar não para o tempo, e o início do simulado avisa isso (M-11, M-32).
 
@@ -178,8 +178,8 @@ Direto e acolhedor.
 | Faixa de largura | Aparelhos típicos | Navegação | Conteúdo |
 |---|---|---|---|
 | Até 599 px | Celular em pé | Abas embaixo | Uma coluna |
-| 600 a 1023 px | Tablet em pé e celular deitado | Trilho lateral com ícones e nomes | Uma coluna |
-| 1024 px ou mais | Tablet deitado e computador | Barra lateral com nomes | Listas e desempenho em duas colunas |
+| 600 a 1023 px | Tablet em pé e celular deitado | Trilho lateral com ícones e nomes; Conta e Sair no pé | Uma coluna |
+| 1024 px ou mais | Tablet deitado e computador | Barra lateral com nomes; Conta e Sair no pé | Listas e desempenho em duas colunas |
 
 - **Divide ao responder.** A partir de 1024 px, no modo foco, a questão fica centralizada antes da resposta. Ao responder, ela vai para a esquerda e a correção abre à direita, cada lado rolando sozinho. Abaixo disso, a correção aparece embaixo da questão.
 - **Leitura:** o texto de leitura não passa de cerca de 68 caracteres por linha em nenhuma faixa.
@@ -227,8 +227,8 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 | Simulado em andamento, mapa e pausa | SIM-02 a SIM-08, RISC-01 a RISC-07, RNF-06, RNF-07, M-11, M-32 |
 | Estante | REV-01 a REV-07, SIM-05, SIM-08, DES-05, CONT-07, CONT-10, CONT-19, CONT-24, FLUXO-15, FLUXO-16 |
 | Desempenho | DES-01 a DES-13, CONT-05 |
-| Conta | CONTA-05, CONTA-07, CONTA-09 a CONTA-12, CONTA-18, CONTA-24, CONTA-25, REP-03 |
-| Fora da conta | CONTA-01 a CONTA-06, CONTA-08, CONTA-09, CONTA-14, RNF-36 |
+| Conta | CONTA-05, CONTA-07, CONTA-09 a CONTA-12, CONTA-18, CONTA-24, CONTA-25, CONTA-34 a CONTA-37, CONTA-46 a CONTA-48, CONTA-51, REP-03 |
+| Fora da conta | CONTA-01 a CONTA-06, CONTA-08, CONTA-09, CONTA-14, CONTA-26 a CONTA-31, CONTA-38 a CONTA-45, CONTA-54, RNF-36 |
 | Painel do editor | EDIT-01 a EDIT-13, FLUXO-01 a FLUXO-17, REP-01, REP-02, CONTA-02, CONTA-16, CONTA-17 |
 | Todas as telas do estudante | RNF-01 a RNF-04, RNF-14, RNF-15, RNF-43 |
 
@@ -248,3 +248,4 @@ Meta WCAG 2.2 AA (RNF-01), com testes automáticos e manuais (D-026). O que o de
 
 - 2026-11-24: documento criado no fechamento da Etapa 5, com autorização do usuário ("Aprovar Etapa 5").
 - 2026-11-24: Etapa 6, bloco 4 (D-032). Texto do erro inesperado com código acrescentado aos textos aprovados (RNF-43); rastreabilidade com RNF-36 (tokens dos links de e-mail no fragmento, nas telas fora da conta) e RNF-43.
+- 2026-11-25: Etapa 6, bloco 1 (D-007 e D-030), aprovado em 2026-11-24. A Conta e o Sair no pé do trilho e da barra lateral a partir de 600 px; sessões ativas e fatores de autenticação na Conta; rastreabilidade com CONTA-26 a CONTA-31, CONTA-34 a CONTA-48, CONTA-51 e CONTA-54. A página `docs/design/navegacao.html` foi atualizada no mesmo registro.
