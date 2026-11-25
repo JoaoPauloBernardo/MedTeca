@@ -103,3 +103,12 @@ Conforme D-033 (`docs/seguranca-e-privacidade.md`, seção 5):
 ## Atualização da Etapa 6, bloco 6 (2026-11-24)
 
 Conforme D-034 (`docs/seguranca-e-privacidade.md`, seção 5.4): o envio dos registros, a retenção no CloudWatch e na auditoria do banco, a rotação da cópia local, a limpeza do espaço reservado, os batimentos e os alertas são autorizações recorrentes, dentro dos parâmetros aprovados neste ADR. Mudança relevante de frequência, horário, escopo, permissões, retenção ou comportamento exige aprovação prévia do usuário, e ele pode suspender ou revogar qualquer uma delas a qualquer momento.
+
+## Atualização das resoluções da seção 5.P (2026-11-25)
+
+Conforme as resoluções aprovadas pelo usuário (`docs/seguranca-e-privacidade.md`, seção 5.P):
+
+- **Logs operacionais.** Passam do disco do sistema para o disco adicional cifrado, com limite técnico de tamanho que os impede de ocupar os 2 GB reservados aos eventos críticos e o espaço do banco (RNF-91). O método fica pendente da V52, que prova o mecanismo com um teste de enchimento.
+- **Eventos de exclusão.** "Exclusão solicitada" e "exclusão concluída", gravados pelo caminho crítico, com identificador pseudônimo da conta, identificador do pedido, horário e marco da transação, passam a ser a fonte única para reaplicar exclusões depois de uma restauração (RNF-90, RNF-93).
+- **Preservação num incidente.** Além dos registros do período (4.H.7), só um snapshot de preservação para investigação, com autorização do usuário e cifragem provada para o tipo exato de snapshot (RNF-89, V53).
+- **Correção:** o banco não fica no disco principal, como dizia a 4.H.3; desde a D-033, fica no disco adicional cifrado.
