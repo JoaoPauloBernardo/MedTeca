@@ -237,7 +237,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Licenças de cada dependência direta conferidas contra a lista da seção 6.E.7 e citadas no pull request
+- [x] Licenças de cada dependência direta conferidas contra a lista da seção 6.E.7 e citadas no pull request (todas as 29 do lock conferidas; psycopg e psycopg-binary, LGPL-3.0, e pathspec, MPL-2.0, aceitas com o motivo escrito no `pyproject.toml`). Desvio: o PyYAML fica para o T22, que é quem o usa; a versão de 7 dias atrás é de 2025 e provavelmente não tem pacote pronto para o Python 3.15. Entram `no-build = true` (nada compilado do código-fonte, para nenhum script de instalação rodar) e um `.gitignore` na raiz, para os caches das ferramentas
 
 **Tests**: none - configuração; a política é provada no T23
 **Gate**: ambiente
