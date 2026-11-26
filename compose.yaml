@@ -1,0 +1,71 @@
+# Ambiente de desenvolvimento do MedTeca (design da fundação).
+#
+#   docker compose up -d --wait db dev     sobe o banco e o contêiner do editor
+#   docker compose run --rm dev <comando>  roda um comando dentro do ambiente
+#
+# Só a pasta do repositório entra nos contêineres; nenhuma pasta nem
+# credencial do computador do usuário (FUND-03, RNF-85). Nenhuma porta é
+# publicada nesta fase. Os dados são fictícios.
+#
+# O repositório entra só para leitura, e só backend/, frontend/ e scripts/
+# aceitam escrita. Assim, código de terceiros rodando no contêiner não
+# consegue gravar no .git (hooks, core.fsmonitor), no .claude, no
+# compose.yaml, no .devcontainer nem em arquivos novos na raiz, que o
+# Windows executaria ou leria sozinho antes de qualquer revisão.
+
+name: medteca
+
+x-ambiente: &ambiente
+  build:
+    context: .
+    dockerfile: docker/dev.Dockerfile
+  image: medteca-dev:local
+  init: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  working_dir: /workspace
+  environment:
+    PGHOST: db
+    PGPORT: "5432"
+    PGDATABASE: medteca
+    PGUSER: medteca
+    PGPASSWORD: senha-ficticia-so-para-desenvolvimento
+  volumes:
+    - .:/workspace:ro
+    - ./backend:/workspace/backend
+    - ./frontend:/workspace/frontend
+    - ./scripts:/workspace/scripts
+    - venv:/workspace/backend/.venv
+    - node_modules:/workspace/frontend/node_modules
+    - cache-uv:/home/dev/.cache/uv
+    - store-pnpm:/home/dev/.local/share/pnpm
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    # PostgreSQL 18.6, Debian 13 (trixie); publicado em 2026-11-06.
+    image: postgres:18.6-trixie@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    environment:
+      POSTGRES_DB: medteca
+      POSTGRES_USER: medteca
+      POSTGRES_PASSWORD: senha-ficticia-so-para-desenvolvimento
+    volumes:
+      - dados-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "medteca", "-d", "medteca"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  dev:
+    <<: *ambiente
+    command: ["sleep", "infinity"]
+
+volumes:
+  dados-db:
+  venv:
+  node_modules:
+  cache-uv:
+  store-pnpm:

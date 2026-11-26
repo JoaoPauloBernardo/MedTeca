@@ -1,0 +1,15 @@
+# Fins de linha LF no repositório e na cópia de trabalho, mesmo com
+# core.autocrlf=true no Windows. Os arquivos são montados em contêineres
+# Linux, onde CRLF quebra scripts de shell e faz o Prettier acusar diferença.
+* text=auto eol=lf
+
+# Binários: nunca converter.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
