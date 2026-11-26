@@ -1,6 +1,9 @@
 # Fica fora do contexto de build das imagens: histórico do Git,
 # dependências instaladas, caches, saídas de build e documentação.
 .git
+.claude
+**/.env
+**/.env.*
 **/node_modules
 **/.venv
 **/__pycache__
