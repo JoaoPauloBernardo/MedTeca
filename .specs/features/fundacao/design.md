@@ -86,7 +86,7 @@ O repositório só tem documentação; não há código a reaproveitar.
 - **Dependencies**: imagens oficiais `python` e `node`, fixadas por digest; o `node` é copiado da imagem oficial dele para a do `python`, na mesma versão do Debian. O uv vem do PyPI e o pnpm, do registro do npm, com a versão fixada e `--ignore-scripts`.
 - **Reuses**: nada.
 
-Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do `node_modules` são criadas na imagem com esse dono, para que os volumes nasçam com a permissão certa.
+Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do `node_modules` são criadas na imagem com esse dono, para que os volumes nasçam com a permissão certa. A `libatomic` que o Node exige vem da imagem oficial do Node. O `npm` e o `npx` saem da imagem depois de instalar o pnpm, e a política de dependências vale também para comandos avulsos: `PIP_REQUIRE_HASHES=1`, `UV_EXCLUDE_NEWER="7 days"`, `pnpm_config_minimum_release_age=10080` e `pnpm_config_strict_dep_builds=true`.
 
 ### Compose
 
@@ -94,7 +94,8 @@ Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do 
 - **Location**: `compose.yaml`
 - **Interfaces**: `docker compose up`; `docker compose run --rm dev <comando>`; `docker compose --profile e2e run --rm e2e`.
 - **Serviços**: `db` (PostgreSQL 18, sem porta publicada, com checagem de saúde por `pg_isready`); `dev` (`sleep infinity`, onde o VS Code se liga); `api` (`runserver 0.0.0.0:8000`); `web` (`vite --host 0.0.0.0`, a única porta publicada, `127.0.0.1:5173`); `e2e` (perfil `e2e`).
-- **Montagens**: só o repositório, em `/workspace`, e volumes nomeados para `.venv`, `node_modules` e os caches do uv e do pnpm. Nenhuma pasta do usuário, nenhuma variável de credencial (FUND-03).
+- **Montagens**: o repositório em `/workspace`, só para leitura, com escrita apenas em `backend/`, `frontend/` e `scripts/` (FUND-35); volumes nomeados para `.venv`, `node_modules` e os caches do uv e do pnpm. Nenhuma pasta do usuário, nenhuma variável de credencial (FUND-03). Os contêineres do ambiente rodam sem capacidades do Linux (`cap_drop: [ALL]`) e com `no-new-privileges`. Mudança da revisão independente da fase 1: com tudo gravável, código de terceiros podia gravar no `.git` e no `.claude` algo que o Windows executaria.
+- **Pastas criadas pelo Docker**: quando o Docker cria uma pasta no Windows para montar um volume, ela nasce com dono `root` e o contêiner não grava nela; por isso `backend/` e `frontend/` têm um `.gitkeep` desde a fase 1.
 
 ### Backend
 

@@ -1,12 +1,12 @@
 #!/bin/sh
 # Confere, de dentro do contêiner, que nada do computador do usuário que dê
 # acesso ao GitHub, à AWS ou a outras máquinas entrou nele, e que o código
-# rodando aqui não consegue gravar no que o Windows executa (FUND-03 e
-# FUND-34; RNF-85).
+# rodando aqui não consegue gravar no que o Windows executa (FUND-03,
+# FUND-34 e FUND-35; RNF-85).
 #
 #   docker compose run --rm dev scripts/conferir-isolamento.sh
 #
-# Sai com 0 e imprime "ok - FUND-03: ..." quando está tudo limpo; sai com 1
+# Sai com 0 e imprime "ok - FUND-03 e FUND-35: ..." quando está tudo limpo; sai com 1
 # e lista o que achou, se não estiver.
 
 achados=""
@@ -84,9 +84,9 @@ for variavel in $(awk 'BEGIN { for (nome in ENVIRON) print nome }' | grep -E '^(
 done
 
 if [ -z "$achados" ]; then
-  echo "ok - FUND-03: contêiner sem credenciais, chaves SSH ou configuração do Git do usuário, e sem escrita no que o Windows executa"
+  echo "ok - FUND-03 e FUND-35: contêiner sem credenciais, chaves SSH ou configuração do Git do usuário, e sem escrita no que o Windows executa"
   exit 0
 fi
 
-echo "falha - FUND-03: o contêiner recebeu algo do computador do usuário:${achados}"
+echo "falha - FUND-03 e FUND-35: o contêiner recebeu algo do computador do usuário:${achados}"
 exit 1

@@ -119,7 +119,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [x] `git ls-files --eol` mostra `w/lf` nos arquivos de texto depois de um novo checkout
+- [x] `git ls-files --eol` mostra `w/lf` nos arquivos de texto depois de um novo checkout (conferido num clone novo, com `core.autocrlf=true`: 29 de 29 com LF; na cópia de trabalho do usuário, os 17 arquivos antigos, o README e os documentos, ficam com CRLF até serem tocados, sem efeito, porque nenhum roda no contêiner)
 - [x] Nenhum documento existente muda de conteúdo no diff
 
 **Tests**: none - configuração, sem camada de teste na matriz
@@ -138,7 +138,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [x] `docker compose build dev` não envia `.git` no contexto (contexto de 345 bytes no build da imagem)
+- [x] `docker compose build dev` não envia `.git` no contexto (provado por um build descartável que copia o contexto inteiro: `.git`, `.claude`, `docs` e `.specs` ficam de fora; os 345 bytes do build da imagem não provavam nada, porque o BuildKit só envia o que o Dockerfile copia)
 
 **Tests**: none - configuração
 **Gate**: ambiente
@@ -172,7 +172,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 **Where**: `compose.yaml`
 **Depends on**: T3
 **Reuses**: nada
-**Requirement**: FUND-01, FUND-02, FUND-03
+**Requirement**: FUND-01, FUND-02, FUND-03, FUND-35
 
 **Done when**:
 
@@ -192,13 +192,13 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 **Where**: `scripts/conferir-isolamento.sh`
 **Depends on**: T4
 **Reuses**: nada
-**Requirement**: FUND-03
+**Requirement**: FUND-03, FUND-35
 
 **Done when**:
 
 - [x] Run isolamento imprime `ok - FUND-03`
 - [x] Com `-e GH_TOKEN=ficticio` no `docker compose run`, o script sai com 1 e cita a variável
-- [x] A V43 começa a ser medida: tempo do `docker compose build dev` e do `docker compose up -d --wait db dev`, anotados no pull request
+- [x] A V43 começa a ser medida: tempo do `docker compose build dev` e do `docker compose up -d --wait db dev`, anotados no pull request. Medido em 2026-11-26, com a pasta em `C:\MedTeca`: build do zero 55 s, com cache 5 s; primeira subida (baixar o PostgreSQL e criar o banco) 50 s, depois 6,4 s; `docker compose run --rm dev true` 2,5 s
 
 **Tests**: integration (o próprio script, nos dois casos acima)
 **Gate**: isolamento
@@ -216,7 +216,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [x] O pull request traz o passo a passo das configurações do VS Code do usuário que impedem copiar o `.gitconfig` e repassar credenciais (`dev.containers.copyGitConfig` e `dev.containers.gitCredentialHelperConfigLocation`, conferidas na documentação na hora). Conferido em 2026-11-26: a documentação oficial não traz essas opções. `git.terminalAuthentication` e `git.useIntegratedAskPass` foram conferidas no manifesto do VS Code do usuário e desligadas no `devcontainer.json`; as opções da extensão Dev Containers são conferidas no manifesto dela depois da instalação, antes do walk da fase 4
+- [ ] O pull request traz o passo a passo das configurações do VS Code do usuário que impedem copiar o `.gitconfig` e repassar credenciais (`dev.containers.copyGitConfig` e `dev.containers.gitCredentialHelperConfigLocation`, conferidas na documentação na hora). Pendente: a documentação oficial não traz essas opções, e a extensão Dev Containers ainda não está instalada no computador do usuário para conferir o manifesto dela. Até lá, o pull request da fase 1 diz para não usar "Reopen in Container". `git.terminalAuthentication` e `git.useIntegratedAskPass` foram conferidas no manifesto do VS Code do usuário e desligadas no `devcontainer.json`; o `postAttachCommand` roda o script de isolamento a cada conexão
 - [x] O walk completo fica para o fim da fase 4, quando houver dependências e testes
 
 **Tests**: none - configuração do editor; prova por walk (FUND-32 a FUND-34)
@@ -731,6 +731,9 @@ Proof: run backend | test_fund_02_so_porta_5173_em_localhost PASSED
 **C3** - Dentro do contêiner não há chaves SSH, credenciais do GitHub ou da AWS, configuração do Git nem auxiliar de credenciais (FUND-03, P1 Ambiente AC 3)
 Proof: run isolamento | ok - FUND-03
 
+**C35** - O repositório entra só para leitura, com escrita apenas em `backend/`, `frontend/` e `scripts/`, e nenhuma outra montagem (FUND-35, P1 Ambiente AC 7)
+Proof: run isolamento | ok FUND-35
+
 **C4** - Lockfile divergente faz a instalação falhar sem reescrever o lockfile, no uv e no pnpm (FUND-04, P1 Ambiente AC 4)
 Proof: run backend | test_fund_04_uv_lockfile_divergente_falha PASSED
 Proof: run backend | test_fund_04_pnpm_lockfile_divergente_falha PASSED
@@ -837,8 +840,8 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 
 The feature's live state, written as it happens - a compaction gives no warning.
 
-**Settled mid-build:** none
-**Dispatched:** none
+**Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário.
+**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário.
 **Walked:** none
 
 ---

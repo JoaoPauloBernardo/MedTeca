@@ -82,6 +82,7 @@ O MedTeca tem o planejamento aprovado (Etapas 1 a 6), mas ainda não tem nenhuma
 4. IF o `uv.lock` ou o `pnpm-lock.yaml` não corresponde ao manifesto THEN the system SHALL falhar a instalação das dependências sem alterar o lockfile. (FUND-04; RNF-72)
 5. The system SHALL recusar, no uv e no pnpm, versões de dependência publicadas há menos de 7 dias. (FUND-05; RNF-73)
 6. The system SHALL bloquear os scripts de instalação das dependências do frontend, salvo os liberados pelo usuário e registrados. (FUND-06; P6-09)
+7. The system SHALL montar o repositório só para leitura nos contêineres de desenvolvimento, com escrita apenas em `backend/`, `frontend/` e `scripts/`. (FUND-35; seção 6.J.1; acrescentado em 2026-11-26 pela revisão independente da fase 1)
 
 **Independent Test**: Num clone limpo, `docker compose up` e abrir `http://localhost:5173`; dentro do contêiner, rodar o script de isolamento e ver que nenhuma credencial aparece.
 
@@ -273,8 +274,9 @@ O MedTeca tem o planejamento aprovado (Etapas 1 a 6), mas ainda não tem nenhuma
 | FUND-32 | P1: Editor dentro do contêiner | Tasks | Pending |
 | FUND-33 | P1: Editor dentro do contêiner | Tasks | Pending |
 | FUND-34 | P1: Editor dentro do contêiner | Tasks | Pending |
+| FUND-35 | P1: Ambiente de desenvolvimento | Tasks | Pending |
 
-**Coverage:** 34 total, 34 mapped to tasks, 0 unmapped.
+**Coverage:** 35 total, 35 mapped to tasks, 0 unmapped.
 
 ---
 
