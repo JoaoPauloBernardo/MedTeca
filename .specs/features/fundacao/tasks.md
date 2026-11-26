@@ -156,9 +156,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `docker compose build dev` passa
-- [ ] `python --version`, `uv --version`, `node --version` e `pnpm --version` dentro da imagem mostram as versões fixadas
-- [ ] Cada `FROM` traz o digest e a versão num comentário
+- [x] `docker compose build dev` passa (conferido com `docker build`; o Compose chega no T4)
+- [x] `python --version`, `uv --version`, `node --version` e `pnpm --version` dentro da imagem mostram as versões fixadas
+- [x] Cada `FROM` traz o digest e a versão num comentário
 
 **Tests**: none - imagem, provada pelo portão e pelo T5
 **Gate**: ambiente
