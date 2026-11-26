@@ -22,7 +22,7 @@ Documento da Etapa 6 (segurança, LGPD, qualidade e infraestrutura). Reúne, por
 |---|---|---|
 | 1 | Contas e acesso | Aprovado em 2026-11-24 ("Aprovar bloco 1") e registrado em 2026-11-25 (D-007); seção 1 |
 | 2 | Permissões e privacidade | Aprovado em 2026-11-24 ("Aprovar bloco 2") e registrado em 2026-11-25; seção 2 |
-| 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3") e registrado em 2026-11-25 (D-009); seção 3. Critérios e modelo conceitual no PR seguinte |
+| 3 | LGPD (D-009) | Aprovado em 2026-11-24 ("Aprovar bloco 3") e registrado em 2026-11-25 (D-009); seção 3. Critérios e modelo conceitual registrados em 2026-11-26 (seção 3.I) |
 | 4 | Registros e monitoramento | Aprovado e registrado em 2026-11-24 (D-032); seção 4 |
 | 5 | Infraestrutura e operação | Aprovado com ressalvas e registrado em 2026-11-24 (D-033); seção 5 |
 | 6 | Qualidade e cadeia de suprimentos | Aprovado e registrado em 2026-11-24 (D-034); seção 6 e seção 5.4 |
@@ -300,7 +300,9 @@ Nenhuma neste bloco.
 - **Bloco 3 (aprovado em 2026-11-24; detalhes na seção 3):**
   - na exclusão da conta, as respostas viram contagens de pessoas distintas por versão e alternativa, e as tentativas são apagadas; as contagens continuam tratadas como dado pessoal desvinculado, e o item D.5 passa a valer para elas;
   - a estatística da equipe ganha regras contra dedução: população definida, sem filtro de período nem de modalidade, contagens nunca exibidas à parte e supressão complementar (se uma alternativa aparece como "menos de 3", a segunda menor também é ocultada);
-  - concessões sensíveis expiram depois de 90 dias sem uso, papéis de equipe parados são suspensos depois de 6 meses e os privilégios passam por revisão semestral.
+  - concessões sensíveis expiram depois de 90 dias sem uso, papéis de equipe parados são suspensos depois de 6 meses e os privilégios passam por revisão semestral;
+  - o item D.2 muda para quem exclui a conta: o reporte aberto fica sem autor até ser concluído, e o concluído perde o texto livre (M-41, REP-04 a REP-06);
+  - os critérios e as decisões do modelo foram registrados em 2026-11-26 (seção 3.I).
 
 ### H. Critérios no catálogo
 
@@ -323,7 +325,7 @@ Registrado em 2026-11-25, numa branch de trabalho, para revisão e merge do usu�
 - **Revisão externa** trazida pelo usuário ("Vamos revisar certinho pra eu nao ter problemas futuros"). O consultor conferiu as Resoluções CD/ANPD nº 15/2024 e nº 2/2022 em republicações (LegisWeb e Normas Brasil, não no Diário Oficial), o que corrigiu três afirmações dele: os critérios de comunicação de incidente, os prazos em dobro e os prazos dos direitos do titular.
 - **Seis ajustes pedidos pelo usuário** antes da aprovação: a exceção desatualizada do prazo em dobro; a população da estatística da equipe; a garantia de que sair não muda os números; a supressão também nas alternativas removidas; o destino de todos os registros na exclusão (B.12); a revisão periódica de privilégios inativos.
 - **Aprovação:** "Aprovar bloco 3" (2026-11-24), sobre a versão consolidada com os seis ajustes.
-- **Registro** em 2026-11-25. Os critérios do catálogo e as mudanças no modelo conceitual (seção C) entram num PR seguinte. A seção F traz o que blocos posteriores mudaram.
+- **Registro** em duas partes, como o usuário escolheu ("Dois PRs (Recomendado)"): esta seção e a D-009 em 2026-11-25; os critérios do catálogo e as decisões do modelo conceitual em 2026-11-26 (seção I). A seção F traz o que blocos posteriores mudaram.
 - **A análise jurídica deste bloco é preliminar.** As bases legais são propostas para o advogado, e nenhuma pergunta da seção E impede fechar o bloco no planejamento; elas impedem abrir o beta.
 
 ### B.1 Decisões aprovadas
@@ -518,7 +520,7 @@ Nenhuma neste bloco.
 
 ### C. Mudanças em decisões anteriores
 
-Aprovadas com o bloco. Os registros no catálogo e no modelo conceitual entram no PR seguinte, com ID novo para cada regra mudada e a regra antiga marcada como substituída.
+Aprovadas com o bloco e registradas em 2026-11-26, com ID novo para cada regra mudada e a regra antiga mantida, marcada como substituída ou removida: o CONTA-12 foi substituído pelo CONTA-70; o CONTA-25 foi removido; M-21 e M-36 foram substituídas por M-40 (e M-21 também por M-42); M-07 e M-22 foram substituídas em parte por M-40 e M-41; a RM-13 foi substituída pela RM-19. O bloco 2 recebeu uma nota na seção 2.G.
 
 | ID | Regra anterior | Regra aprovada | Justificativa |
 |---|---|---|---|
@@ -537,7 +539,7 @@ Aprovadas com o bloco. Os registros no catálogo e no modelo conceitual entram n
 - **DES-01, DES-11 a DES-13, M-37:** valem como estão para contas ativas.
 - **RM-09:** a fotografia nunca muda. Apagar não é alterar.
 - **REP-03:** sem mudança.
-- **CONT-20:** os registros de respostas afetadas por mudança de gabarito perdem os identificadores da pessoa e mantêm a quantidade total (B.12).
+- **CONT-20:** os registros de respostas afetadas por mudança de gabarito perdem os identificadores da pessoa e mantêm a quantidade total (B.12, CONTA-87).
 
 ### D. Propostas aprovadas junto com o bloco
 
@@ -596,7 +598,13 @@ Neste registro (2026-11-25), numa branch de trabalho, para revisão e merge do u
 - `docs/design-e-ux.md`: nota sobre as fontes servidas pelo próprio servidor.
 - `README.md`: a D-009 sai da lista de decisões pendentes.
 
-No PR seguinte: os critérios do catálogo (inclusive o CONTA-12 substituído e o CONTA-25 removido) e as decisões novas do modelo conceitual que substituem as da tabela C, com nota na D-008.
+Na segunda parte (2026-11-26), também numa branch de trabalho, para revisão e merge do usuário:
+
+- `docs/requisitos-mvp.md`: critérios CONTA-70 a CONTA-97, REP-04 a REP-06 e RNF-95 a RNF-97; o CONTA-12 substituído pelo CONTA-70 e o CONTA-25 removido, com as duas situações novas nas convenções; notas no CONT-20 e no CONTA-69; pendências atualizadas.
+- `docs/modelo-conceitual.md`: M-40 a M-42 e RM-19; M-21, M-36 e RM-13 substituídas, e M-07 e M-22 substituídas em parte; entidade CONTAGEM no diagrama; rastreabilidade e pendências da Etapa 6.
+- `docs/decisions.md`: notas na D-008 e na D-009; notas nos ADRs das duas.
+- Este documento: seção I, notas nas seções 2.G e 5.P e cabeçalho.
+- `README.md`: situação da Etapa 6.
 
 ### H. Fontes
 
@@ -609,6 +617,27 @@ Conferidas pelo consultor em 2026-11-24, em republicações:
 - [Mattos Filho: regulamento de comunicação de incidente](https://www.mattosfilho.com.br/unico/regulamento-incidente-seguranca/)
 - [Migalhas: agentes de tratamento de pequeno porte](https://www.migalhas.com.br/depeso/360989/a-lgpd-e-os-agentes-de-tratamento-de-pequeno-porte)
 - [Agência Gov: comunicar incidente é preciso, mas nem sempre](https://agenciagov.ebc.com.br/noticias/202507/incidentes-de-seguranca-com-dados-pessoais-comunicar-e-preciso-mas-nem-sempre)
+
+### I. Critérios no catálogo e decisões do modelo
+
+Registrados em 2026-11-26. Os critérios de `docs/requisitos-mvp.md` transcrevem as decisões e as propostas aprovadas deste bloco no formato EARS, e as decisões de `docs/modelo-conceitual.md` substituem as da tabela C.
+
+| Tema | Critérios | Modelo |
+|---|---|---|
+| Contagens na exclusão da conta (B.2) | CONTA-70, que substitui o CONTA-12 | M-40, RM-19 |
+| Estatística da equipe: população, invariância na exclusão e proteção contra dedução (B.2) | CONTA-71 a CONTA-77 | M-40 |
+| Datas das tentativas preservadas | CONTA-25 removido | M-36 substituída por M-40 |
+| Reportes de quem exclui a conta (B.2) | REP-04 a REP-06 | M-41 |
+| Inatividade (B.7) | CONTA-78 a CONTA-81 | — |
+| Revisão de privilégios inativos (B.7) | CONTA-82 a CONTA-85 | — |
+| Destino de cada registro na exclusão (B.12) | CONTA-86 a CONTA-90 | M-42 |
+| Convites (B.9) | CONTA-90 a CONTA-92 | — |
+| Idade (B.9) | CONTA-93 e CONTA-94 | — |
+| Canal de privacidade e exportação (B.3, B.5) | CONTA-95 e CONTA-96 | — |
+| Pwned Passwords (B.4) | CONTA-97, que detalha o CONTA-28 | — |
+| Fontes, chamadas a terceiros e cookies (B.4) | RNF-95 a RNF-97 | — |
+
+**Fora dos critérios**, por serem metas de processo ou dependerem do advogado: a meta interna de 15 dias pelo canal e a correção de e-mail (B.5); os prazos de comunicação de incidentes e o registro de todo incidente (B.6); as bases legais (B.3); os documentos da Etapa 7 (B.10).
 
 ## 4. Registros e monitoramento (bloco 4, D-032)
 
@@ -1634,7 +1663,7 @@ Encontradas durante o registro do bloco 5. **Resolvidas pelo usuário em 2026-11
      - **Marco do backup:** o backup exporta o snapshot do banco (`pg_export_snapshot`), e o `pg_dump` usa esse snapshot (`--snapshot`); o manifesto do backup grava o marco do snapshot (`pg_current_snapshot`) e o identificador do cluster; cada evento leva o ID da transação (`pg_current_xact_id`). Na restauração, é reprocessado todo pedido cujo evento não está visível no snapshot do backup (`pg_visible_in_snapshot`, a confirmar na V55), de forma idempotente pelo identificador do pedido e decidindo pelo estado do banco restaurado (RNF-92). Uma margem de 24 horas no horário fica só como rede de segurança, para eventos cujo marco não dê para avaliar. Alternativas descartadas: só o horário UTC, frágil diante do relógio, da duração do dump e de transações longas; e o número sequencial do pedido, porque a ordem dos números não é a ordem dos commits.
      - **Lacunas:** a conferência verifica a continuidade da `seq` no período a reprocessar; se houver lacuna, o banco restaurado fica bloqueado até a conferência manual do usuário (RNF-94).
      - **Acesso:** a leitura dos eventos na restauração usa o papel de leitor dos registros, com MFA, e fica registrada (RNF-20).
-     - **Efeitos:** a lista própria do bloco 3 (B.8) sai no registro do bloco 3. A Jur-24 passa a considerar também essa fonte: o identificador pseudônimo continua sendo dado pessoal enquanto houver possibilidade de reidentificação, por exemplo pelos backups de até 30 dias.
+     - **Efeitos:** a lista própria do bloco 3 (B.8) sai no registro do bloco 3 (feito em 2026-11-25: seção 3.B.8, marcada como substituída). A Jur-24 passa a considerar também essa fonte: o identificador pseudônimo continua sendo dado pessoal enquanto houver possibilidade de reidentificação, por exemplo pelos backups de até 30 dias.
 2. **Preservação de evidências e RNF-45.**
    - **Bloco 5** (K.1): preservar as evidências de um servidor comprometido no registro do incidente.
    - **Bloco 4** (RNF-45 e 4.H.7): o RNF-45 proíbe cópias de disco com a pasta de registros e o espaço reservado; o 4.H.7 só prevê copiar os registros do período para o registro do incidente.
@@ -1696,7 +1725,7 @@ Fica para quando o registro dos blocos 1 e 3 for autorizado:
 - o ajuste do procedimento de emergência (5.P.3);
 - a fonte das exclusões (5.P.1).
 
-As duas divergências foram resolvidas em 2026-11-25 (5.P); o que muda nos textos dos blocos 1 e 3 entra no registro deles.
+As duas divergências foram resolvidas em 2026-11-25 (5.P); o que muda nos textos dos blocos 1 e 3 entra no registro deles (feito em 2026-11-25: seções 1.B.5 e 3.B.8).
 
 ### R. Fontes conferidas em 2026-11-24
 
@@ -2211,3 +2240,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-25: bloco 1 (contas e acesso), aprovado em 2026-11-24 ("Aprovar bloco 1"), registrado na seção 1, a partir do texto da versão final aprovada, com a seção D (o que os blocos 4 a 6 e a resolução da 5.P.3 mudaram) e o ajuste do procedimento de emergência (B.5). Critérios CONTA-26 a CONTA-55. Os blocos 2 e 3 seguem aprovados e sem registro. Registro pedido pelo usuário ("vamos pra próxima parte").
 - 2026-11-25: bloco 2 (permissões e privacidade), aprovado em 2026-11-24 ("Aprovar bloco 2"), registrado na seção 2, a partir do texto da proposta aprovada, com a seção G (o que os blocos 1, 3 e 4 mudaram). Critérios CONTA-56 a CONTA-69. O bloco 3 segue aprovado e sem registro. Registro pedido pelo usuário ("está perfeito vamos seguir!").
 - 2026-11-25: bloco 3 (LGPD), aprovado em 2026-11-24 ("Aprovar bloco 3"), registrado na seção 3, a partir da versão consolidada aprovada com os seis ajustes do usuário. A lista de exclusões (B.8) aparece como substituída pela resolução da 5.P.1; a tabela B.12 recebeu as linhas previstas em 4.H.8; as perguntas ao advogado viraram Jur-01 a Jur-16. Os critérios e o modelo conceitual entram no PR seguinte, como o usuário escolheu ("Dois PRs"). Registro pedido pelo usuário ("vamos").
+- 2026-11-26: bloco 3, segunda parte do registro: critérios CONTA-70 a CONTA-97, REP-04 a REP-06 e RNF-95 a RNF-97 no catálogo, com o CONTA-12 substituído e o CONTA-25 removido; decisões M-40 a M-42 e RM-19 no modelo conceitual, que substituem M-21, M-36 e RM-13 e, em parte, M-07 e M-22. Seção 3.I com o mapa de cada tema; notas no cabeçalho e nas seções 2.G, 3.1, 3.C, 3.G e 5.P. Os seis blocos estão registrados por inteiro. Registro pedido pelo usuário ("vamo seguir!").
