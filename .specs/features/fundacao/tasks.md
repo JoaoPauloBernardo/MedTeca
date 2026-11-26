@@ -196,9 +196,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Run isolamento imprime `ok - FUND-03`
-- [ ] Com `-e GH_TOKEN=ficticio` no `docker compose run`, o script sai com 1 e cita a variável
-- [ ] A V43 começa a ser medida: tempo do `docker compose build dev` e do `docker compose up -d --wait db dev`, anotados no pull request
+- [x] Run isolamento imprime `ok - FUND-03`
+- [x] Com `-e GH_TOKEN=ficticio` no `docker compose run`, o script sai com 1 e cita a variável
+- [x] A V43 começa a ser medida: tempo do `docker compose build dev` e do `docker compose up -d --wait db dev`, anotados no pull request
 
 **Tests**: integration (o próprio script, nos dois casos acima)
 **Gate**: isolamento
