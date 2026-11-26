@@ -293,9 +293,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_07_saude_responde_ok`, `test_fund_08_banco_fora_responde_503` (falha simulada do cursor, corpo exato e sem detalhe) e `test_fund_09_saude_sem_cache` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 3 tests pass (no silent deletions)
+- [x] `test_fund_07_saude_responde_ok`, `test_fund_08_banco_fora_responde_503` (falha simulada do cursor, corpo exato e sem detalhe) e `test_fund_09_saude_sem_cache` passam
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 3 tests pass (no silent deletions). São 4 execuções: o FUND-09 roda com o banco no ar e fora, porque o cabeçalho vale para as duas respostas
 
 **Tests**: integration
 **Gate**: backend
