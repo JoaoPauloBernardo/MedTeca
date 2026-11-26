@@ -138,7 +138,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `docker compose build dev` não envia `.git` no contexto
+- [x] `docker compose build dev` não envia `.git` no contexto (contexto de 345 bytes no build da imagem)
 
 **Tests**: none - configuração
 **Gate**: ambiente
