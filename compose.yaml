@@ -63,6 +63,26 @@ services:
     <<: *ambiente
     command: ["sleep", "infinity"]
 
+  api:
+    <<: *ambiente
+    # Instala pelo lockfile e sobe o servidor de desenvolvimento do Django,
+    # que recarrega a cada mudança no código. Sem porta publicada: o
+    # navegador chega à API pelo repasse do Vite (D-020).
+    command:
+      - sh
+      - -c
+      - cd backend && uv sync --locked && exec uv run python manage.py runserver 0.0.0.0:8000
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/api/saude", timeout=2)
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+
 volumes:
   dados-db:
   venv:

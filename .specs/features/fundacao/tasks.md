@@ -333,8 +333,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Com `docker compose up -d --wait db api`, uma requisição a `http://api:8000/api/saude` feita de dentro do `dev`, com o `urllib` do Python, responde 200; o resultado vai no pull request
-- [ ] A V43 continua: tempo do `portoes-backend.sh`, anotado no pull request
+- [x] Com `docker compose up -d --wait db api`, uma requisição a `http://api:8000/api/saude` feita de dentro do `dev`, com o `urllib` do Python, responde 200; o resultado vai no pull request (200, `no-store`, `{"situacao": "ok"}`; a API fica saudável em 14 s; com o banco parado, 503 e `{"situacao": "indisponivel"}` em 4 s)
+- [x] A V43 continua: tempo do `portoes-backend.sh`, anotado no pull request (32 s, com a pasta no Windows)
 
 **Tests**: none - configuração; a rota é provada no T10 e o caminho completo no T25
 **Gate**: backend
