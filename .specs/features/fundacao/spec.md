@@ -149,7 +149,7 @@ O MedTeca tem o planejamento aprovado (Etapas 1 a 6), mas ainda não tem nenhuma
 
 1. WHILE as configurações de produção estão ativas the system SHALL responder 404 em `/api/docs` e em `/api/openapi.json`. (FUND-19; ASVS 13.4.5)
 2. WHILE as configurações de produção estão ativas the system SHALL passar no `manage.py check --deploy` sem erros nem avisos, salvo os silenciados com o motivo escrito no arquivo de configurações. (FUND-20)
-3. IF as configurações de produção são carregadas sem `DJANGO_SECRET_KEY` THEN the system SHALL recusar a inicialização com erro. (FUND-21)
+3. IF as configurações de produção são carregadas sem `DJANGO_SECRET_KEY`, ou com ela vazia, só com espaços ou com menos de 50 caracteres THEN the system SHALL recusar a inicialização com erro. (FUND-21; ampliado em 2026-11-26 pela revisão independente da fase 2: o mínimo de 50 é o do próprio Django, W009)
 
 **Independent Test**: Rodar `check --deploy` e os testes com as configurações de produção; tirar a variável do segredo e ver o Django recusar a subida.
 
@@ -231,7 +231,7 @@ O MedTeca tem o planejamento aprovado (Etapas 1 a 6), mas ainda não tem nenhuma
 - IF o banco está fora THEN `/api/saude` responde 503 (FUND-08) e a página mostra "Servidor fora do ar" (FUND-12).
 - IF a API demora mais de 5 segundos THEN a página mostra "Servidor fora do ar" (FUND-12).
 - IF a API responde 200 com um corpo diferente de `{"situacao": "ok"}` THEN a página mostra "Servidor fora do ar" (FUND-12: só `situacao` igual a `ok` conta como no ar).
-- IF o segredo da produção falta THEN o Django não sobe (FUND-21).
+- IF o segredo da produção falta ou tem menos de 50 caracteres THEN o Django não sobe (FUND-21).
 - IF um lockfile está desatualizado THEN a instalação falha sem reescrevê-lo (FUND-04).
 
 ---

@@ -87,13 +87,29 @@ def test_fund_20_check_deploy_sem_avisos() -> None:
     assert silenciados.stdout.split() == ["security.W004", "security.W008"]
 
 
-@pytest.mark.parametrize("segredo", ["ausente", "vazio"])
+SEGREDOS_RECUSADOS = {
+    "vazio": "",
+    "so-espacos": " " * 60,
+    # Um a menos que o mínimo do Django (W009 do check --deploy).
+    "curto": "a1b2c3d4e5" * 4 + "f6g7h8i9j",
+}
+
+
+@pytest.mark.parametrize("segredo", ["ausente", *SEGREDOS_RECUSADOS])
 def test_fund_21_producao_exige_segredo(segredo: str) -> None:
     if segredo == "ausente":
         resultado = rodar_em_producao("manage.py", "check", sem=("DJANGO_SECRET_KEY",))
     else:
-        resultado = rodar_em_producao("manage.py", "check", com={"DJANGO_SECRET_KEY": ""})
+        valor = SEGREDOS_RECUSADOS[segredo]
+        resultado = rodar_em_producao("manage.py", "check", com={"DJANGO_SECRET_KEY": valor})
 
     assert resultado.returncode != 0
     assert "ImproperlyConfigured" in resultado.stderr
     assert "DJANGO_SECRET_KEY" in resultado.stderr
+
+
+def test_fund_21_producao_aceita_segredo_de_50_caracteres() -> None:
+    # O limite exato: 50 caracteres sobem; o caso "curto" acima, com 49, não.
+    resultado = rodar_em_producao("manage.py", "check", com={"DJANGO_SECRET_KEY": "x9" * 25})
+
+    assert resultado.returncode == 0, resultado.stderr

@@ -792,8 +792,12 @@ Proof: run backend | test_fund_19_docs_fora_em_producao PASSED
 **C20** - Com as configurações de produção, `check --deploy` sai com 0 e sem avisos além dos silenciados com motivo (FUND-20, P1 Produção AC 2)
 Proof: run backend | test_fund_20_check_deploy_sem_avisos PASSED
 
-**C21** - Sem `DJANGO_SECRET_KEY`, as configurações de produção não carregam (FUND-21, P1 Produção AC 3)
-Proof: run backend | test_fund_21_producao_exige_segredo PASSED
+**C21** - Sem `DJANGO_SECRET_KEY`, com ela vazia, só com espaços ou com menos de 50 caracteres, as configurações de produção não carregam; com 50, carregam (FUND-21, P1 Produção AC 3)
+Proof: run backend | test_fund_21_producao_exige_segredo[ausente] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[vazio] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[so-espacos] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[curto] PASSED
+Proof: run backend | test_fund_21_producao_aceita_segredo_de_50_caracteres PASSED
 
 **C22** - O pull request da fase 5 roda e passa os portões da tabela (FUND-22, P1 CI AC 1)
 Proof: walk - a página de checagens do pull request da fase 5 lista `backend`, `frontend`, `e2e`, `workflows`, `segredos`, `dependencias` e o CodeQL, todos verdes

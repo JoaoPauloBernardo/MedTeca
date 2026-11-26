@@ -1,7 +1,7 @@
 """Configurações de produção.
 
-Só carregam com as variáveis de ambiente da produção: sem DJANGO_SECRET_KEY,
-o Django não sobe (FUND-21). O banco por socket com autenticação peer
+Só carregam com as variáveis de ambiente da produção: sem um DJANGO_SECRET_KEY
+de pelo menos 50 caracteres, o Django não sobe (FUND-21). O banco por socket com autenticação peer
 (D-005, D-033) entra com a funcionalidade de publicação.
 """
 
@@ -13,13 +13,19 @@ from .base import *  # noqa: F403
 
 DEBUG = False
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
-if not SECRET_KEY:
+# O segredo precisa ter pelo menos 50 caracteres, o mínimo que o Django
+# cobra no check --deploy (W009); espaços nas pontas não contam.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "").strip()
+if len(SECRET_KEY) < 50:
     raise ImproperlyConfigured(
-        "Defina DJANGO_SECRET_KEY: as configurações de produção não sobem sem o segredo."
+        "Defina DJANGO_SECRET_KEY com pelo menos 50 caracteres: as configurações de "
+        "produção não sobem sem um segredo forte."
     )
 
-ALLOWED_HOSTS = [host for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if host]
+# Hosts separados por vírgula; espaços em volta de cada um são ignorados.
+ALLOWED_HOSTS = [
+    host.strip() for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if host.strip()
+]
 
 # Cookies só por HTTPS (D-007). Os nomes com __Host- e o resto da sessão
 # entram com a funcionalidade Contas.
