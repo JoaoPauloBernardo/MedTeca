@@ -1982,6 +1982,8 @@ Tudo roda em contêineres. Enquanto as checagens obrigatórias não estiverem na
 
 **E.1 Gerenciadores e fontes** (P6-07). uv no Python (`uv.lock`, com hash) e pnpm no frontend (`pnpm-lock.yaml`). A instalação usa só o lockfile (`uv sync --locked`, `pnpm install --frozen-lockfile`). As fontes de pacotes são só o PyPI, o registro do npm e as imagens oficiais; nenhuma dependência vem direto de Git ou de arquivo baixado (`blockExoticSubdeps`, padrão no pnpm 11, Doc). As versões das ferramentas ficam fixadas.
 
+Nota de 2026-11-26 (implementação da fundação): o Marketplace do VS Code foi aceito como fonte, só para as extensões do editor que rodam no contêiner de desenvolvimento ("Aceito, com versão fixa"). Cada extensão fica numa versão publicada há mais de 7 dias, fixada em `.devcontainer/devcontainer.json`, com a atualização automática desligada nas configurações do usuário no VS Code. O Dependabot não atualiza essa lista; ela é revista na manutenção mensal (I.2).
+
 **E.2 Espera de 7 dias** (P6-08):
 
 - uv: `exclude-newer = "7 days"` (fonte secundária; V37);

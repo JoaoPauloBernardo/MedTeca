@@ -840,7 +840,7 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 
 The feature's live state, written as it happens - a compaction gives no warning.
 
-**Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário.
+**Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário. "Aceito, com versão fixa" (2026-11-26): extensões do VS Code do Marketplace, com versão fixa, espera de 7 dias e atualização automática desligada pelo usuário; fixadas no `devcontainer.json` (ms-python.python 2026.10.0, ms-python.vscode-pylance 2026.4.1, ms-python.debugpy 2026.6.0, ms-python.vscode-python-envs 1.44.0, charliermarsh.ruff 2026.96.0, dbaeumer.vscode-eslint 3.0.34, esbenp.prettier-vscode 12.4.0, vitest.explorer 1.52.2). A sintaxe `id@versão` é conferida no walk da fase 4.
 **Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário.
 **Walked:** none
 
