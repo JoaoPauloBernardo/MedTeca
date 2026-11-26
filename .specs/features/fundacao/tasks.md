@@ -313,9 +313,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_19_docs_fora_em_producao`, `test_fund_20_check_deploy_sem_avisos` e `test_fund_21_producao_exige_segredo` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 6 tests pass (no silent deletions)
+- [x] `test_fund_19_docs_fora_em_producao`, `test_fund_20_check_deploy_sem_avisos` e `test_fund_21_producao_exige_segredo` passam
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 6 tests pass (no silent deletions). São 8 execuções: o FUND-21 roda com o segredo ausente e vazio
 
 **Tests**: integration
 **Gate**: backend

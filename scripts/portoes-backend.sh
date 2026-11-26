@@ -23,5 +23,11 @@ uv run mypy .
 echo "== migrações pendentes"
 uv run python manage.py makemigrations --check --dry-run
 
+echo "== configuração de produção (check --deploy)"
+DJANGO_SETTINGS_MODULE=medteca.settings.prod \
+DJANGO_SECRET_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(64))')" \
+DJANGO_ALLOWED_HOSTS=medteca.test \
+  uv run python manage.py check --deploy --fail-level WARNING
+
 echo "== testes (pytest no PostgreSQL 18)"
 uv run pytest
