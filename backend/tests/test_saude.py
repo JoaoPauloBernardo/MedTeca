@@ -44,4 +44,7 @@ def test_fund_09_saude_sem_cache(
 
     resposta = client.get("/api/saude")
 
+    # Confere que a variante percorreu o caminho certo (200 ou 503) antes de
+    # afirmar o cabeçalho, para que as duas respostas fiquem de fato provadas.
+    assert resposta.status_code == (503 if banco == "banco-fora" else 200)
     assert resposta["Cache-Control"] == "no-store"

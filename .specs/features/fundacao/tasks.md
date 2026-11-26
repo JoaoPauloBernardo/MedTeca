@@ -751,8 +751,9 @@ Proof: run backend | test_fund_07_saude_responde_ok PASSED
 **C8** - Com falha no banco, `GET /api/saude` responde 503 e exatamente `{"situacao": "indisponivel"}` (FUND-08, P1 API AC 2)
 Proof: run backend | test_fund_08_banco_fora_responde_503 PASSED
 
-**C9** - `GET /api/saude` traz `Cache-Control: no-store` (FUND-09, P1 API AC 3)
-Proof: run backend | test_fund_09_saude_sem_cache PASSED
+**C9** - `GET /api/saude` traz `Cache-Control: no-store` na resposta 200 e na 503 (FUND-09, P1 API AC 3)
+Proof: run backend | test_fund_09_saude_sem_cache[banco-no-ar] PASSED
+Proof: run backend | test_fund_09_saude_sem_cache[banco-fora] PASSED
 
 **C10** - Antes da resposta, a página mostra "Verificando o servidor…" (FUND-10, P1 Página AC 1)
 Proof: run frontend | ✓ FUND-10
