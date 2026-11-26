@@ -53,6 +53,7 @@ plugins = ["mypy_django_plugin.main"]
 django_settings_module = "medteca.settings.test"
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "medteca.settings.test"
 testpaths = ["tests"]
-addopts = "--strict-markers"
+# --ds pela linha de comando vence o DJANGO_SETTINGS_MODULE que o Compose
+# define para o desenvolvimento: os testes usam sempre as configurações de teste.
+addopts = "--strict-markers --ds=medteca.settings.test"

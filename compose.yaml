@@ -25,6 +25,7 @@ x-ambiente: &ambiente
   security_opt: ["no-new-privileges:true"]
   working_dir: /workspace
   environment:
+    DJANGO_SETTINGS_MODULE: medteca.settings.dev
     PGHOST: db
     PGPORT: "5432"
     PGDATABASE: medteca

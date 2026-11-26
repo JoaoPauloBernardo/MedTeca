@@ -6,9 +6,11 @@ import sys
 
 
 def main() -> None:
-    # Por padrão, as configurações de desenvolvimento. A produção define
-    # DJANGO_SETTINGS_MODULE explicitamente.
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "medteca.settings.dev")
+    # Sem configuração padrão: no desenvolvimento, o compose.yaml define
+    # DJANGO_SETTINGS_MODULE. Um comando rodado na produção sem a variável
+    # falha, em vez de subir com o segredo público do desenvolvimento.
+    if not os.environ.get("DJANGO_SETTINGS_MODULE"):
+        sys.exit("Defina DJANGO_SETTINGS_MODULE (no desenvolvimento, o compose.yaml já define).")
     from django.core.management import execute_from_command_line
 
     execute_from_command_line(sys.argv)
