@@ -1,12 +1,19 @@
 // VS Code dentro do contêiner de desenvolvimento (FUND-32 a FUND-34).
 // Abra a pasta do repositório no VS Code e use "Reopen in Container".
 // Git, commits e push continuam no Windows, fora do contêiner (seção 6.J.1).
+//
+// Atenção: por padrão, a extensão Dev Containers copia o .gitconfig, repassa
+// o auxiliar de credenciais do Git e o agente SSH para o contêiner. Isso se
+// desliga nas configurações do usuário no VS Code, não aqui; o passo a passo
+// está no pull request da fase 1. O script abaixo roda a cada conexão e
+// acusa qualquer um desses repasses.
 {
   "name": "MedTeca",
   "dockerComposeFile": ["../compose.yaml"],
   "service": "dev",
   "workspaceFolder": "/workspace",
   "remoteUser": "dev",
+  "postAttachCommand": "scripts/conferir-isolamento.sh",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -18,8 +25,9 @@
       ],
       "settings": {
         "python.defaultInterpreterPath": "/workspace/backend/.venv/bin/python",
-        // O VS Code não entrega credenciais do Git a processos do contêiner,
-        // nem no terminal nem nas extensões (RNF-85).
+        // A extensão Git do VS Code deixa de responder pedidos de senha do
+        // Git vindos do terminal e das extensões do contêiner (RNF-85). Isso
+        // não desliga os repasses da extensão Dev Containers citados acima.
         "git.terminalAuthentication": false,
         "git.useIntegratedAskPass": false
       }
