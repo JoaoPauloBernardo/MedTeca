@@ -255,8 +255,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `uv sync --locked` passa num volume vazio
-- [ ] Se o `exclude-newer` relativo falhar com `--locked` (V37), parar e levar ao usuário a alternativa de data fixa
+- [x] `uv sync --locked` passa num volume vazio (29 pacotes instalados)
+- [x] Se o `exclude-newer` relativo falhar com `--locked` (V37), parar e levar ao usuário a alternativa de data fixa. Não falhou: o uv 0.13.9 grava a espera no lock como período (`exclude-newer-span = "P7D"`), não como data, então o lock não envelhece de um dia para o outro
 
 **Tests**: none - arquivo gerado
 **Gate**: instalar
