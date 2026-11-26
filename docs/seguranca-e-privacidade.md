@@ -1,6 +1,8 @@
 # Segurança e privacidade: MedTeca
 
-**Situação**: Etapa 6 em andamento. Blocos 1 (contas e acesso), 2 (permissões e privacidade), 3 (LGPD), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25.
+**Situação**: Etapa 6 aprovada em 2026-11-26. Blocos 1 (contas e acesso), 2 (permissões e privacidade), 3 (LGPD), 4 (registros e monitoramento), 5 (infraestrutura e operação) e 6 (qualidade e cadeia de suprimentos) aprovados e registrados; o bloco 5, com ressalvas. As quatro inconsistências da seção 5.P foram resolvidas em 2026-11-25. As verificações e as questões jurídicas seguem abertas e impedem o beta, não a implementação.
+
+**Aprovado (Etapa 6)**: 2026-11-26 - usuário: "Aprovar Etapa 6"
 
 **Aprovado (bloco 1)**: 2026-11-24 - usuário: "Aprovar bloco 1"
 
@@ -489,6 +491,8 @@ Texto aprovado em 2026-11-24:
 ### B.10 Documentos da Etapa 7
 
 Todos são rascunhos do Claude, revisados pelo advogado antes do beta: política de privacidade; termos de uso; registro das operações de tratamento; avaliação do legítimo interesse dos registros de segurança; plano de resposta a incidentes.
+
+Nota de 2026-11-26: a Etapa 7 foi resumida à ordem de construção e à spec da fundação. Pela ordem de construção aprovada (D-036), estes documentos passam para a preparação do beta, com o mesmo rascunho do Claude e a mesma revisão do advogado. As outras menções à "Etapa 7" neste documento seguem essa nota.
 
 ### B.11 Exceções ao ASVS
 
@@ -2241,3 +2245,4 @@ Nada foi criado no GitHub ou na AWS: o modelo de pull request, o `SECURITY.md`, 
 - 2026-11-25: bloco 2 (permissões e privacidade), aprovado em 2026-11-24 ("Aprovar bloco 2"), registrado na seção 2, a partir do texto da proposta aprovada, com a seção G (o que os blocos 1, 3 e 4 mudaram). Critérios CONTA-56 a CONTA-69. O bloco 3 segue aprovado e sem registro. Registro pedido pelo usuário ("está perfeito vamos seguir!").
 - 2026-11-25: bloco 3 (LGPD), aprovado em 2026-11-24 ("Aprovar bloco 3"), registrado na seção 3, a partir da versão consolidada aprovada com os seis ajustes do usuário. A lista de exclusões (B.8) aparece como substituída pela resolução da 5.P.1; a tabela B.12 recebeu as linhas previstas em 4.H.8; as perguntas ao advogado viraram Jur-01 a Jur-16. Os critérios e o modelo conceitual entram no PR seguinte, como o usuário escolheu ("Dois PRs"). Registro pedido pelo usuário ("vamos").
 - 2026-11-26: bloco 3, segunda parte do registro: critérios CONTA-70 a CONTA-97, REP-04 a REP-06 e RNF-95 a RNF-97 no catálogo, com o CONTA-12 substituído e o CONTA-25 removido; decisões M-40 a M-42 e RM-19 no modelo conceitual, que substituem M-21, M-36 e RM-13 e, em parte, M-07 e M-22. Seção 3.I com o mapa de cada tema; notas no cabeçalho e nas seções 2.G, 3.1, 3.C, 3.G e 5.P. Os seis blocos estão registrados por inteiro. Registro pedido pelo usuário ("vamo seguir!").
+- 2026-11-26: **Etapa 6 aprovada** ("Aprovar Etapa 6"). Nota na seção 3.B.10: os documentos jurídicos passam para a preparação do beta (D-036).

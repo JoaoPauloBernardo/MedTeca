@@ -2,7 +2,7 @@
 
 Plataforma web de questões para estudantes de medicina, com conteúdo rastreável, revisado por pessoas e transparente sobre a origem de cada gabarito.
 
-> **Situação: em planejamento.** Ainda não há código implementado nem versão em uso. Por enquanto, este repositório guarda a documentação de produto, os requisitos e as decisões técnicas. Esta página reflete a situação de 24/11/2026. A fonte da verdade sobre o que está decidido é o [registro de decisões](docs/decisions.md).
+> **Situação: preparando a implementação.** O planejamento foi aprovado até a Etapa 6, e a primeira funcionalidade, a fundação do projeto, está especificada em `.specs/features/fundacao/`. Ainda não há código implementado nem versão em uso. Esta página reflete a situação de 26/11/2026. A fonte da verdade sobre o que está decidido é o [registro de decisões](docs/decisions.md).
 
 ## Visão geral
 
@@ -181,7 +181,7 @@ A segurança e a privacidade foram definidas na Etapa 6. As contas e o acesso (D
 
 ## Situação atual
 
-Situação em 24/11/2026:
+Situação em 26/11/2026:
 
 | Etapa | Situação |
 |---|---|
@@ -190,8 +190,8 @@ Situação em 24/11/2026:
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
 | 5. Identidade visual, UX e fluxos de navegação | Aprovada |
-| 6. Segurança, qualidade e infraestrutura | Em andamento: os seis blocos aprovados e registrados (contas e acesso, permissões e privacidade, LGPD, registros e monitoramento, infraestrutura e operação, qualidade e cadeia de suprimentos), com os critérios no catálogo e as mudanças no modelo conceitual; falta aprovar a etapa |
-| 7. Consolidação da documentação e preparação para implementação | Futura |
+| 6. Segurança, qualidade e infraestrutura | Aprovada em 26/11/2026: contas e acesso, permissões e privacidade, LGPD, registros e monitoramento, infraestrutura e operação, qualidade e cadeia de suprimentos. As verificações técnicas e as questões jurídicas seguem abertas e impedem o beta, não a implementação |
+| 7. Preparação para implementação | Resumida à ordem de construção (D-036) e à spec da fundação, aprovadas em 26/11/2026; a fundação está em implementação |
 
 **Decisões ainda pendentes:**
 
@@ -213,7 +213,7 @@ A situação atualizada de cada decisão está sempre no [registro de decisões]
 4. **Modelagem conceitual dos dados:** questões, versões, gabaritos, tentativas e rastreabilidade.
 5. **Identidade visual, UX e fluxos:** sistema visual próprio, componentes, navegação e responsividade.
 6. **Segurança, qualidade e infraestrutura:** proteção do servidor, LGPD, permissões, backups e operação.
-7. **Consolidação:** revisão da documentação e preparação para implementar.
+7. **Preparação para implementar:** ordem de construção das funcionalidades e spec da fundação.
 
 **Depois do planejamento:**
 
