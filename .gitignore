@@ -1,0 +1,19 @@
+# Dependências instaladas (ficam em volumes do Docker; as pastas no
+# Windows são só pontos de montagem).
+.venv/
+node_modules/
+
+# Caches das ferramentas do backend.
+__pycache__/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Saídas do frontend e dos testes de ponta a ponta.
+frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
+
+# Variáveis de ambiente locais nunca entram no repositório.
+.env
+.env.*

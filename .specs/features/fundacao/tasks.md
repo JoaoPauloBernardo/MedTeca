@@ -237,7 +237,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Licenças de cada dependência direta conferidas contra a lista da seção 6.E.7 e citadas no pull request
+- [x] Licenças de cada dependência direta conferidas contra a lista da seção 6.E.7 e citadas no pull request (todas as 29 do lock conferidas; psycopg e psycopg-binary, LGPL-3.0, e pathspec, MPL-2.0, aceitas com o motivo escrito no `pyproject.toml`). Desvio: o PyYAML fica para o T22, que é quem o usa; a versão de 7 dias atrás é de 2025 e provavelmente não tem pacote pronto para o Python 3.15. Entram `no-build = true` (nada compilado do código-fonte, para nenhum script de instalação rodar) e um `.gitignore` na raiz, para os caches das ferramentas
 
 **Tests**: none - configuração; a política é provada no T23
 **Gate**: ambiente
@@ -255,8 +255,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `uv sync --locked` passa num volume vazio
-- [ ] Se o `exclude-newer` relativo falhar com `--locked` (V37), parar e levar ao usuário a alternativa de data fixa
+- [x] `uv sync --locked` passa num volume vazio (29 pacotes instalados)
+- [x] Se o `exclude-newer` relativo falhar com `--locked` (V37), parar e levar ao usuário a alternativa de data fixa. Não falhou: o uv 0.13.9 grava a espera no lock como período (`exclude-newer-span = "P7D"`), não como data, então o lock não envelhece de um dia para o outro
 
 **Tests**: none - arquivo gerado
 **Gate**: instalar
@@ -274,8 +274,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `manage.py check` passa
-- [ ] `makemigrations --check --dry-run` não acusa nada
+- [x] `manage.py check` passa
+- [x] `makemigrations --check --dry-run` não acusa nada (Ruff e mypy estrito também passam)
 
 **Tests**: none - configuração do projeto; a primeira rota e os testes vêm no T10
 **Gate**: django
@@ -293,9 +293,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_07_saude_responde_ok`, `test_fund_08_banco_fora_responde_503` (falha simulada do cursor, corpo exato e sem detalhe) e `test_fund_09_saude_sem_cache` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 3 tests pass (no silent deletions)
+- [x] `test_fund_07_saude_responde_ok`, `test_fund_08_banco_fora_responde_503` (falha simulada do cursor, corpo exato e sem detalhe) e `test_fund_09_saude_sem_cache` passam
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 3 tests pass (no silent deletions). São 4 execuções: o FUND-09 roda com o banco no ar e fora, porque o cabeçalho vale para as duas respostas
 
 **Tests**: integration
 **Gate**: backend
@@ -313,9 +313,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_19_docs_fora_em_producao`, `test_fund_20_check_deploy_sem_avisos` e `test_fund_21_producao_exige_segredo` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 6 tests pass (no silent deletions)
+- [x] `test_fund_19_docs_fora_em_producao`, `test_fund_20_check_deploy_sem_avisos` e `test_fund_21_producao_exige_segredo` passam
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 6 tests pass (no silent deletions). São 8 execuções: o FUND-21 roda com o segredo ausente e vazio
 
 **Tests**: integration
 **Gate**: backend
@@ -333,8 +333,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Com `docker compose up -d --wait db api`, uma requisição a `http://api:8000/api/saude` feita de dentro do `dev`, com o `urllib` do Python, responde 200; o resultado vai no pull request
-- [ ] A V43 continua: tempo do `portoes-backend.sh`, anotado no pull request
+- [x] Com `docker compose up -d --wait db api`, uma requisição a `http://api:8000/api/saude` feita de dentro do `dev`, com o `urllib` do Python, responde 200; o resultado vai no pull request (200, `no-store`, `{"situacao": "ok"}`; a API fica saudável em 14 s; com o banco parado, 503 e `{"situacao": "indisponivel"}` em 4 s)
+- [x] A V43 continua: tempo do `portoes-backend.sh`, anotado no pull request (32 s, com a pasta no Windows)
 
 **Tests**: none - configuração; a rota é provada no T10 e o caminho completo no T25
 **Gate**: backend
@@ -751,8 +751,9 @@ Proof: run backend | test_fund_07_saude_responde_ok PASSED
 **C8** - Com falha no banco, `GET /api/saude` responde 503 e exatamente `{"situacao": "indisponivel"}` (FUND-08, P1 API AC 2)
 Proof: run backend | test_fund_08_banco_fora_responde_503 PASSED
 
-**C9** - `GET /api/saude` traz `Cache-Control: no-store` (FUND-09, P1 API AC 3)
-Proof: run backend | test_fund_09_saude_sem_cache PASSED
+**C9** - `GET /api/saude` traz `Cache-Control: no-store` na resposta 200 e na 503 (FUND-09, P1 API AC 3)
+Proof: run backend | test_fund_09_saude_sem_cache[banco-no-ar] PASSED
+Proof: run backend | test_fund_09_saude_sem_cache[banco-fora] PASSED
 
 **C10** - Antes da resposta, a página mostra "Verificando o servidor…" (FUND-10, P1 Página AC 1)
 Proof: run frontend | ✓ FUND-10
@@ -791,8 +792,12 @@ Proof: run backend | test_fund_19_docs_fora_em_producao PASSED
 **C20** - Com as configurações de produção, `check --deploy` sai com 0 e sem avisos além dos silenciados com motivo (FUND-20, P1 Produção AC 2)
 Proof: run backend | test_fund_20_check_deploy_sem_avisos PASSED
 
-**C21** - Sem `DJANGO_SECRET_KEY`, as configurações de produção não carregam (FUND-21, P1 Produção AC 3)
-Proof: run backend | test_fund_21_producao_exige_segredo PASSED
+**C21** - Sem `DJANGO_SECRET_KEY`, com ela vazia, só com espaços ou com menos de 50 caracteres, as configurações de produção não carregam; com 50, carregam (FUND-21, P1 Produção AC 3)
+Proof: run backend | test_fund_21_producao_exige_segredo[ausente] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[vazio] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[so-espacos] PASSED
+Proof: run backend | test_fund_21_producao_exige_segredo[curto] PASSED
+Proof: run backend | test_fund_21_producao_aceita_segredo_de_50_caracteres PASSED
 
 **C22** - O pull request da fase 5 roda e passa os portões da tabela (FUND-22, P1 CI AC 1)
 Proof: walk - a página de checagens do pull request da fase 5 lista `backend`, `frontend`, `e2e`, `workflows`, `segredos`, `dependencias` e o CodeQL, todos verdes
@@ -841,7 +846,7 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário.
-**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário.
+**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário. Revisão independente da fase 2, sobre `9258924` - returned: nada importante, 7 achados menores; 1, 2 e 5 corrigidos (`4f0650a`, `0135f03`, `79f89a0`), 3, 4, 6 e 7 registrados como cuidados para Contas e Publicação no `design.md`.
 **Walked:** none
 
 ---

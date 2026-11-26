@@ -1,0 +1,59 @@
+[project]
+name = "medteca"
+version = "0.1.0"
+description = "Backend do MedTeca: API em Django e Django Ninja."
+requires-python = ">=3.15,<3.16"
+dependencies = [
+    "django>=6.1.3,<6.2",
+    "django-ninja>=1.8",
+    # Licença LGPL-3.0, aceita com motivo (seção 6.E.7): é o driver do
+    # PostgreSQL usado pelo Django (D-004, D-005), como biblioteca e sem
+    # modificação.
+    "psycopg[binary]>=3.3.9",
+]
+
+[dependency-groups]
+# Só no desenvolvimento e no CI, nunca na imagem de produção. O mypy traz o
+# pathspec (MPL-2.0), aceito com esse motivo (seção 6.E.7).
+dev = [
+    "django-stubs[compatible-mypy]>=6.1.2",
+    "mypy>=2.4.1",
+    "pytest>=9.2",
+    "pytest-django>=4.14",
+    "ruff>=0.17.5",
+    "zizmor>=1.32",
+]
+
+[tool.uv]
+# O projeto não é um pacote: o uv só instala as dependências.
+package = false
+# Espera de 7 dias para versões novas (P6-08, RNF-73).
+exclude-newer = "7 days"
+# Nada é compilado a partir do código-fonte: só pacotes prontos (wheels),
+# para que nenhum script de instalação rode (P6-09).
+no-build = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+# E/W/F: erros e estilo; I: ordem dos imports; B: armadilhas comuns;
+# UP: sintaxe atual; S: regras de segurança do Bandit (P6-15); DJ: Django.
+select = ["E", "W", "F", "I", "B", "UP", "S", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+# Nos testes, assert é o jeito de afirmar.
+"tests/**" = ["S101"]
+
+[tool.mypy]
+strict = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "medteca.settings.test"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# --ds pela linha de comando vence o DJANGO_SETTINGS_MODULE que o Compose
+# define para o desenvolvimento: os testes usam sempre as configurações de teste.
+addopts = "--strict-markers --ds=medteca.settings.test"
