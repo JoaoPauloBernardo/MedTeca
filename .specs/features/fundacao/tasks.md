@@ -274,8 +274,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `manage.py check` passa
-- [ ] `makemigrations --check --dry-run` não acusa nada
+- [x] `manage.py check` passa
+- [x] `makemigrations --check --dry-run` não acusa nada (Ruff e mypy estrito também passam)
 
 **Tests**: none - configuração do projeto; a primeira rota e os testes vêm no T10
 **Gate**: django
