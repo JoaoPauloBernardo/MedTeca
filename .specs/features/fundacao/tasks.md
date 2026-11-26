@@ -176,9 +176,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `docker compose up -d --wait db dev` sobe os dois serviços
-- [ ] O `db` fica `healthy` pela checagem com `pg_isready` dentro do próprio contêiner do banco
-- [ ] Nenhum serviço publica porta
+- [x] `docker compose up -d --wait db dev` sobe os dois serviços
+- [x] O `db` fica `healthy` pela checagem com `pg_isready` dentro do próprio contêiner do banco
+- [x] Nenhum serviço publica porta
 
 **Tests**: none - configuração; a porta é provada no T22 (FUND-02)
 **Gate**: ambiente
