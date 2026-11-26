@@ -216,8 +216,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] O pull request traz o passo a passo das configurações do VS Code do usuário que impedem copiar o `.gitconfig` e repassar credenciais (`dev.containers.copyGitConfig` e `dev.containers.gitCredentialHelperConfigLocation`, conferidas na documentação na hora)
-- [ ] O walk completo fica para o fim da fase 4, quando houver dependências e testes
+- [x] O pull request traz o passo a passo das configurações do VS Code do usuário que impedem copiar o `.gitconfig` e repassar credenciais (`dev.containers.copyGitConfig` e `dev.containers.gitCredentialHelperConfigLocation`, conferidas na documentação na hora). Conferido em 2026-11-26: a documentação oficial não traz essas opções. `git.terminalAuthentication` e `git.useIntegratedAskPass` foram conferidas no manifesto do VS Code do usuário e desligadas no `devcontainer.json`; as opções da extensão Dev Containers são conferidas no manifesto dela depois da instalação, antes do walk da fase 4
+- [x] O walk completo fica para o fim da fase 4, quando houver dependências e testes
 
 **Tests**: none - configuração do editor; prova por walk (FUND-32 a FUND-34)
 **Gate**: ambiente

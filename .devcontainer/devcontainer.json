@@ -1,0 +1,28 @@
+// VS Code dentro do contêiner de desenvolvimento (FUND-32 a FUND-34).
+// Abra a pasta do repositório no VS Code e use "Reopen in Container".
+// Git, commits e push continuam no Windows, fora do contêiner (seção 6.J.1).
+{
+  "name": "MedTeca",
+  "dockerComposeFile": ["../compose.yaml"],
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "dev",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vitest.explorer"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspace/backend/.venv/bin/python",
+        // O VS Code não entrega credenciais do Git a processos do contêiner,
+        // nem no terminal nem nas extensões (RNF-85).
+        "git.terminalAuthentication": false,
+        "git.useIntegratedAskPass": false
+      }
+    }
+  }
+}
