@@ -6,6 +6,12 @@
 # Só a pasta do repositório entra nos contêineres; nenhuma pasta nem
 # credencial do computador do usuário (FUND-03, RNF-85). Nenhuma porta é
 # publicada nesta fase. Os dados são fictícios.
+#
+# O repositório entra só para leitura, e só backend/, frontend/ e scripts/
+# aceitam escrita. Assim, código de terceiros rodando no contêiner não
+# consegue gravar no .git (hooks, core.fsmonitor), no .claude, no
+# compose.yaml, no .devcontainer nem em arquivos novos na raiz, que o
+# Windows executaria ou leria sozinho antes de qualquer revisão.
 
 name: medteca
 
@@ -15,6 +21,8 @@ x-ambiente: &ambiente
     dockerfile: docker/dev.Dockerfile
   image: medteca-dev:local
   init: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
   working_dir: /workspace
   environment:
     PGHOST: db
@@ -23,7 +31,10 @@ x-ambiente: &ambiente
     PGUSER: medteca
     PGPASSWORD: senha-ficticia-so-para-desenvolvimento
   volumes:
-    - .:/workspace
+    - .:/workspace:ro
+    - ./backend:/workspace/backend
+    - ./frontend:/workspace/frontend
+    - ./scripts:/workspace/scripts
     - venv:/workspace/backend/.venv
     - node_modules:/workspace/frontend/node_modules
     - cache-uv:/home/dev/.cache/uv
