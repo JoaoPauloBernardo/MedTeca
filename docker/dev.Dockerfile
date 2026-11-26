@@ -34,7 +34,9 @@ RUN printf '%s\n' \
  && rm /tmp/ferramentas.txt
 
 # pnpm do registro do npm: o pacote é baixado, o SHA-512 é conferido e só
-# então ele é instalado, sem rodar scripts de instalação (P6-09).
+# então ele é instalado, sem rodar scripts de instalação (P6-09). Depois, o
+# npm e o npx saem da imagem: eles instalariam a versão mais nova de
+# qualquer pacote, rodando os scripts dele, fora da política do projeto.
 ARG PNPM_VERSION=11.28.13
 ARG PNPM_SHA512=d5caa9cdcd6067ac2902f9f44daa00b1288a73babf1e98f4f375b3a7583b1894b4d49f7527da8f5e1530198bb10e03adba321a1f015429dc2946ce8a7a9a8c65
 RUN cd /tmp \
@@ -42,14 +44,22 @@ RUN cd /tmp \
  && echo "${PNPM_SHA512}  pnpm-${PNPM_VERSION}.tgz" | sha512sum -c - \
  && npm install --global --ignore-scripts "./pnpm-${PNPM_VERSION}.tgz" \
  && rm "pnpm-${PNPM_VERSION}.tgz" \
- && npm cache clean --force
+ && npm cache clean --force \
+ && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 
-# O uv nunca baixa Python por conta própria: usa o da imagem.
+# A política de dependências vale também para comandos avulsos, fora dos
+# arquivos do projeto (seção 6.E): o pip exige hash, o uv e o pnpm esperam
+# 7 dias por versões novas e o pnpm barra scripts de instalação. O uv nunca
+# baixa Python por conta própria: usa o da imagem.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PIP_REQUIRE_HASHES=1 \
+    UV_EXCLUDE_NEWER="7 days" \
     UV_PYTHON_DOWNLOADS=never \
     UV_LINK_MODE=copy \
-    UV_CACHE_DIR=/home/dev/.cache/uv
+    UV_CACHE_DIR=/home/dev/.cache/uv \
+    pnpm_config_minimum_release_age=10080 \
+    pnpm_config_strict_dep_builds=true
 
 # Usuário sem privilégio. As pastas que viram volumes nascem com esse dono,
 # para que o Docker copie a permissão certa ao criar cada volume.
