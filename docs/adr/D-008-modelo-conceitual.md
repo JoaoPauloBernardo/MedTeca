@@ -3,7 +3,7 @@
 - **Status**: Aprovada
 - **Data**: 2026-11-23
 - **Aprovação**: "Aprovar Etapa 4" (2026-11-23); registro autorizado com "Autorizo" (2026-11-23)
-- **Relacionadas**: D-001, D-005, D-013, D-014, D-019, D-022, D-024; documento `docs/modelo-conceitual.md`
+- **Relacionadas**: D-001, D-005, D-009, D-013, D-014, D-019, D-022, D-024, D-032; documento `docs/modelo-conceitual.md`
 
 ## Contexto
 
@@ -38,6 +38,11 @@ As alternativas de cada decisão estão no documento do modelo. Este quadro resu
 ## Decisão
 
 Adotar o modelo conceitual de `docs/modelo-conceitual.md`: 38 decisões de modelagem (M-01 a M-38), das quais M-03 e M-18 foram substituídas em parte por M-30 e M-38, e 17 regras de integridade (RM-01 a RM-17), com diagrama, rastreabilidade e comparação com a lista de integridade de conteúdo do projeto.
+
+## Atualizações da Etapa 6
+
+- **Bloco 4 (D-032, 2026-11-24):** entrou a M-39 (auditoria de ações sensíveis), com a regra RM-18. Nenhuma decisão da Etapa 4 mudou.
+- **Bloco 3 (D-009, aprovado em 2026-11-24 e registrado no modelo em 2026-11-26):** a linha "Exclusão de conta" do quadro acima foi substituída. Na exclusão, a primeira resposta da pessoa em cada versão vira contagem e as tentativas são apagadas (M-40); o reporte concluído perde o texto livre (M-41); cada registro tem destino definido (M-42); a RM-19 substitui a RM-13. M-21 e M-36 ficam como substituídas, e M-07 e M-22, como substituídas em parte, com o texto original mantido. O motivo é a LGPD (art. 16, IV, e art. 12): num beta pequeno, as tentativas desvinculadas podiam não ser anônimas de verdade. O raciocínio e as alternativas estão no ADR da D-009.
 
 ## Consequências
 

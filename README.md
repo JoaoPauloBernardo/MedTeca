@@ -190,7 +190,7 @@ Situação em 24/11/2026:
 | 3. Arquitetura e tecnologias | Aprovada |
 | 4. Modelagem conceitual dos dados | Aprovada |
 | 5. Identidade visual, UX e fluxos de navegação | Aprovada |
-| 6. Segurança, qualidade e infraestrutura | Em andamento: os seis blocos aprovados e registrados (contas e acesso, permissões e privacidade, LGPD, registros e monitoramento, infraestrutura e operação, qualidade e cadeia de suprimentos); falta registrar no catálogo e no modelo as mudanças do bloco 3 e aprovar a etapa |
+| 6. Segurança, qualidade e infraestrutura | Em andamento: os seis blocos aprovados e registrados (contas e acesso, permissões e privacidade, LGPD, registros e monitoramento, infraestrutura e operação, qualidade e cadeia de suprimentos), com os critérios no catálogo e as mudanças no modelo conceitual; falta aprovar a etapa |
 | 7. Consolidação da documentação e preparação para implementação | Futura |
 
 **Decisões ainda pendentes:**

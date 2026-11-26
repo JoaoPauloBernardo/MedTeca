@@ -1,9 +1,10 @@
 # D-009: Tratamento de dados pessoais (LGPD)
 
 - **Status**: Aprovada
-- **Data**: 2026-11-24 (registro em 2026-11-25)
+- **Data**: 2026-11-24 (registro em 2026-11-25; catálogo e modelo em 2026-11-26)
 - **Aprovação**: respostas do bloco 3 da Etapa 6, "Você, pessoa física, no beta (Recomendado)", "Guardar só contagens (Recomendado)", "Excluir após 24 meses sem uso (Recomendado)" e "Claude rascunha, advogado revisa (Recomendado)"; versão consolidada aprovada com "Aprovar bloco 3" (2026-11-24); registro pedido com "vamos" (2026-11-25)
-- **Muda**: CONTA-12, CONTA-25, M-07, M-21, M-22, M-36 e RM-13 (registro no catálogo e no modelo num PR seguinte)
+- **Muda**: CONTA-12 (substituído por CONTA-70), CONTA-25 (removido), M-21, M-36 e RM-13 (substituídas por M-40, M-42 e RM-19) e M-07 e M-22 (substituídas em parte por M-40 e M-41); registrado em 2026-11-26
+- **Critérios**: CONTA-70 a CONTA-97, REP-04 a REP-06 e RNF-95 a RNF-97
 - **Relacionadas**: D-001, D-002, D-007, D-008, D-024, D-032, D-033, D-034; `docs/seguranca-e-privacidade.md`, seções 2 e 3; perguntas Jur-01 a Jur-16
 
 ## Contexto
@@ -35,6 +36,10 @@
 - **Terceiros:** AWS com análise de transferência internacional; Pwned Passwords só com o prefixo do SHA-1 calculado em memória; fontes no próprio servidor; só cookies essenciais.
 - **Convites e idade:** convite só a pedido, com aviso de privacidade; declaração de 18 anos ou mais.
 - **Documentos jurídicos:** política de privacidade, termos de uso, registro das operações, avaliação do legítimo interesse dos registros de segurança e plano de resposta a incidentes, rascunhados pelo Claude e revisados pelo advogado antes do beta (Etapa 7).
+
+## Registro no catálogo e no modelo (2026-11-26)
+
+Segunda parte do registro, como o usuário escolheu ("Dois PRs (Recomendado)"). Os critérios confirmados que mudaram ganharam ID novo, e os antigos ficaram com a situação "Substituído" ou "Removido" ("ID novo, antigo substituído (Recomendado)"). No modelo, as decisões novas M-40 a M-42 e a regra RM-19 substituem as antigas, que continuam no documento ("Decisões novas que substituem (Recomendado)"). O mapa de cada tema para os critérios e as decisões está em `docs/seguranca-e-privacidade.md`, seção 3.I.
 
 ## Atualização da resolução da 5.P.1 (2026-11-25)
 
