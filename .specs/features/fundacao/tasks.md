@@ -119,8 +119,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `git ls-files --eol` mostra `w/lf` nos arquivos de texto depois de um novo checkout
-- [ ] Nenhum documento existente muda de conteúdo no diff
+- [x] `git ls-files --eol` mostra `w/lf` nos arquivos de texto depois de um novo checkout
+- [x] Nenhum documento existente muda de conteúdo no diff
 
 **Tests**: none - configuração, sem camada de teste na matriz
 **Gate**: ambiente
