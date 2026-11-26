@@ -144,7 +144,8 @@ Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do 
 | --- | --- | --- |
 | Banco fora do ar | `DatabaseError` em `/api/saude` vira 503 com corpo fixo, sem detalhe | Página mostra "Servidor fora do ar" |
 | API fora do ar ou lenta | Erro de rede ou `AbortSignal.timeout(5000)` | Página mostra "Servidor fora do ar" |
-| Segredo ausente na produção | `ImproperlyConfigured` ao carregar `prod.py` | O processo não sobe |
+| Segredo ausente ou com menos de 50 caracteres na produção | `ImproperlyConfigured` ao carregar `prod.py` | O processo não sobe |
+| `manage.py` sem `DJANGO_SETTINGS_MODULE` | Recusa rodar, com mensagem | Nenhum comando sobe com o segredo público do desenvolvimento |
 | Lockfile desatualizado | `uv sync --locked` e `pnpm install --frozen-lockfile` falham | A instalação para, e o lockfile fica como estava |
 
 ---
@@ -157,9 +158,21 @@ Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do 
 | O VS Code, por padrão, copia o `.gitconfig` e repassa as credenciais do Git para o contêiner | `.devcontainer/devcontainer.json` | Credenciais dentro do contêiner, contra o RNF-85 | Essas opções são configurações do usuário no VS Code, não do repositório; o pull request da fase 1 traz o passo a passo, e o FUND-34 prova o resultado. Commits e push continuam pelo Windows |
 | Mudanças em arquivos montados do Windows não chegam ao contêiner como eventos | `vite.config.ts` | O Vite não recarrega sozinho | `usePolling`; a V43 mede o custo |
 | `strictDepBuilds` pode barrar dependências com script de instalação | `pnpm-workspace.yaml` | A instalação falha | Cada liberação é perguntada ao usuário e registrada (seção 6.E.3) |
-| Relato de falha do `exclude-newer` relativo do uv com `uv sync --locked` (V37) | `backend/pyproject.toml` | A instalação pode falhar | Testar na fase 2; se falhar, levar ao usuário a alternativa de data fixa |
+| Relato de falha do `exclude-newer` relativo do uv com `uv sync --locked` (V37) | `backend/pyproject.toml` | A instalação pode falhar | Testado na fase 2: o uv 0.13.9 grava a espera como período (`exclude-newer-span = "P7D"`) e o `--locked` passa |
 | Volumes nomeados nascem com dono `root` | `docker/dev.Dockerfile` | Sem permissão para instalar como `dev` | Criar as pastas na imagem com o dono `dev` |
 | O Docker Desktop estava instalado (cliente 29.6.1) mas parado em 2026-11-26 | Computador do usuário | Nada roda | O usuário abre o Docker Desktop antes da fase 1 |
+
+### Cuidados para as próximas funcionalidades
+
+Achados da revisão independente da fase 2 que não são defeito da fundação, mas pegam quem vier depois:
+
+| Cuidado | Onde | Funcionalidade | O que fazer |
+| --- | --- | --- | --- |
+| O Django Ninja isenta toda rota do middleware de CSRF; a checagem só acontece nas classes de autenticação por cookie | `ninja/operation.py` | Contas | Rotas que alteram dados sem autenticação (entrar, cadastrar, recuperar senha) chamam a checagem de CSRF explicitamente, para evitar CSRF no login (D-007) |
+| Atrás do Caddy, o Django vê HTTP; sem `SECURE_PROXY_SSL_HEADER`, a checagem de origem do CSRF recusa os POST e os links absolutos saem com `http://` | `backend/medteca/settings/prod.py` | Publicação | `SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")`, seguro porque o Caddy descarta esse cabeçalho vindo do cliente (seção 5.H.3). O teste do FUND-19 usa `secure=True` e não pega isso |
+| O `manage.py` agora exige `DJANGO_SETTINGS_MODULE` | Imagem de produção | Publicação | A imagem de produção define `DJANGO_SETTINGS_MODULE=medteca.settings.prod` |
+| Na produção, sem `LOGGING`, os erros 500 não aparecem em lugar nenhum, e a rota de saúde não registra a falha do banco | `backend/medteca/settings/` e `api.py` | Contas (eventos da D-032) e Publicação | Configurar os registros da D-032, registrando a exceção no servidor sem levá-la à resposta (FUND-08 continua valendo) |
+| O Django já manda `X-Frame-Options`, `nosniff`, `Referrer-Policy: same-origin` e COOP; a seção 5.H.4 dá os cabeçalhos ao Caddy e pede `strict-origin-when-cross-origin` | `prod.py` e configuração do Caddy | Publicação | Escolher um dono para cada cabeçalho ao configurar o Caddy, sem valores duplicados ou conflitantes |
 
 ---
 

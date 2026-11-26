@@ -846,7 +846,7 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário.
-**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário.
+**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário. Revisão independente da fase 2, sobre `9258924` - returned: nada importante, 7 achados menores; 1, 2 e 5 corrigidos (`4f0650a`, `0135f03`, `79f89a0`), 3, 4, 6 e 7 registrados como cuidados para Contas e Publicação no `design.md`.
 **Walked:** none
 
 ---
