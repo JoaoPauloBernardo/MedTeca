@@ -746,6 +746,7 @@ Proof: run backend | test_fund_05_pnpm_espera_7_dias PASSED
 
 **C6** - pnpm com `strictDepBuilds: true` e só as liberações registradas em `allowBuilds` (FUND-06, P1 Ambiente AC 6)
 Proof: run backend | test_fund_06_pnpm_bloqueia_scripts PASSED
+Proof: run backend | test_fund_06_script_de_instalacao_nao_roda PASSED
 
 **C7** - `GET /api/saude` com o banco de pé responde 200 e `{"situacao": "ok"}` (FUND-07, P1 API AC 1)
 Proof: run backend | test_fund_07_saude_responde_ok PASSED

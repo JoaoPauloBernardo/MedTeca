@@ -18,6 +18,7 @@ from ruamel.yaml import YAML
 RAIZ = Path(__file__).resolve().parents[3]
 BACKEND = RAIZ / "backend"
 FRONTEND = RAIZ / "frontend"
+PYPI = {"registry": "https://pypi.org/simple"}
 
 
 def rodar(comando: list[str], pasta: Path, **ambiente: str) -> subprocess.CompletedProcess[str]:
@@ -80,8 +81,27 @@ def test_fund_04_comandos_usam_o_lockfile() -> None:
     # Todo comando de instalação do repositório usa o lockfile, sem
     # recalcular: o uv com --locked e o pnpm com --frozen-lockfile. O uv run
     # do script de contrato também, porque ele instala o que falta.
-    arquivos = [*sorted((RAIZ / "scripts").glob("*")), RAIZ / "compose.yaml"]
-    trechos = [(arquivo, arquivo.read_text(encoding="utf-8")) for arquivo in arquivos]
+    arquivos = [
+        *sorted((RAIZ / "scripts").glob("*")),
+        *sorted((RAIZ / "docker").glob("*")),
+        *sorted((RAIZ / ".devcontainer").glob("*")),
+        *sorted((RAIZ / ".github").rglob("*.y*ml")),
+        RAIZ / "compose.yaml",
+    ]
+    # Linhas de comentário ficam de fora: o Dockerfile documenta como
+    # atualizar um lock de propósito.
+    trechos = [
+        (
+            a,
+            "\n".join(
+                linha
+                for linha in a.read_text(encoding="utf-8").splitlines()
+                if not linha.strip().startswith("#")
+            ),
+        )
+        for a in arquivos
+        if a.is_file()
+    ]
 
     uv_sync = [
         (a.name, linha) for a, t in trechos for linha in t.splitlines() if "uv sync" in linha
@@ -96,6 +116,12 @@ def test_fund_04_comandos_usam_o_lockfile() -> None:
     assert all("--frozen-lockfile" in linha for _, linha in pnpm_install), pnpm_install
     assert '"uv", "run", "--locked"' in contrato
 
+    # Na imagem, o padrão de qualquer comando é usar o lockfile, inclusive um
+    # uv run ou pnpm install digitado à mão no terminal do contêiner.
+    imagem = (RAIZ / "docker" / "dev.Dockerfile").read_text(encoding="utf-8")
+    assert "UV_LOCKED=1" in imagem
+    assert "pnpm_config_frozen_lockfile=true" in imagem
+
 
 def test_fund_04_dependencias_diretas_do_registro() -> None:
     # O blockExoticSubdeps do pnpm só cobre as dependências indiretas: as
@@ -109,13 +135,20 @@ def test_fund_04_dependencias_diretas_do_registro() -> None:
     }
     assert fora_do_registro == {}
 
-    # No Python, uma dependência com " @ " aponta direto para um endereço.
-    pyproject = tomllib.loads((BACKEND / "pyproject.toml").read_text(encoding="utf-8"))
-    requisitos = [
-        *pyproject["project"]["dependencies"],
-        *pyproject["dependency-groups"]["dev"],
-    ]
-    assert [r for r in requisitos if " @ " in r] == []
+    # Nos lockfiles, a origem de cada pacote, direto ou indireto. No uv, isso
+    # pega também o que o [tool.uv.sources] ou um índice a mais trariam.
+    lock_uv = tomllib.loads((BACKEND / "uv.lock").read_text(encoding="utf-8"))
+    fontes_uv = {pacote["name"]: pacote["source"] for pacote in lock_uv["package"]}
+    assert fontes_uv.pop("medteca") == {"virtual": "."}
+    assert {nome: fonte for nome, fonte in fontes_uv.items() if fonte != PYPI} == {}
+
+    # No pnpm, um pacote do registro só tem o hash (integrity); um de Git ou
+    # de arquivo teria tarball, repo ou directory na resolução.
+    lock_pnpm: dict[str, Any] = YAML(typ="safe").load(
+        (FRONTEND / "pnpm-lock.yaml").read_text(encoding="utf-8")
+    )
+    resolucoes = {nome: dados["resolution"] for nome, dados in lock_pnpm["packages"].items()}
+    assert {nome: r for nome, r in resolucoes.items() if set(r) != {"integrity"}} == {}
 
 
 def test_fund_05_uv_espera_7_dias() -> None:
@@ -140,3 +173,47 @@ def test_fund_06_pnpm_bloqueia_scripts() -> None:
     # Nenhum script de instalação liberado até hoje; cada liberação futura é
     # aprovada pelo usuário e acrescentada aqui (seção 6.E.3).
     assert workspace["allowBuilds"] == {}
+    # E nenhuma liberação geral, nem no arquivo nem no ambiente: com ela, o
+    # pnpm rodaria todos os scripts, seja qual for o allowBuilds.
+    assert "dangerouslyAllowAllBuilds" not in workspace
+    valor = rodar(["pnpm", "config", "get", "dangerously-allow-all-builds"], FRONTEND)
+    assert valor.stdout.strip() in {"undefined", "false"}
+
+
+def test_fund_06_script_de_instalacao_nao_roda(tmp_path: Path) -> None:
+    # Um pacote local com script de instalação, num projeto com a mesma
+    # configuração do frontend: a instalação falha e o script não roda.
+    marcador = tmp_path / "o-script-rodou"
+    pacote = tmp_path / "pacote-com-script"
+    pacote.mkdir()
+    (pacote / "package.json").write_text(
+        json.dumps(
+            {
+                "name": "pacote-com-script",
+                "version": "1.0.0",
+                "scripts": {
+                    "postinstall": f"node -e \"require('fs').writeFileSync('{marcador}', '')\""
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    projeto = tmp_path / "projeto"
+    projeto.mkdir()
+    shutil.copy(FRONTEND / "pnpm-workspace.yaml", projeto / "pnpm-workspace.yaml")
+    (projeto / "package.json").write_text(
+        json.dumps(
+            {
+                "name": "teste",
+                "private": True,
+                "dependencies": {"pacote-com-script": "file:../pacote-com-script"},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    resultado = rodar(["pnpm", "install", "--no-frozen-lockfile"], projeto)
+
+    assert resultado.returncode != 0, resultado.stdout
+    assert "ERR_PNPM_IGNORED_BUILDS" in resultado.stdout + resultado.stderr
+    assert not marcador.exists()
