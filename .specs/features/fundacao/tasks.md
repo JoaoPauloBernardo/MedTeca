@@ -373,8 +373,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `pnpm install --frozen-lockfile` passa num volume vazio
-- [ ] Se alguma dependência pedir script de instalação, parar e perguntar ao usuário (6.E.3)
+- [x] `pnpm install --frozen-lockfile` passa num volume vazio (numa pasta vazia em `/tmp`, com os três arquivos do pnpm; `pnpm peers check` sem nenhum problema)
+- [x] Se alguma dependência pedir script de instalação, parar e perguntar ao usuário (6.E.3). Nenhuma pediu: a instalação passou com `strictDepBuilds` ligado e `allowBuilds` vazio
 
 **Tests**: none - arquivo gerado
 **Gate**: instalar
