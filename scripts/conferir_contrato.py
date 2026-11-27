@@ -30,9 +30,11 @@ ARQUIVOS = ("openapi.json", "esquema.d.ts")
 def gerar(destino: Path) -> None:
     """Exporta o OpenAPI e gera os tipos TypeScript dentro de `destino`."""
     openapi = destino / "openapi.json"
-    # Comandos fixos, com ferramentas do próprio ambiente (uv e pnpm).
+    # Comandos fixos, com ferramentas do próprio ambiente (uv e pnpm). O
+    # --locked impede o uv de reescrever o uv.lock se o pyproject.toml mudou
+    # sem um lock novo: a checagem falha, como pede o FUND-04.
     subprocess.run(  # noqa: S603
-        ["uv", "run", "python", "manage.py", "export_openapi_schema",  # noqa: S607
+        ["uv", "run", "--locked", "python", "manage.py", "export_openapi_schema",  # noqa: S607
          "--api", "medteca.api.api", "--output", str(openapi), "--indent", "2", "--sorted"],
         cwd=BACKEND,
         check=True,
