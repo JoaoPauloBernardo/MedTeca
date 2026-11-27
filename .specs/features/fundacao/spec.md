@@ -120,7 +120,7 @@ O MedTeca tem o planejamento aprovado (Etapas 1 a 6), mas ainda não tem nenhuma
 4. The system SHALL exibir a situação do servidor numa região `role="status"`, para que leitores de tela a anunciem. (FUND-13; RNF-01)
 5. The system SHALL declarar o idioma da página como `pt-BR`. (FUND-14; RNF-02)
 6. The system SHALL buscar `/api/saude` na mesma origem da página, sem carregar recurso de outra origem. (FUND-15; D-020, RNF-96)
-7. WHEN a página inicial abre no Chromium e no WebKit, com os perfis de iPhone e iPad THEN the system SHALL passar no axe-core sem violação séria ou crítica. (FUND-16; D-026, RNF-01)
+7. WHEN a página inicial abre no Chromium e no WebKit, com os perfis de iPhone e iPad THEN the system SHALL passar no axe-core sem nenhuma violação das regras da WCAG 2.0 a 2.2, níveis A e AA, de qualquer gravidade, e sem violação séria ou crítica das boas práticas. (FUND-16; D-026, RNF-01; ampliado em 2026-11-27 pela decisão do usuário, "Barrar qualquer WCAG A/AA", depois da revisão independente da fase 4)
 
 **Independent Test**: Abrir `http://localhost:5173` com o banco de pé ("Servidor no ar") e com a API parada ("Servidor fora do ar").
 

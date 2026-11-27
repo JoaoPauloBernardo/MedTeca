@@ -1965,7 +1965,7 @@ A profundidade acompanha o nível do usuário, sem esconder complexidade. O mode
 | Testes do backend | pytest e pytest-django em PostgreSQL 18 real (D-026) | Todo pull request |
 | Contrato da API | OpenAPI do Django Ninja comparado com o cliente TypeScript (D-026) | Todo pull request |
 | Componentes | Vitest e Testing Library (D-026) | Todo pull request |
-| Ponta a ponta e acessibilidade | Playwright em Chromium e WebKit, com perfis de iPhone e iPad; axe-core sem violação séria ou crítica (D-026) | Todo pull request |
+| Ponta a ponta e acessibilidade | Playwright em Chromium e WebKit, com perfis de iPhone e iPad; axe-core sem violação séria ou crítica (D-026). Nota de 2026-11-27: o corte passou a ser nenhuma violação das regras WCAG A e AA, de qualquer gravidade, e só as sérias e críticas nas boas práticas ("Barrar qualquer WCAG A/AA") | Todo pull request |
 | Migrações | Nada pendente (`makemigrations --check`), Squawk sobre o SQL gerado e regra das duas fases (V44) | Todo pull request |
 | Configuração de produção | `check --deploy`; documentação da API fora do ar em produção (ASVS 13.4.5); imagem sem `.git`, sem testes e sem dependências de desenvolvimento (13.4.1 e 15.2.3) | Todo pull request |
 | Workflows | zizmor e CodeQL para Actions | Todo pull request |

@@ -578,7 +578,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 ### T25: Testes de ponta a ponta
 
-**What**: `pagina-inicial.spec.ts` com FUND-01 ("Servidor no ar" vindo da API real), FUND-14 (`html[lang="pt-BR"]`), FUND-15 (todas as requisições na mesma origem da página) e FUND-16 (axe-core sem violação séria ou crítica), nos três projetos.
+**What**: `pagina-inicial.spec.ts` com FUND-01 ("Servidor no ar" vindo da API real), FUND-14 (`html[lang="pt-BR"]`), FUND-15 (todas as requisições na mesma origem da página) e FUND-16 (axe-core sem violação séria ou crítica; ampliado depois para qualquer violação da WCAG A e AA, por decisão do usuário), nos três projetos.
 **Where**: `frontend/e2e/pagina-inicial.spec.ts`
 **Depends on**: T24
 **Reuses**: `frontend/playwright.config.ts`
@@ -780,7 +780,7 @@ Proof: run e2e | ✓ [chromium] FUND-14
 **C15** - Toda requisição da página vai à origem da própria página, inclusive `/api/saude` (FUND-15, P1 Página AC 6)
 Proof: run e2e | ✓ [chromium] FUND-15
 
-**C16** - axe-core sem violação séria ou crítica no Chromium, no iPhone e no iPad (FUND-16, P1 Página AC 7)
+**C16** - axe-core sem nenhuma violação da WCAG A e AA (de qualquer gravidade, com a regra de tamanho de alvo da WCAG 2.2 rodando) e sem violação séria ou crítica das boas práticas, no Chromium, no iPhone e no iPad (FUND-16, P1 Página AC 7)
 Proof: run e2e | ✓ [chromium] FUND-16
 Proof: run e2e | ✓ [webkit-iphone] FUND-16
 Proof: run e2e | ✓ [webkit-ipad] FUND-16
@@ -851,7 +851,7 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 
 The feature's live state, written as it happens - a compaction gives no warning.
 
-**Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário. "Aceito, com versão fixa" (2026-11-26): extensões do VS Code do Marketplace, com versão fixa, espera de 7 dias e atualização automática desligada pelo usuário; fixadas no `devcontainer.json` (ms-python.python 2026.10.0, ms-python.vscode-pylance 2026.4.1, ms-python.debugpy 2026.6.0, ms-python.vscode-python-envs 1.44.0, charliermarsh.ruff 2026.96.0, dbaeumer.vscode-eslint 3.0.34, esbenp.prettier-vscode 12.4.0, vitest.explorer 1.52.2). A sintaxe `id@versão` é conferida no walk da fase 4. "Aceito nas ferramentas" (2026-11-27): licenças BlueOak-1.0.0, CC-BY-4.0 e Python-2.0 só em ferramentas de desenvolvimento do frontend, registradas no `pnpm-workspace.yaml`.
+**Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário. "Aceito, com versão fixa" (2026-11-26): extensões do VS Code do Marketplace, com versão fixa, espera de 7 dias e atualização automática desligada pelo usuário; fixadas no `devcontainer.json` (ms-python.python 2026.10.0, ms-python.vscode-pylance 2026.4.1, ms-python.debugpy 2026.6.0, ms-python.vscode-python-envs 1.44.0, charliermarsh.ruff 2026.96.0, dbaeumer.vscode-eslint 3.0.34, esbenp.prettier-vscode 12.4.0, vitest.explorer 1.52.2). A sintaxe `id@versão` é conferida no walk da fase 4. "Aceito nas ferramentas" (2026-11-27): licenças BlueOak-1.0.0, CC-BY-4.0 e Python-2.0 só em ferramentas de desenvolvimento do frontend, registradas no `pnpm-workspace.yaml`. "Barrar qualquer WCAG A/AA" (2026-11-27): o FUND-16 passa a barrar qualquer violação das regras WCAG A e AA do axe-core, de qualquer gravidade, e só as sérias e críticas nas boas práticas.
 **Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário. Revisão independente da fase 2, sobre `9258924` - returned: nada importante, 7 achados menores; 1, 2 e 5 corrigidos (`4f0650a`, `0135f03`, `79f89a0`), 3, 4, 6 e 7 registrados como cuidados para Contas e Publicação no `design.md`. Revisão independente da fase 3, sobre `0b635ec` - returned: 3 achados importantes e 5 menores; o 2 a 8 corrigidos de `f22f651` a `67dea2f` e nas caixas do T13 e do T18; o 1 (licenças BlueOak-1.0.0, CC-BY-4.0 e Python-2.0 em ferramentas de desenvolvimento) levado ao usuário, e o lightningcss (MPL-2.0) registrado com motivo; o CSRF_TRUSTED_ORIGINS do desenvolvimento entra nos cuidados para Contas. Revisão independente da fase 4, sobre `5ecda7d` - returned: 4 achados importantes e 6 menores; corrigidos de `7ae7e42` a este commit; o 2 em parte (a regra de tamanho de alvo da WCAG 2.2 passou a rodar; o corte do FUND-16 em violações sérias e críticas levado ao usuário) e o 4 com o build em /tmp e um cuidado para o T26.
 **Walked (pendente, rótulo trocado para a checagem não dar o walk como feito):** o walk no VS Code (FUND-32 a FUND-34) ainda não aconteceu; o caminho da página (FUND-01) foi visto no navegador do app no T22.
 

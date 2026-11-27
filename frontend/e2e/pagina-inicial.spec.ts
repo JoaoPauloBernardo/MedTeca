@@ -40,9 +40,20 @@ test("FUND-15: toda requisição vai à origem da própria página, inclusive /a
 // Regras da WCAG 2.0 a 2.2, níveis A e AA (RNF-01), mais as boas práticas do
 // axe. As tags ligam também regras que o axe deixa desligadas por padrão,
 // como a do tamanho de alvo da WCAG 2.2 (2.5.8).
-const REGRAS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
+const WCAG_A_E_AA = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+const REGRAS = [...WCAG_A_E_AA, "best-practice"];
 
-test("FUND-16: o axe-core não acha violação séria nem crítica", async ({ page }) => {
+// Uma violação de regra da WCAG A ou AA barra a página, seja qual for a
+// gravidade que o axe atribui; nas boas práticas, só as sérias e críticas
+// ("Barrar qualquer WCAG A/AA", decisão do usuário em 2026-11-27).
+function barra(violacao: { tags: string[]; impact?: string | null }): boolean {
+  const daWcag = violacao.tags.some((tag) => WCAG_A_E_AA.includes(tag));
+  return daWcag || violacao.impact === "serious" || violacao.impact === "critical";
+}
+
+test("FUND-16: o axe-core não acha violação da WCAG A e AA nem violação séria das boas práticas", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(page.getByRole("status")).toHaveText("Servidor no ar");
 
@@ -57,9 +68,9 @@ test("FUND-16: o axe-core não acha violação séria nem crítica", async ({ pa
   ].map((regra) => regra.id);
   expect(regrasAvaliadas).toContain("target-size");
 
-  const graves = resultado.violations
-    .filter((violacao) => violacao.impact === "serious" || violacao.impact === "critical")
-    .map((violacao) => `${violacao.id}: ${violacao.help}`);
+  const barradas = resultado.violations
+    .filter(barra)
+    .map((violacao) => `${violacao.id} (${violacao.impact ?? "sem gravidade"}): ${violacao.help}`);
 
-  expect(graves).toEqual([]);
+  expect(barradas).toEqual([]);
 });
