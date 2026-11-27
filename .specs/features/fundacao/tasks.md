@@ -586,9 +586,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Run e2e passa nos três projetos (12 testes)
-- [ ] Walk do usuário no VS Code (FUND-32 a FUND-34), anotado no Handoff
-- [ ] A V43 fecha: os tempos medidos nas fases 1 a 4, levados ao usuário no pull request
+- [x] Run e2e passa nos três projetos (12 testes, em 31 s)
+- [ ] Walk do usuário no VS Code (FUND-32 a FUND-34), anotado no Handoff. Pendente: depende de o usuário instalar a extensão Dev Containers, de conferir as opções dela no manifesto (caixa aberta do T6) e de ele abrir o projeto no contêiner
+- [x] A V43 fecha: os tempos medidos nas fases 1 a 4, levados ao usuário no pull request. Com a pasta em `C:\MedTeca`: build da imagem 55 s do zero e 5 s com cache; subida da pilha inteira 21 s; `portoes-backend.sh` 66 s (22 testes); `portoes-frontend.sh` 38 s; testes de ponta a ponta 31 s. Nada aqui pede mover a pasta para o WSL 2; a decisão continua do usuário (seção 6.J.1)
 
 **Tests**: e2e
 **Gate**: e2e
