@@ -51,15 +51,22 @@ RUN cd /tmp \
 # arquivos do projeto (seção 6.E): o pip exige hash, o uv e o pnpm esperam
 # 7 dias por versões novas e o pnpm barra scripts de instalação. O uv nunca
 # baixa Python por conta própria: usa o da imagem.
+#
+# O uv e o pnpm usam sempre o lockfile e nunca o reescrevem (FUND-04), mesmo
+# num comando digitado à mão. Para atualizar um lock de propósito:
+#   UV_LOCKED=0 uv lock
+#   pnpm install --no-frozen-lockfile
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_REQUIRE_HASHES=1 \
+    UV_LOCKED=1 \
     UV_EXCLUDE_NEWER="7 days" \
     UV_PYTHON_DOWNLOADS=never \
     UV_LINK_MODE=copy \
     UV_CACHE_DIR=/home/dev/.cache/uv \
     pnpm_config_minimum_release_age=10080 \
     pnpm_config_strict_dep_builds=true \
+    pnpm_config_frozen_lockfile=true \
     pnpm_config_update_notifier=false
 
 # Usuário sem privilégio. As pastas que viram volumes nascem com esse dono,

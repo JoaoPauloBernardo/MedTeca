@@ -27,5 +27,5 @@ python3 ../scripts/conferir_contrato.py
 echo "== componentes (Vitest e Testing Library)"
 pnpm exec vitest run
 
-echo "== build do Vite"
-pnpm exec vite build
+echo "== build do Vite (saída em /tmp, fora do repositório)"
+pnpm exec vite build --outDir /tmp/medteca-dist --emptyOutDir
