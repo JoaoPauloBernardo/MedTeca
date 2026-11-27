@@ -105,16 +105,16 @@ Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do 
   - `GET /api/saude` → `200 {"situacao": "ok"}` ou `503 {"situacao": "indisponivel"}`, sempre com `Cache-Control: no-store`. Faz `SELECT 1` e trata `DatabaseError`.
   - `/api/docs` e `/api/openapi.json` só quando `MEDTECA_DOCS_DA_API` é verdadeiro (desenvolvimento e teste); na produção, `NinjaAPI(docs_url=None, openapi_url=None)`.
 - **Configurações**: `base.py` (pt-BR, `America/Sao_Paulo`, `USE_TZ`, middlewares de segurança, banco pelas variáveis de ambiente); `dev.py` (depuração, segredo fictício, hosts `localhost`, `127.0.0.1` e `api`); `test.py` (a partir do `dev`); `prod.py` (sem depuração, segredo obrigatório por `DJANGO_SECRET_KEY`, hosts por `DJANGO_ALLOWED_HOSTS`, cookies seguros e avisos de HSTS e de redirecionamento silenciados com o motivo).
-- **Dependencies**: Django 6.1, Django Ninja, psycopg 3; no grupo de desenvolvimento, pytest, pytest-django, Ruff, mypy, django-stubs, PyYAML (testes do repositório) e zizmor.
+- **Dependencies**: Django 6.1, Django Ninja, psycopg 3; no grupo de desenvolvimento, pytest, pytest-django, Ruff, mypy, django-stubs, ruamel.yaml (testes do repositório; o PyYAML não tem pacote pronto para o Python 3.15) e zizmor.
 
 ### Frontend
 
 - **Purpose**: Página inicial que consulta `/api/saude`.
 - **Location**: `frontend/src/`
 - **Interfaces**:
-  - `SituacaoDoServidor`: estados `verificando`, `no-ar` e `fora-do-ar`; chama `cliente.GET("/api/saude", { signal: AbortSignal.timeout(5000) })`; só `200` com `situacao === "ok"` conta como no ar; a mensagem fica num `<p role="status">`.
+  - `SituacaoDoServidor`: estados `verificando`, `no-ar` e `fora-do-ar`; chama `cliente.GET("/api/saude", { signal })`, com um `AbortController` cancelado por um `setTimeout` de 5 s (e não `AbortSignal.timeout`, que o relógio simulado do Vitest não alcança); só `200` com `situacao === "ok"` conta como no ar; a mensagem fica num `<p role="status">`; a requisição é cancelada se o componente sai da tela.
   - `PaginaInicial`: título "MedTeca" e a `SituacaoDoServidor`.
-  - `cliente.ts`: `createClient<paths>({ baseUrl: "" })` do `openapi-fetch`, com os tipos de `esquema.d.ts`.
+  - `cliente.ts`: `createClient<paths>({ baseUrl: window.location.origin, fetch })` do `openapi-fetch`, com os tipos de `esquema.d.ts`. A base absoluta, na origem da página, funciona também nos testes fora do navegador, e o `fetch` é procurado a cada chamada, para os testes poderem trocá-lo.
 - **Vite**: repasse de `/api` para `http://api:8000`; `server.allowedHosts` com `web`, para o Playwright; observação de arquivos por varredura (`usePolling`), porque a pasta vem do Windows.
 - **Dependencies**: React, React DOM, `openapi-fetch`; no desenvolvimento, Vite, TypeScript, ESLint (typescript-eslint, react-hooks, jsx-a11y), Prettier, Vitest, Testing Library, jsdom, `openapi-typescript`, Playwright e `@axe-core/playwright`. O React Aria entra com o sistema de design, quando houver o primeiro componente que o use.
 
@@ -143,7 +143,7 @@ Roda como usuário sem privilégio (`dev`, UID 1000). As pastas do `.venv` e do 
 | Error Scenario | Handling | User Impact |
 | --- | --- | --- |
 | Banco fora do ar | `DatabaseError` em `/api/saude` vira 503 com corpo fixo, sem detalhe | Página mostra "Servidor fora do ar" |
-| API fora do ar ou lenta | Erro de rede ou `AbortSignal.timeout(5000)` | Página mostra "Servidor fora do ar" |
+| API fora do ar ou lenta | Erro de rede ou cancelamento pelo `AbortController` depois de 5 s | Página mostra "Servidor fora do ar" |
 | Segredo ausente ou com menos de 50 caracteres na produção | `ImproperlyConfigured` ao carregar `prod.py` | O processo não sobe |
 | `manage.py` sem `DJANGO_SETTINGS_MODULE` | Recusa rodar, com mensagem | Nenhum comando sobe com o segredo público do desenvolvimento |
 | Lockfile desatualizado | `uv sync --locked` e `pnpm install --frozen-lockfile` falham | A instalação para, e o lockfile fica como estava |
@@ -170,6 +170,8 @@ Achados da revisão independente da fase 2 que não são defeito da fundação, 
 | --- | --- | --- | --- |
 | O Django Ninja isenta toda rota do middleware de CSRF; a checagem só acontece nas classes de autenticação por cookie | `ninja/operation.py` | Contas | Rotas que alteram dados sem autenticação (entrar, cadastrar, recuperar senha) chamam a checagem de CSRF explicitamente, para evitar CSRF no login (D-007) |
 | O repasse do Vite troca o `Host` para `api:8000`, mas mantém `Origin: http://localhost:5173`; a checagem de origem do CSRF do Django recusaria todo POST no desenvolvimento | `backend/medteca/settings/dev.py` | Contas | `CSRF_TRUSTED_ORIGINS` do desenvolvimento com `http://localhost:5173` e `http://web:5173` (achado da revisão independente da fase 3) |
+| No GitHub Actions, o checkout pertence ao usuário `runner` (UID 1001), e o contêiner `dev` roda como UID 1000; Ruff, mypy e pytest gravam caches em `backend/` e falhariam por permissão | `compose.yaml`, workflows | CI (fase 5) | Resolver no T26: caches fora do repositório ou o contêiner com o UID do runner. O build do Vite já sai em `/tmp` (achado da revisão independente da fase 4) |
+| O axe-core só barra violações sérias e críticas (FUND-16); uma violação da WCAG A ou AA classificada como "moderada" passaria | `frontend/e2e/pagina-inicial.spec.ts` | Sistema de design | Decisão do usuário, levada na fase 4: manter o corte ou barrar qualquer violação da WCAG A e AA |
 | Atrás do Caddy, o Django vê HTTP; sem `SECURE_PROXY_SSL_HEADER`, a checagem de origem do CSRF recusa os POST e os links absolutos saem com `http://` | `backend/medteca/settings/prod.py` | Publicação | `SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")`, seguro porque o Caddy descarta esse cabeçalho vindo do cliente (seção 5.H.3). O teste do FUND-19 usa `secure=True` e não pega isso |
 | O `manage.py` agora exige `DJANGO_SETTINGS_MODULE` | Imagem de produção | Publicação | A imagem de produção define `DJANGO_SETTINGS_MODULE=medteca.settings.prod` |
 | Na produção, sem `LOGGING`, os erros 500 não aparecem em lugar nenhum, e a rota de saúde não registra a falha do banco | `backend/medteca/settings/` e `api.py` | Contas (eventos da D-032) e Publicação | Configurar os registros da D-032, registrando a exceção no servidor sem levá-la à resposta (FUND-08 continua valendo) |
