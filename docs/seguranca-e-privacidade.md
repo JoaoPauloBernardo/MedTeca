@@ -2030,6 +2030,8 @@ Motivo: em março de 2025 (tj-actions) e em março de 2026 (trivy-action), vers�
 - a revisão de dependências do GitHub faz isso de graça em repositório público (Doc); no Python, isso depende de o GitHub ler o `uv.lock` (V39), e, se não ler, a checagem sai do inventário;
 - pergunta para o advogado: Jur-25.
 
+Nota de 2026-11-27 (implementação da fundação): na árvore de dependências do frontend apareceram três licenças fora da lista, todas em ferramentas de desenvolvimento e de build: BlueOak-1.0.0 (`lru-cache`, `minimatch`, `@isaacs/nonrecursive-glob-match`), CC-BY-4.0 (`caniuse-lite`) e Python-2.0 (`argparse`). O usuário aprovou as três só nesse uso ("Aceito nas ferramentas"); o registro, pacote a pacote, está em `frontend/pnpm-workspace.yaml`. O que vai para o app do estudante continua todo MIT.
+
 ### F. Publicação, inventário e retenção no ECR
 
 **F.1 O que acontece depois do merge** (P6-02). O repositório do ECR é **privado**, em São Paulo; o ECR Public não é usado. Depois do merge do usuário:

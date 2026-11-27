@@ -37,3 +37,9 @@ peerDependencyRules:
 #   acessibilidade (D-026).
 # - lightningcss (MPL-2.0), dependência do Vite 8: processa o CSS no build;
 #   o código dele não vai para o app, só o CSS que ele gera.
+# Licenças fora da lista, aprovadas pelo usuário só para ferramentas de
+# desenvolvimento ("Aceito nas ferramentas", 2026-11-27):
+# - BlueOak-1.0.0: lru-cache, minimatch e @isaacs/nonrecursive-glob-match
+#   (do ESLint e do jsdom); permissiva, aprovada pela OSI.
+# - CC-BY-4.0: caniuse-lite, dados de compatibilidade de navegadores.
+# - Python-2.0: argparse (do openapi-typescript); mesma família da PSF-2.0.
