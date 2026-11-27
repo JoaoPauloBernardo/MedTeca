@@ -548,9 +548,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_04_uv_lockfile_divergente_falha`, `test_fund_04_pnpm_lockfile_divergente_falha`, `test_fund_05_uv_espera_7_dias`, `test_fund_05_pnpm_espera_7_dias` e `test_fund_06_pnpm_bloqueia_scripts` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 14 tests pass (no silent deletions)
+- [x] `test_fund_04_uv_lockfile_divergente_falha`, `test_fund_04_pnpm_lockfile_divergente_falha`, `test_fund_05_uv_espera_7_dias`, `test_fund_05_pnpm_espera_7_dias` e `test_fund_06_pnpm_bloqueia_scripts` passam, mais `test_fund_04_comandos_usam_o_lockfile` e `test_fund_04_dependencias_diretas_do_registro`, acrescentados pela revisão da fase 3
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 14 tests pass (no silent deletions); 22 execuções no backend
 
 **Tests**: unit
 **Gate**: backend
@@ -737,6 +737,8 @@ Proof: run isolamento | ok FUND-35
 **C4** - Lockfile divergente faz a instalação falhar sem reescrever o lockfile, no uv e no pnpm (FUND-04, P1 Ambiente AC 4)
 Proof: run backend | test_fund_04_uv_lockfile_divergente_falha PASSED
 Proof: run backend | test_fund_04_pnpm_lockfile_divergente_falha PASSED
+Proof: run backend | test_fund_04_comandos_usam_o_lockfile PASSED
+Proof: run backend | test_fund_04_dependencias_diretas_do_registro PASSED
 
 **C5** - uv com `exclude-newer = "7 days"` e pnpm com `minimumReleaseAge: 10080` (FUND-05, P1 Ambiente AC 5)
 Proof: run backend | test_fund_05_uv_espera_7_dias PASSED
