@@ -1982,6 +1982,8 @@ Tudo roda em contêineres. Enquanto as checagens obrigatórias não estiverem na
 
 **E.1 Gerenciadores e fontes** (P6-07). uv no Python (`uv.lock`, com hash) e pnpm no frontend (`pnpm-lock.yaml`). A instalação usa só o lockfile (`uv sync --locked`, `pnpm install --frozen-lockfile`). As fontes de pacotes são só o PyPI, o registro do npm e as imagens oficiais; nenhuma dependência vem direto de Git ou de arquivo baixado (`blockExoticSubdeps`, padrão no pnpm 11, Doc). As versões das ferramentas ficam fixadas.
 
+Nota de 2026-11-26 (implementação da fundação): o Marketplace do VS Code foi aceito como fonte, só para as extensões do editor que rodam no contêiner de desenvolvimento ("Aceito, com versão fixa"). Cada extensão fica numa versão publicada há mais de 7 dias, fixada em `.devcontainer/devcontainer.json`, com a atualização automática desligada nas configurações do usuário no VS Code. O Dependabot não atualiza essa lista; ela é revista na manutenção mensal (I.2).
+
 **E.2 Espera de 7 dias** (P6-08):
 
 - uv: `exclude-newer = "7 days"` (fonte secundária; V37);
@@ -2027,6 +2029,8 @@ Motivo: em março de 2025 (tj-actions) e em março de 2026 (trivy-action), vers�
 - qualquer outra, inclusive GPL, AGPL e licença não identificada, barra o pull request até o usuário aprovar com análise; a AGPL alcança até o uso pela rede;
 - a revisão de dependências do GitHub faz isso de graça em repositório público (Doc); no Python, isso depende de o GitHub ler o `uv.lock` (V39), e, se não ler, a checagem sai do inventário;
 - pergunta para o advogado: Jur-25.
+
+Nota de 2026-11-27 (implementação da fundação): na árvore de dependências do frontend apareceram três licenças fora da lista, todas em ferramentas de desenvolvimento e de build: BlueOak-1.0.0 (`lru-cache`, `minimatch`, `@isaacs/nonrecursive-glob-match`), CC-BY-4.0 (`caniuse-lite`) e Python-2.0 (`argparse`). O usuário aprovou as três só nesse uso ("Aceito nas ferramentas"); o registro, pacote a pacote, está em `frontend/pnpm-workspace.yaml`. O que vai para o app do estudante continua todo MIT.
 
 ### F. Publicação, inventário e retenção no ECR
 

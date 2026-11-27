@@ -59,7 +59,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy \
     UV_CACHE_DIR=/home/dev/.cache/uv \
     pnpm_config_minimum_release_age=10080 \
-    pnpm_config_strict_dep_builds=true
+    pnpm_config_strict_dep_builds=true \
+    pnpm_config_update_notifier=false
 
 # Usuário sem privilégio. As pastas que viram volumes nascem com esse dono,
 # para que o Docker copie a permissão certa ao criar cada volume.

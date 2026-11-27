@@ -1,0 +1,4 @@
+# Arquivos gerados: o formato é o da ferramenta que os gera.
+pnpm-lock.yaml
+src/api/openapi.json
+src/api/esquema.d.ts

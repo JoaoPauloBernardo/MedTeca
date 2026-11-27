@@ -16,12 +16,23 @@
   "postAttachCommand": "scripts/conferir-isolamento.sh",
   "customizations": {
     "vscode": {
+      // Extensões do Marketplace do VS Code, aceito como fonte só para o
+      // editor ("Aceito, com versão fixa", 2026-11-26). Cada uma fica numa
+      // versão publicada há mais de 7 dias, escolhida em 2026-11-26. As três
+      // ms-python.* do meio vêm no pacote da ms-python.python e são fixadas
+      // aqui para não entrarem na versão mais nova. O Dependabot não atualiza
+      // esta lista: ela é revista na manutenção mensal. A atualização
+      // automática (extensions.autoUpdate) é uma configuração do usuário no
+      // VS Code, não deste arquivo.
       "extensions": [
-        "ms-python.python",
-        "charliermarsh.ruff",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "vitest.explorer"
+        "ms-python.python@2026.10.0",
+        "ms-python.vscode-pylance@2026.4.1",
+        "ms-python.debugpy@2026.6.0",
+        "ms-python.vscode-python-envs@1.44.0",
+        "charliermarsh.ruff@2026.96.0",
+        "dbaeumer.vscode-eslint@3.0.34",
+        "esbenp.prettier-vscode@12.4.0",
+        "vitest.explorer@1.52.2"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/workspace/backend/.venv/bin/python",
