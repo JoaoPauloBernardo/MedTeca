@@ -13,8 +13,15 @@ allowBuilds: {}
 # publicado, sinal comum de conta invadida (P6-09).
 trustPolicy: no-downgrade
 
-# Nenhuma dependência vem direto de Git ou de arquivo baixado (P6-07).
+# Nenhuma dependência indireta vem direto de Git ou de arquivo baixado
+# (P6-07). As diretas, que esta opção não cobre, são conferidas pelo teste
+# do FUND-04 e pela revisão do package.json.
 blockExoticSubdeps: true
+
+# Se o packageManager do package.json pedir outra versão do pnpm, a
+# instalação falha em vez de baixá-la: a versão do pnpm vem da imagem, com
+# o hash conferido.
+pmOnFail: error
 
 # O eslint-plugin-jsx-a11y declara suporte ao ESLint só até o 9, que deixou
 # de ter suporte. Testado com o ESLint 10 em 2026-11-26: as regras de

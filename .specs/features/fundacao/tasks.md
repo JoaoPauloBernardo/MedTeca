@@ -540,7 +540,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 ### T23: Testes da política de dependências
 
-**What**: Testes de FUND-04 (lockfile divergente faz `uv sync --locked` e `pnpm install --frozen-lockfile` falharem sem alterar o lockfile, numa cópia temporária; e os comandos de instalação do repositório usam essas opções), FUND-05 (`exclude-newer` e `minimumReleaseAge`) e FUND-06 (`strictDepBuilds` e `allowBuilds`).
+**What**: Testes de FUND-04 (lockfile divergente faz `uv sync --locked` e `pnpm install --frozen-lockfile` falharem sem alterar o lockfile, numa cópia temporária; os comandos de instalação e o `uv run` do repositório usam essas opções; e toda dependência direta do `package.json` é uma faixa de versão do registro, sem `git:`, `file:`, `link:` ou endereço, porque o `blockExoticSubdeps` só cobre as indiretas; acrescentado pela revisão independente da fase 3), FUND-05 (`exclude-newer` e `minimumReleaseAge`) e FUND-06 (`strictDepBuilds` e `allowBuilds`).
 **Where**: `backend/tests/repositorio/test_dependencias.py`
 **Depends on**: None
 **Reuses**: `backend/pyproject.toml`, `frontend/pnpm-workspace.yaml`
