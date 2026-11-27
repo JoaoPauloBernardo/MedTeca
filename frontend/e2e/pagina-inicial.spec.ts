@@ -37,11 +37,26 @@ test("FUND-15: toda requisição vai à origem da própria página, inclusive /a
   expect(deOutraOrigem).toEqual([]);
 });
 
+// Regras da WCAG 2.0 a 2.2, níveis A e AA (RNF-01), mais as boas práticas do
+// axe. As tags ligam também regras que o axe deixa desligadas por padrão,
+// como a do tamanho de alvo da WCAG 2.2 (2.5.8).
+const REGRAS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
+
 test("FUND-16: o axe-core não acha violação séria nem crítica", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("status")).toHaveText("Servidor no ar");
 
-  const resultado = await new AxeBuilder({ page }).analyze();
+  const resultado = await new AxeBuilder({ page }).withTags(REGRAS).analyze();
+
+  // A regra de tamanho de alvo precisa ter rodado, para a checagem cobrir a WCAG 2.2.
+  const regrasAvaliadas = [
+    ...resultado.passes,
+    ...resultado.violations,
+    ...resultado.incomplete,
+    ...resultado.inapplicable,
+  ].map((regra) => regra.id);
+  expect(regrasAvaliadas).toContain("target-size");
+
   const graves = resultado.violations
     .filter((violacao) => violacao.impact === "serious" || violacao.impact === "critical")
     .map((violacao) => `${violacao.id}: ${violacao.help}`);
