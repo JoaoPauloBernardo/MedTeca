@@ -19,3 +19,6 @@ pnpm exec prettier --check .
 
 echo "== tipos (tsc estrito)"
 pnpm exec tsc --noEmit
+
+echo "== contrato da API (OpenAPI e tipos gerados)"
+python3 ../scripts/conferir_contrato.py

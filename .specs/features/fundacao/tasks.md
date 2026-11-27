@@ -447,9 +447,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_17_tipos_gerados_do_openapi` e `test_fund_18_contrato_divergente_falha` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 8 tests pass (no silent deletions)
+- [x] `test_fund_17_tipos_gerados_do_openapi` e `test_fund_18_contrato_divergente_falha` passam (o FUND-18 com o OpenAPI e com os tipos alterados, uma prova por variante). Prova manual: um valor novo em `situacao` na API, sem regenerar, fez a checagem sair com 1 e mostrar a diferença nos dois arquivos
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh` (o Ruff e o mypy passam a olhar também `scripts/`, e as dependências do frontend são instaladas antes do pytest, porque o teste do contrato gera os tipos com o pnpm); `scripts/portoes-frontend.sh` termina na checagem de contrato
+- [x] Test count: 8 tests pass (no silent deletions). São 14 execuções no total do backend
 
 **Tests**: unit
 **Gate**: backend
@@ -784,7 +784,8 @@ Proof: run e2e | ✓ [webkit-ipad] FUND-16
 Proof: run backend | test_fund_17_tipos_gerados_do_openapi PASSED
 
 **C18** - Um OpenAPI ou tipos divergentes fazem a checagem de contrato sair com 1 (FUND-18, P1 Contrato AC 2)
-Proof: run backend | test_fund_18_contrato_divergente_falha PASSED
+Proof: run backend | test_fund_18_contrato_divergente_falha[openapi-divergente] PASSED
+Proof: run backend | test_fund_18_contrato_divergente_falha[tipos-divergentes] PASSED
 
 **C19** - Com as configurações de produção, `/api/docs` e `/api/openapi.json` respondem 404 (FUND-19, P1 Produção AC 1)
 Proof: run backend | test_fund_19_docs_fora_em_producao PASSED
