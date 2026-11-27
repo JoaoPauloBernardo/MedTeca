@@ -767,6 +767,8 @@ Proof: run frontend | ✓ FUND-11
 Proof: run frontend | ✓ FUND-12 status 503
 Proof: run frontend | ✓ FUND-12 corpo inesperado
 Proof: run frontend | ✓ FUND-12 sem resposta em 5 segundos
+Proof: run frontend | ✓ FUND-12 status 206
+Proof: run frontend | ✓ FUND-12 erro de rede
 
 **C13** - A mensagem fica numa região `role="status"` (FUND-13, P1 Página AC 4)
 Proof: run frontend | ✓ FUND-13

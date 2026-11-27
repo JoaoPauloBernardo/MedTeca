@@ -81,6 +81,22 @@ describe("SituacaoDoServidor", () => {
     expect(await screen.findByText("Servidor fora do ar")).toBeTruthy();
   });
 
+  test("FUND-12 status 206: um 2xx diferente de 200, mesmo com situacao ok, mostra 'Servidor fora do ar'", async () => {
+    responder(206, { situacao: "ok" });
+
+    render(<SituacaoDoServidor />);
+
+    expect(await screen.findByText("Servidor fora do ar")).toBeTruthy();
+  });
+
+  test("FUND-12 erro de rede: sem resposta nenhuma, mostra 'Servidor fora do ar'", async () => {
+    vi.stubGlobal("fetch", () => Promise.reject(new TypeError("Failed to fetch")));
+
+    render(<SituacaoDoServidor />);
+
+    expect(await screen.findByText("Servidor fora do ar")).toBeTruthy();
+  });
+
   test("FUND-12 corpo inesperado: 200 sem situacao ok mostra 'Servidor fora do ar'", async () => {
     responder(200, { situacao: "talvez" });
 
