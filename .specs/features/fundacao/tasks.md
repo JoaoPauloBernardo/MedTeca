@@ -354,8 +354,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Licenças de cada dependência direta conferidas contra a seção 6.E.7 e citadas no pull request
-- [ ] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24
+- [x] Licenças de cada dependência direta conferidas contra a seção 6.E.7 e citadas no pull request (todas MIT ou Apache-2.0, menos `@axe-core/playwright`, MPL-2.0, aceita com o motivo escrito no `pnpm-workspace.yaml`). Desvios de versão, por compatibilidade: TypeScript 5.9 (o typescript-eslint aceita até a 6.0 e o openapi-typescript só a 5.x). ESLint 10, embora o eslint-plugin-jsx-a11y declare suporte só até o 9: o 9 está sem suporte ("This version is no longer supported"), e um teste com uma imagem sem `alt` e um hook dentro de `if` mostrou as duas regras funcionando no 10; a liberação desse par fica no `pnpm-workspace.yaml`. `@testing-library/jest-dom` e `user-event` ficam de fora até algum teste precisar
+- [x] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24 (fixada em 1.65.1; a imagem do T24 segue essa versão)
 
 **Tests**: none - configuração; a política é provada no T23
 **Gate**: ambiente
