@@ -29,18 +29,43 @@ export default defineConfig(
     rules: {
       "no-eval": "error",
       "no-new-func": "error",
+      // HTML montado a partir de texto é barrado em todas as formas que dá
+      // para ver no código (seção 6.G.1). Props espalhadas vindas de fora
+      // ({...props}) não dão para ver: aí vale a revisão.
       "no-restricted-syntax": [
         "error",
         {
           selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
           message: "HTML injetado no React é barrado (seção 6.G.1).",
         },
+        {
+          selector: "Property[key.name='dangerouslySetInnerHTML']",
+          message: "HTML injetado no React é barrado, também num objeto de props (seção 6.G.1).",
+        },
+        {
+          selector: "AssignmentExpression[left.property.name=/^(innerHTML|outerHTML)$/]",
+          message: "Gravar HTML direto no DOM é barrado (seção 6.G.1).",
+        },
+        {
+          selector: "CallExpression[callee.property.name='insertAdjacentHTML']",
+          message: "Gravar HTML direto no DOM é barrado (seção 6.G.1).",
+        },
+        {
+          selector:
+            "CallExpression[callee.object.name='document'][callee.property.name=/^(write|writeln)$/]",
+          message: "document.write é barrado (seção 6.G.1).",
+        },
       ],
     },
   },
   {
-    // Arquivos JavaScript de configuração ficam fora da checagem de tipos.
-    files: ["**/*.js"],
+    // Arquivos JavaScript ficam fora da checagem de tipos, mas continuam
+    // com as outras regras; o .jsx entra aqui para não escapar do lint.
+    files: ["**/*.{js,jsx,mjs,cjs}"],
     extends: [tseslint.configs.disableTypeChecked],
+    rules: {
+      // A versão com tipos desta regra fica desligada acima; esta não precisa deles.
+      "no-implied-eval": "error",
+    },
   },
 );
