@@ -429,7 +429,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `esquema.d.ts` tem o caminho `/api/saude` com as respostas 200 e 503
+- [x] `esquema.d.ts` tem o caminho `/api/saude` com as respostas 200 e 503 (gerado por `scripts/conferir_contrato.py --gerar`, com o OpenAPI exportado com as chaves ordenadas, para a saída ser estável)
 
 **Tests**: none - arquivos gerados; provados no T18
 **Gate**: frontend
