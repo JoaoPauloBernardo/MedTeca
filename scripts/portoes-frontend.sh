@@ -17,8 +17,9 @@ pnpm exec eslint .
 echo "== Prettier: formatação"
 pnpm exec prettier --check .
 
-echo "== tipos (tsc estrito)"
-pnpm exec tsc --noEmit
+echo "== tipos (tsc estrito: navegador e Node)"
+pnpm exec tsc --noEmit -p tsconfig.json
+pnpm exec tsc --noEmit -p tsconfig.node.json
 
 echo "== contrato da API (OpenAPI e tipos gerados)"
 python3 ../scripts/conferir_contrato.py

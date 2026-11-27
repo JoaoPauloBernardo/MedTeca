@@ -18,7 +18,9 @@ export default defineConfig(
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
-        projectService: true,
+        // Código do navegador (tsconfig.json) e código que roda no Node,
+        // como a configuração do Vite (tsconfig.node.json).
+        project: ["./tsconfig.json", "./tsconfig.node.json"],
         tsconfigRootDir: import.meta.dirname,
       },
     },
