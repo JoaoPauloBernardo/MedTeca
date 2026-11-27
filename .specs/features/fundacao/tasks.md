@@ -392,8 +392,8 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh`
-- [ ] Um `eval("1")` de teste, apagado em seguida, faz o ESLint falhar
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh` (ESLint, Prettier e `tsc`; o build do Vite entra no T21, quando houver o `main.tsx` que o `index.html` carrega, e o Vitest no T20, com o primeiro teste)
+- [x] Um `eval("1")` de teste, apagado em seguida, faz o ESLint falhar (`no-eval`, saída 1)
 
 **Tests**: none - configuração de ferramentas
 **Gate**: frontend
