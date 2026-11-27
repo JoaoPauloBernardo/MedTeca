@@ -411,7 +411,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh`
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh`
 
 **Tests**: none - configuração; FUND-14 e FUND-15 são provados no T25
 **Gate**: frontend
