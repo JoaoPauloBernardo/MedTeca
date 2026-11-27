@@ -1,7 +1,9 @@
+/// <reference types="vitest/config" />
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-// Servidor de desenvolvimento do MedTeca (design da fundação).
+// Servidor de desenvolvimento e testes de componentes do MedTeca (design da
+// fundação).
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -16,5 +18,11 @@ export default defineConfig({
     // A pasta vem do Windows, e as mudanças só chegam ao contêiner por
     // varredura; a V43 mede o custo.
     watch: { usePolling: true, interval: 300 },
+  },
+  test: {
+    // Componentes testados num DOM simulado (D-026). Os testes de ponta a
+    // ponta, em e2e/, rodam no Playwright, não aqui.
+    environment: "jsdom",
+    include: ["src/**/*.test.{ts,tsx}"],
   },
 });

@@ -23,3 +23,6 @@ pnpm exec tsc --noEmit -p tsconfig.node.json
 
 echo "== contrato da API (OpenAPI e tipos gerados)"
 python3 ../scripts/conferir_contrato.py
+
+echo "== componentes (Vitest e Testing Library)"
+pnpm exec vitest run

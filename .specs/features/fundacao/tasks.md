@@ -487,9 +487,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Testes `FUND-10`, `FUND-11`, `FUND-12` (status 503, corpo inesperado e 5 s sem resposta) e `FUND-13` passam
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh`
-- [ ] Test count: 6 tests pass (no silent deletions)
+- [x] Testes `FUND-10`, `FUND-11`, `FUND-12` (status 503, corpo inesperado e 5 s sem resposta) e `FUND-13` passam (o limite de 5 s é feito com `AbortController` e `setTimeout`, para o teste adiantar o relógio: aos 4.999 ms a mensagem ainda é "Verificando", e aos 5.000 vira "fora do ar")
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh` (o Vitest entra no portão)
+- [x] Test count: 6 tests pass (no silent deletions); cinco execuções seguidas sem falha, depois de corrigir o teste do FUND-13, que dependia de a resposta falsa chegar depois da leitura da mensagem inicial
 
 **Tests**: unit
 **Gate**: frontend
