@@ -2,3 +2,8 @@
 pnpm-lock.yaml
 src/api/openapi.json
 src/api/esquema.d.ts
+
+# Saídas do build e dos testes de ponta a ponta.
+dist
+playwright-report
+test-results

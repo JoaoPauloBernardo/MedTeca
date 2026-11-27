@@ -26,3 +26,6 @@ python3 ../scripts/conferir_contrato.py
 
 echo "== componentes (Vitest e Testing Library)"
 pnpm exec vitest run
+
+echo "== build do Vite"
+pnpm exec vite build

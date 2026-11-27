@@ -507,9 +507,9 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] Teste `FUND-01: a página mostra o título MedTeca` passa
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh`
-- [ ] Test count: 7 tests pass (no silent deletions)
+- [x] Teste `FUND-01: a página mostra o título MedTeca` passa (e confere que a situação do servidor aparece na página)
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-frontend.sh` (o build do Vite entra no portão; `dist`, `playwright-report` e `test-results` ficam fora do Prettier)
+- [x] Test count: 7 tests pass (no silent deletions)
 
 **Tests**: unit
 **Gate**: frontend
