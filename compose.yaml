@@ -110,6 +110,32 @@ services:
       retries: 20
       start_period: 120s
 
+  e2e:
+    # Testes de ponta a ponta (FUND-16, D-026) com a imagem oficial do
+    # Playwright, que traz os navegadores. Só sobe com o perfil e2e:
+    #   docker compose --profile e2e run --rm e2e
+    # Playwright 1.65.1, Ubuntu 24.04 (noble); publicada em 2026-11-13. A versão
+    # é a mesma do @playwright/test do frontend.
+    image: mcr.microsoft.com/playwright:v1.65.1-noble@sha256:1507cbfc550a63a6b7396791ca4f00df17beb56342d2447b3f106c306f525579
+    profiles: [e2e]
+    init: true
+    user: pwuser
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    # O Chromium usa a memória compartilhada; o padrão de 64 MB é pouco.
+    shm_size: 1gb
+    working_dir: /workspace/frontend
+    environment:
+      NPM_CONFIG_UPDATE_NOTIFIER: "false"
+    volumes:
+      - .:/workspace:ro
+      - ./frontend:/workspace/frontend
+      - node_modules:/workspace/frontend/node_modules:ro
+    command: ["npx", "--no-install", "playwright", "test"]
+    depends_on:
+      web:
+        condition: service_healthy
+
 volumes:
   dados-db:
   venv:

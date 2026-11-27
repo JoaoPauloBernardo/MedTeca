@@ -355,7 +355,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 **Done when**:
 
 - [x] Licenças de cada dependência direta conferidas contra a seção 6.E.7 e citadas no pull request (todas MIT ou Apache-2.0, menos `@axe-core/playwright`, MPL-2.0, aceita com o motivo escrito no `pnpm-workspace.yaml`). Desvios de versão, por compatibilidade: TypeScript 5.9 (o typescript-eslint aceita até a 6.0 e o openapi-typescript só a 5.x). ESLint 10, embora o eslint-plugin-jsx-a11y declare suporte só até o 9: o 9 está sem suporte ("This version is no longer supported"), e um teste com uma imagem sem `alt` e um hook dentro de `if` mostrou as duas regras funcionando no 10; a liberação desse par fica no `pnpm-workspace.yaml`. `@testing-library/jest-dom` e `user-event` ficam de fora até algum teste precisar
-- [ ] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24. Pendente até o T24: o pacote está fixado em 1.65.1 exato, e a tag `mcr.microsoft.com/playwright:v1.65.1` existe (conferida pela revisão independente da fase 3); o T24 fixa o digest e confere `playwright --version`
+- [x] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24. Conferido no T24: o pacote está fixado em 1.65.1 exato, e `playwright --version` dentro da imagem `v1.65.1-noble` (fixada por digest) mostra 1.65.1
 
 **Tests**: none - configuração; a política é provada no T23
 **Gate**: ambiente
@@ -568,7 +568,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `docker compose --profile e2e run --rm e2e npx --no-install playwright --version` mostra a mesma versão do `@playwright/test`
+- [x] `docker compose --profile e2e run --rm e2e npx --no-install playwright --version` mostra a mesma versão do `@playwright/test` (1.65.1; a imagem `v1.65.1-noble`, de 2026-11-13, roda como `pwuser`, sem capacidades do Linux; perfis "Desktop Chrome", "iPhone 17" e "iPad (gen 11)")
 
 **Tests**: none - configuração; provada no T25
 **Gate**: ambiente
