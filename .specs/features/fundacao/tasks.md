@@ -527,10 +527,10 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 **Done when**:
 
-- [ ] `test_fund_02_so_porta_5173_em_localhost` passa
-- [ ] `docker compose up` e "Servidor no ar" em `http://localhost:5173`, aberto no navegador do app
-- [ ] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
-- [ ] Test count: 9 tests pass (no silent deletions)
+- [x] `test_fund_02_so_porta_5173_em_localhost` passa (lendo o `compose.yaml` com o `ruamel.yaml`, que substituiu o PyYAML)
+- [x] `docker compose up` e "Servidor no ar" em `http://localhost:5173`, aberto no navegador do app (pilha de pé em 21 s; a página com `lang="pt-BR"` e todos os recursos na própria origem; `/api/saude` responde 200 pela porta 5173)
+- [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh`
+- [x] Test count: 9 tests pass (no silent deletions); 15 execuções no backend
 
 **Tests**: unit
 **Gate**: backend

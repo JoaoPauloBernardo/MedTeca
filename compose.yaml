@@ -1,11 +1,12 @@
 # Ambiente de desenvolvimento do MedTeca (design da fundação).
 #
-#   docker compose up -d --wait db dev     sobe o banco e o contêiner do editor
+#   docker compose up                      sobe tudo; a página fica em http://localhost:5173
 #   docker compose run --rm dev <comando>  roda um comando dentro do ambiente
 #
 # Só a pasta do repositório entra nos contêineres; nenhuma pasta nem
-# credencial do computador do usuário (FUND-03, RNF-85). Nenhuma porta é
-# publicada nesta fase. Os dados são fictícios.
+# credencial do computador do usuário (FUND-03, RNF-85). Só o serviço web
+# publica porta, e só para o próprio computador (FUND-02). Os dados são
+# fictícios.
 #
 # O repositório entra só para leitura, e só backend/, frontend/ e scripts/
 # aceitam escrita. Assim, código de terceiros rodando no contêiner não
@@ -79,6 +80,31 @@ services:
         - python
         - -c
         - import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/api/saude", timeout=2)
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+
+  web:
+    <<: *ambiente
+    # Instala pelo lockfile e sobe o servidor do Vite, que repassa /api para
+    # a API. É a única porta publicada, e só para o próprio computador
+    # (127.0.0.1): a página fica em http://localhost:5173 (FUND-01, FUND-02).
+    command:
+      - sh
+      - -c
+      - cd frontend && pnpm install --frozen-lockfile && exec pnpm exec vite
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen("http://127.0.0.1:5173/", timeout=2)
       interval: 3s
       timeout: 5s
       retries: 20
