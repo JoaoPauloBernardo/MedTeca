@@ -30,6 +30,10 @@ peerDependencyRules:
   allowedVersions:
     eslint-plugin-jsx-a11y>eslint: "10"
 
-# Licenças aceitas com motivo (seção 6.E.7):
+# Licenças aceitas com motivo (seção 6.E.7). O que vai para o app do
+# estudante (react, react-dom, scheduler, openapi-fetch e os tipos dele) é
+# todo MIT; as exceções abaixo são só de ferramentas:
 # - axe-core e @axe-core/playwright (MPL-2.0): só nos testes de
-#   acessibilidade (D-026); nunca entram no app entregue ao estudante.
+#   acessibilidade (D-026).
+# - lightningcss (MPL-2.0), dependência do Vite 8: processa o CSS no build;
+#   o código dele não vai para o app, só o CSS que ele gera.

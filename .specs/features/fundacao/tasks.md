@@ -355,7 +355,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 **Done when**:
 
 - [x] Licenças de cada dependência direta conferidas contra a seção 6.E.7 e citadas no pull request (todas MIT ou Apache-2.0, menos `@axe-core/playwright`, MPL-2.0, aceita com o motivo escrito no `pnpm-workspace.yaml`). Desvios de versão, por compatibilidade: TypeScript 5.9 (o typescript-eslint aceita até a 6.0 e o openapi-typescript só a 5.x). ESLint 10, embora o eslint-plugin-jsx-a11y declare suporte só até o 9: o 9 está sem suporte ("This version is no longer supported"), e um teste com uma imagem sem `alt` e um hook dentro de `if` mostrou as duas regras funcionando no 10; a liberação desse par fica no `pnpm-workspace.yaml`. `@testing-library/jest-dom` e `user-event` ficam de fora até algum teste precisar
-- [x] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24 (fixada em 1.65.1; a imagem do T24 segue essa versão)
+- [ ] A versão do `@playwright/test` é a mesma da imagem do Playwright usada no T24. Pendente até o T24: o pacote está fixado em 1.65.1 exato, e a tag `mcr.microsoft.com/playwright:v1.65.1` existe (conferida pela revisão independente da fase 3); o T24 fixa o digest e confere `playwright --version`
 
 **Tests**: none - configuração; a política é provada no T23
 **Gate**: ambiente
@@ -449,7 +449,7 @@ T29, T30 e T31 não dependem de nenhuma tarefa desta fase.
 
 - [x] `test_fund_17_tipos_gerados_do_openapi` e `test_fund_18_contrato_divergente_falha` passam (o FUND-18 com o OpenAPI e com os tipos alterados, uma prova por variante). Prova manual: um valor novo em `situacao` na API, sem regenerar, fez a checagem sair com 1 e mostrar a diferença nos dois arquivos
 - [x] Gate check passes: `docker compose run --rm dev scripts/portoes-backend.sh` (o Ruff e o mypy passam a olhar também `scripts/`, e as dependências do frontend são instaladas antes do pytest, porque o teste do contrato gera os tipos com o pnpm); `scripts/portoes-frontend.sh` termina na checagem de contrato
-- [x] Test count: 8 tests pass (no silent deletions). São 14 execuções no total do backend
+- [x] Test count: 8 tests pass (no silent deletions). Na prática, 9 funções de teste e 14 execuções no backend: o FUND-21 ganhou um teste na revisão da fase 2 e as variantes contam à parte; nenhum teste foi apagado
 
 **Tests**: unit
 **Gate**: backend
@@ -847,7 +847,7 @@ Proof: walk - no terminal do VS Code dentro do contêiner, `scripts/conferir-iso
 The feature's live state, written as it happens - a compaction gives no warning.
 
 **Settled mid-build:** "Pode apagar" (2026-11-26): apagar os sockets velhos do Docker Desktop. Eles não se apagaram (erro 1920); as pastas `run` e `docker-secrets-engine` foram renomeadas, e o Docker passou a ser aberto só pelo usuário.
-**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário. Revisão independente da fase 2, sobre `9258924` - returned: nada importante, 7 achados menores; 1, 2 e 5 corrigidos (`4f0650a`, `0135f03`, `79f89a0`), 3, 4, 6 e 7 registrados como cuidados para Contas e Publicação no `design.md`.
+**Dispatched:** revisão independente da fase 1 (sessão sem o contexto do autor, com revisão de segurança), sobre `06b1347` - returned: 3 achados importantes e 7 menores; tratados de `8ebc56c` a este commit, e o das extensões do VS Code (fonte fora da seção 6.E.1) levado ao usuário. Revisão independente da fase 2, sobre `9258924` - returned: nada importante, 7 achados menores; 1, 2 e 5 corrigidos (`4f0650a`, `0135f03`, `79f89a0`), 3, 4, 6 e 7 registrados como cuidados para Contas e Publicação no `design.md`. Revisão independente da fase 3, sobre `0b635ec` - returned: 3 achados importantes e 5 menores; o 2 a 8 corrigidos de `f22f651` a `67dea2f` e nas caixas do T13 e do T18; o 1 (licenças BlueOak-1.0.0, CC-BY-4.0 e Python-2.0 em ferramentas de desenvolvimento) levado ao usuário, e o lightningcss (MPL-2.0) registrado com motivo; o CSRF_TRUSTED_ORIGINS do desenvolvimento entra nos cuidados para Contas.
 **Walked:** none
 
 ---
